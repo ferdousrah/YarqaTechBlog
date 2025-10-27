@@ -1,4 +1,4 @@
-// src/collections/Media.ts - Payload 3.x with optimization
+// src/collections/Media.ts - Payload 3.x with proper optimization
 import type { CollectionConfig } from 'payload'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -16,32 +16,56 @@ export const Media: CollectionConfig = {
         width: 400,
         height: 300,
         position: 'centre',
+        formatOptions: {
+          format: 'webp',
+        },
       },
       {
         name: 'card',
         width: 768,
         height: 432,
         position: 'centre',
+        formatOptions: {
+          format: 'webp',
+        },
       },
       {
         name: 'tablet',
         width: 1024,
         position: 'centre',
+        formatOptions: {
+          format: 'webp',
+        },
       },
       {
         name: 'desktop',
         width: 1920,
         position: 'centre',
+        formatOptions: {
+          format: 'webp',
+        },
       },
       {
         name: 'og',
         width: 1200,
         height: 630,
         position: 'centre',
+        formatOptions: {
+          format: 'jpeg',
+        },
       },
     ],
     adminThumbnail: 'thumbnail',
-    mimeTypes: ['image/*', 'video/*', 'application/pdf'],
+    mimeTypes: ['image/*'],
+    formatOptions: {
+      format: 'webp',
+    },
+    resizeOptions: {
+      width: 3840,
+      height: 2160,
+      fit: 'inside',
+      withoutEnlargement: true,
+    },
   },
   admin: {
     group: 'Content',
