@@ -25,16 +25,21 @@ interface Comment {
 }
 
 interface CommentsProps {
-  postId: string
+  postId: string | number
   enableComments?: boolean
 }
 
 export function Comments({ postId, enableComments = true }: CommentsProps) {
+  // Convert postId to string for consistency
+  const postIdString = String(postId)
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+
+  // Debug log
+  console.log('Comments component rendered with postId:', postIdString, 'enableComments:', enableComments)
 
   // Form state
   const [content, setContent] = useState('')
@@ -44,22 +49,26 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
 
   useEffect(() => {
     fetchComments()
-  }, [postId])
+  }, [postIdString])
 
   const fetchComments = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/posts/${postId}/comments`)
+      console.log('Fetching comments from:', `/api/posts/${postIdString}/comments`)
+      const response = await fetch(`/api/posts/${postIdString}/comments`)
       const data = await response.json()
+
+      console.log('Comments fetch response:', data)
 
       if (data.success) {
         setComments(data.comments)
       } else {
+        console.error('Failed to load comments:', data)
         setError('Failed to load comments')
       }
     } catch (err) {
       console.error('Error fetching comments:', err)
-      setError('Failed to load comments')
+      setError('Failed to load comments. ' + (err instanceof Error ? err.message : String(err)))
     } finally {
       setLoading(false)
     }
@@ -89,7 +98,7 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          postId,
+          postId: postIdString,
           content: content.trim(),
           guestName: guestName.trim(),
           guestEmail: guestEmail.trim(),
