@@ -19,7 +19,7 @@ export const Comments: CollectionConfig = {
         },
       }
     },
-    create: ({ req: { user } }) => !!user,
+    create: () => true, // Allow anyone to create comments (guest or authenticated)
     update: ({ req: { user } }) => {
       if (user?.role === 'admin' || user?.role === 'editor') return true
       return {
@@ -57,10 +57,25 @@ export const Comments: CollectionConfig = {
       name: 'author',
       type: 'relationship',
       relationTo: 'users',
-      required: true,
       admin: {
         position: 'sidebar',
         readOnly: true,
+      },
+    },
+    {
+      name: 'guestName',
+      type: 'text',
+      admin: {
+        description: 'Name for guest commenters',
+        condition: (data) => !data?.author,
+      },
+    },
+    {
+      name: 'guestEmail',
+      type: 'email',
+      admin: {
+        description: 'Email for guest commenters',
+        condition: (data) => !data?.author,
       },
     },
     {
@@ -116,9 +131,16 @@ export const Comments: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ req, operation, data }) => {
-        if (operation === 'create' && req.user) {
-          data.author = req.user.id
-          data.status = 'pending'
+        if (operation === 'create') {
+          if (req.user) {
+            data.author = req.user.id
+          }
+          // Auto-approve comments from authenticated users with admin/editor role
+          if (req.user && (req.user.role === 'admin' || req.user.role === 'editor')) {
+            data.status = 'approved'
+          } else {
+            data.status = 'pending'
+          }
         }
 
         if (operation === 'update' && data.content) {
@@ -127,6 +149,41 @@ export const Comments: CollectionConfig = {
         }
 
         return data
+      },
+    ],
+    afterChange: [
+      async ({ doc, req, operation }) => {
+        // Update post comments count when a comment is approved
+        if (operation === 'create' || operation === 'update') {
+          if (doc.status === 'approved' && doc.post) {
+            try {
+              const payload = req.payload
+              const postId = typeof doc.post === 'object' ? doc.post.id : doc.post
+
+              // Count approved comments for this post
+              const commentsCount = await payload.count({
+                collection: 'comments',
+                where: {
+                  post: { equals: postId },
+                  status: { equals: 'approved' },
+                },
+              })
+
+              // Update post's commentsCount
+              await payload.update({
+                collection: 'posts',
+                id: postId,
+                data: {
+                  commentsSettings: {
+                    commentsCount: commentsCount.totalDocs,
+                  },
+                },
+              })
+            } catch (error) {
+              req.payload.logger.error('Error updating comments count:', error)
+            }
+          }
+        }
       },
     ],
   },

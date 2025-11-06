@@ -26,6 +26,8 @@ import { incrementViewsEndpoint } from './endpoints/increment-views'
 import { toggleBookmarkEndpoint } from './endpoints/toggle-bookmark'
 import { readingProgressEndpoint } from './endpoints/reading-progress'
 import { dashboardStatsEndpoint } from './endpoints/dashboard-stats'
+import { getCommentsEndpoint } from './endpoints/get-comments'
+import { createCommentEndpoint } from './endpoints/create-comment'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -72,6 +74,8 @@ export default buildConfig({
     toggleBookmarkEndpoint,
     readingProgressEndpoint,
     dashboardStatsEndpoint,
+    getCommentsEndpoint,
+    createCommentEndpoint,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
