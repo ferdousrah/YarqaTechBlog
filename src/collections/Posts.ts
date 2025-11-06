@@ -27,7 +27,7 @@ export const Posts: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }) => {
-      if (user && (user.role === 'admin' || user.role === 'editor')) {
+      if (user && (user.role === 'admin' || user.role === 'editor' || user.role === 'author')) {
         return true
       }
       return {
@@ -37,11 +37,11 @@ export const Posts: CollectionConfig = {
       }
     },
     create: ({ req: { user } }) => {
-      return !!(user && (user.role === 'admin' || user.role === 'editor'))
+      return !!(user && (user.role === 'admin' || user.role === 'editor' || user.role === 'author'))
     },
     update: ({ req: { user } }) => {
       if (user?.role === 'admin') return true
-      if (user?.role === 'editor') {
+      if (user?.role === 'editor' || user?.role === 'author') {
         return {
           author: {
             equals: user.id,

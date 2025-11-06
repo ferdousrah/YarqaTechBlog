@@ -19,7 +19,7 @@ export const Comments: CollectionConfig = {
         },
       }
     },
-    create: () => true, // Allow anyone to create comments (guest or authenticated)
+    create: ({ req: { user } }) => !!user, // Require authentication to create comments
     update: ({ req: { user } }) => {
       if (user?.role === 'admin' || user?.role === 'editor') return true
       return {
@@ -57,25 +57,10 @@ export const Comments: CollectionConfig = {
       name: 'author',
       type: 'relationship',
       relationTo: 'users',
+      required: true,
       admin: {
         position: 'sidebar',
         readOnly: true,
-      },
-    },
-    {
-      name: 'guestName',
-      type: 'text',
-      admin: {
-        description: 'Name for guest commenters',
-        condition: (data) => !data?.author,
-      },
-    },
-    {
-      name: 'guestEmail',
-      type: 'email',
-      admin: {
-        description: 'Email for guest commenters',
-        condition: (data) => !data?.author,
       },
     },
     {
@@ -132,11 +117,13 @@ export const Comments: CollectionConfig = {
     beforeChange: [
       ({ req, operation, data }) => {
         if (operation === 'create') {
-          if (req.user) {
-            data.author = req.user.id
+          // Require authenticated user
+          if (!req.user) {
+            throw new Error('You must be logged in to post a comment')
           }
-          // Auto-approve comments from authenticated users with admin/editor role
-          if (req.user && (req.user.role === 'admin' || req.user.role === 'editor')) {
+          data.author = req.user.id
+          // Auto-approve comments from authenticated users with admin/editor/author role
+          if (req.user && (req.user.role === 'admin' || req.user.role === 'editor' || req.user.role === 'author')) {
             data.status = 'approved'
           } else {
             data.status = 'pending'

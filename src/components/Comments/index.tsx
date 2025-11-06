@@ -2,21 +2,19 @@
 
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+import { useAuth } from '@/contexts/AuthContext'
+import { AuthModal } from '@/components/Auth/AuthModal'
 
 interface Author {
-  id: string
+  id: string | number
   name: string
 }
 
 interface Comment {
-  id: string
+  id: string | number
   content: string
   author?: Author
-  guestName?: string
-  guestEmail?: string
   createdAt: string
   isEdited: boolean
   editedAt?: string
@@ -30,22 +28,16 @@ interface CommentsProps {
 }
 
 export function Comments({ postId, enableComments = true }: CommentsProps) {
-  // Convert postId to string for consistency
   const postIdString = String(postId)
+  const { user, loading: authLoading } = useAuth()
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-
-  // Debug log
-  console.log('Comments component rendered with postId:', postIdString, 'enableComments:', enableComments)
-
-  // Form state
   const [content, setContent] = useState('')
-  const [guestName, setGuestName] = useState('')
-  const [guestEmail, setGuestEmail] = useState('')
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
+  const [showAuthModal, setShowAuthModal] = useState(false)
 
   useEffect(() => {
     fetchComments()
@@ -54,21 +46,17 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
   const fetchComments = async () => {
     try {
       setLoading(true)
-      console.log('Fetching comments from:', `/api/posts/${postIdString}/comments`)
       const response = await fetch(`/api/posts/${postIdString}/comments`)
       const data = await response.json()
-
-      console.log('Comments fetch response:', data)
 
       if (data.success) {
         setComments(data.comments)
       } else {
-        console.error('Failed to load comments:', data)
         setError('Failed to load comments')
       }
     } catch (err) {
       console.error('Error fetching comments:', err)
-      setError('Failed to load comments. ' + (err instanceof Error ? err.message : String(err)))
+      setError('Failed to load comments')
     } finally {
       setLoading(false)
     }
@@ -79,13 +67,13 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
     setError(null)
     setSuccessMessage(null)
 
-    if (!content.trim()) {
-      setError('Comment cannot be empty')
+    if (!user) {
+      setShowAuthModal(true)
       return
     }
 
-    if (!guestName.trim() || !guestEmail.trim()) {
-      setError('Name and email are required')
+    if (!content.trim()) {
+      setError('Comment cannot be empty')
       return
     }
 
@@ -100,8 +88,6 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
         body: JSON.stringify({
           postId: postIdString,
           content: content.trim(),
-          guestName: guestName.trim(),
-          guestEmail: guestEmail.trim(),
           parentCommentId,
         }),
       })
@@ -112,11 +98,10 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
         setSuccessMessage(data.message || 'Comment submitted successfully!')
         setContent('')
         setReplyingTo(null)
-        // Optionally refresh comments after a delay
         setTimeout(() => {
           fetchComments()
           setSuccessMessage(null)
-        }, 3000)
+        }, 2000)
       } else {
         setError(data.error || 'Failed to submit comment')
       }
@@ -141,26 +126,25 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
 
   const CommentItem = ({ comment, isReply = false }: { comment: Comment; isReply?: boolean }) => {
     const [showReplyForm, setShowReplyForm] = useState(false)
-
-    const authorName = comment.author?.name || comment.guestName || 'Anonymous'
+    const authorName = comment.author?.name || 'Anonymous'
 
     return (
       <div className={`${isReply ? 'ml-8 mt-4' : 'mt-6'} border-l-2 border-gray-200 pl-4`}>
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
             {authorName.charAt(0).toUpperCase()}
           </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="font-semibold text-gray-900">{authorName}</span>
               <span className="text-sm text-gray-500">{formatDate(comment.createdAt)}</span>
               {comment.isEdited && (
                 <span className="text-xs text-gray-400 italic">(edited)</span>
               )}
             </div>
-            <p className="mt-2 text-gray-700 whitespace-pre-wrap">{comment.content}</p>
+            <p className="mt-2 text-gray-700 whitespace-pre-wrap break-words">{comment.content}</p>
             <div className="mt-2 flex items-center gap-4">
-              {!isReply && (
+              {!isReply && user && (
                 <button
                   onClick={() => setShowReplyForm(!showReplyForm)}
                   className="text-sm text-blue-600 hover:text-blue-700 font-medium"
@@ -172,7 +156,7 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
 
             {showReplyForm && (
               <div className="mt-4 bg-gray-50 p-4 rounded-lg">
-                <form onSubmit={(e) => handleSubmitComment(e, comment.id)}>
+                <form onSubmit={(e) => handleSubmitComment(e, String(comment.id))}>
                   <Textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
@@ -197,7 +181,6 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
               </div>
             )}
 
-            {/* Nested replies */}
             {comment.replies && comment.replies.length > 0 && (
               <div className="mt-4">
                 {comment.replies.map((reply) => (
@@ -220,97 +203,91 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
   }
 
   return (
-    <div className="mt-12 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold mb-8">
-        Comments {comments.length > 0 && `(${comments.length})`}
-      </h2>
+    <>
+      <div className="mt-12 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-8">
+          Comments {comments.length > 0 && `(${comments.length})`}
+        </h2>
 
-      {/* Comment Form */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-        <h3 className="text-xl font-semibold mb-4">Leave a Comment</h3>
-        <form onSubmit={(e) => handleSubmitComment(e)}>
+        {/* Comment Form */}
+        {!authLoading && (
+          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+            {user ? (
+              <>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">{user.name}</div>
+                    <div className="text-sm text-gray-500">{user.email}</div>
+                  </div>
+                </div>
+                <form onSubmit={(e) => handleSubmitComment(e)}>
+                  <Textarea
+                    id="content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="Share your thoughts..."
+                    required
+                    rows={4}
+                    maxLength={1000}
+                    className="mt-1"
+                  />
+                  <p className="text-sm text-gray-500 mt-1">{content.length}/1000 characters</p>
+
+                  {error && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                      {error}
+                    </div>
+                  )}
+
+                  {successMessage && (
+                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                      {successMessage}
+                    </div>
+                  )}
+
+                  <div className="mt-4">
+                    <Button type="submit" disabled={submitting}>
+                      {submitting ? 'Submitting...' : 'Post Comment'}
+                    </Button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-4">You need to be logged in to comment.</p>
+                <Button onClick={() => setShowAuthModal(true)}>Login to Comment</Button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Comments List */}
+        {loading ? (
+          <div className="text-center py-8">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
+            <p className="mt-2 text-gray-500">Loading comments...</p>
+          </div>
+        ) : comments.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <p>No comments yet. Be the first to comment!</p>
+          </div>
+        ) : (
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="guestName">Name *</Label>
-                <Input
-                  id="guestName"
-                  type="text"
-                  value={guestName}
-                  onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="Your name"
-                  required
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="guestEmail">Email *</Label>
-                <Input
-                  id="guestEmail"
-                  type="email"
-                  value={guestEmail}
-                  onChange={(e) => setGuestEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  className="mt-1"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="content">Comment *</Label>
-              <Textarea
-                id="content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Share your thoughts..."
-                required
-                rows={4}
-                maxLength={1000}
-                className="mt-1"
-              />
-              <p className="text-sm text-gray-500 mt-1">
-                {content.length}/1000 characters
-              </p>
-            </div>
+            {comments.map((comment) => (
+              <CommentItem key={comment.id} comment={comment} />
+            ))}
           </div>
-
-          {error && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              {error}
-            </div>
-          )}
-
-          {successMessage && (
-            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
-              {successMessage}
-            </div>
-          )}
-
-          <div className="mt-6">
-            <Button type="submit" disabled={submitting} className="w-full md:w-auto">
-              {submitting ? 'Submitting...' : 'Post Comment'}
-            </Button>
-          </div>
-        </form>
+        )}
       </div>
 
-      {/* Comments List */}
-      {loading ? (
-        <div className="text-center py-8">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
-          <p className="mt-2 text-gray-500">Loading comments...</p>
-        </div>
-      ) : comments.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          <p>No comments yet. Be the first to comment!</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {comments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} />
-          ))}
-        </div>
-      )}
-    </div>
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        defaultMode="login"
+      />
+    </>
   )
 }
