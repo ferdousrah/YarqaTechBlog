@@ -6,21 +6,24 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const payload = await getPayload({ config })
+
+    // Get user from request (authentication check)
+    const { user } = await payload.auth({ headers: request.headers })
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'You must be logged in to post a comment' },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
-    const { postId, content, guestName, guestEmail, parentCommentId } = body
+    const { postId, content, parentCommentId } = body
 
     // Validate required fields
     if (!postId || !content) {
       return NextResponse.json(
         { success: false, error: 'Post ID and content are required' },
-        { status: 400 }
-      )
-    }
-
-    // For guest users, require name and email
-    if (!guestName || !guestEmail) {
-      return NextResponse.json(
-        { success: false, error: 'Name and email are required for guest comments' },
         { status: 400 }
       )
     }
@@ -60,8 +63,7 @@ export async function POST(request: NextRequest) {
     const commentData: any = {
       post: numericPostId,
       content: content.trim(),
-      guestName: guestName.trim(),
-      guestEmail: guestEmail.trim(),
+      author: user.id, // Use authenticated user
     }
 
     if (parentCommentId) {
@@ -72,6 +74,7 @@ export async function POST(request: NextRequest) {
     const newComment = await payload.create({
       collection: 'comments',
       data: commentData,
+      user, // Pass user context for access control
     })
 
     return NextResponse.json({
