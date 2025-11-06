@@ -5,6 +5,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import LexicalContent from '@/components/frontend/LexicalContent'
+import { Comments } from '@/components/Comments'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
@@ -182,6 +183,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             </button>
           </div>
         </div>
+
+        {/* Comments Section */}
+        <Comments
+          postId={post.id}
+          enableComments={post.commentsSettings?.enableComments ?? true}
+        />
       </article>
 
       {/* Related Posts */}
