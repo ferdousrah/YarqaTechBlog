@@ -11,10 +11,13 @@ export async function GET(
     const payload = await getPayload({ config })
     const postId = params.postId
 
+    // Convert postId to number if needed
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) : postId
+
     const comments = await payload.find({
       collection: 'comments',
       where: {
-        post: { equals: postId },
+        post: { equals: numericPostId },
         status: { equals: 'approved' },
         parentComment: { exists: false }, // Only top-level comments
       },

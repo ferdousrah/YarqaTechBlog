@@ -33,10 +33,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Convert postId to number if it's a string
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) : postId
+
     // Check if post exists and has comments enabled
     const post = await payload.findByID({
       collection: 'posts',
-      id: postId,
+      id: numericPostId,
     })
 
     if (!post) {
@@ -55,14 +58,15 @@ export async function POST(request: NextRequest) {
 
     // Create comment
     const commentData: any = {
-      post: postId,
+      post: numericPostId,
       content: content.trim(),
       guestName: guestName.trim(),
       guestEmail: guestEmail.trim(),
     }
 
     if (parentCommentId) {
-      commentData.parentComment = parentCommentId
+      const numericParentId = typeof parentCommentId === 'string' ? parseInt(parentCommentId, 10) : parentCommentId
+      commentData.parentComment = numericParentId
     }
 
     const newComment = await payload.create({
