@@ -28,35 +28,42 @@ export default function Footer({ settings }: FooterProps) {
   }
 
   // Build social links array from settings
-  const socialLinks = []
-  if (settings?.socialLinks?.twitter) {
-    socialLinks.push({ Icon: Twitter, href: settings.socialLinks.twitter, label: 'Twitter', color: 'hover:text-sky-400' })
-  }
-  if (settings?.socialLinks?.linkedin) {
-    socialLinks.push({ Icon: Linkedin, href: settings.socialLinks.linkedin, label: 'LinkedIn', color: 'hover:text-blue-400' })
-  }
-  if (settings?.socialLinks?.github) {
-    socialLinks.push({ Icon: Github, href: settings.socialLinks.github, label: 'GitHub', color: 'hover:text-gray-300' })
-  }
-  if (settings?.socialLinks?.facebook) {
-    socialLinks.push({ Icon: Facebook, href: settings.socialLinks.facebook, label: 'Facebook', color: 'hover:text-blue-500' })
-  }
-  if (settings?.socialLinks?.instagram) {
-    socialLinks.push({ Icon: Instagram, href: settings.socialLinks.instagram, label: 'Instagram', color: 'hover:text-pink-400' })
-  }
-  if (settings?.socialLinks?.youtube) {
-    socialLinks.push({ Icon: Youtube, href: settings.socialLinks.youtube, label: 'YouTube', color: 'hover:text-red-500' })
+  const buildSocialLinks = () => {
+    const links = []
+
+    if (settings?.socialLinks?.twitter) {
+      links.push({ Icon: Twitter, href: settings.socialLinks.twitter, label: 'Twitter', color: 'hover:text-sky-400' })
+    }
+    if (settings?.socialLinks?.linkedin) {
+      links.push({ Icon: Linkedin, href: settings.socialLinks.linkedin, label: 'LinkedIn', color: 'hover:text-blue-400' })
+    }
+    if (settings?.socialLinks?.github) {
+      links.push({ Icon: Github, href: settings.socialLinks.github, label: 'GitHub', color: 'hover:text-gray-300' })
+    }
+    if (settings?.socialLinks?.facebook) {
+      links.push({ Icon: Facebook, href: settings.socialLinks.facebook, label: 'Facebook', color: 'hover:text-blue-500' })
+    }
+    if (settings?.socialLinks?.instagram) {
+      links.push({ Icon: Instagram, href: settings.socialLinks.instagram, label: 'Instagram', color: 'hover:text-pink-400' })
+    }
+    if (settings?.socialLinks?.youtube) {
+      links.push({ Icon: Youtube, href: settings.socialLinks.youtube, label: 'YouTube', color: 'hover:text-red-500' })
+    }
+
+    // Default social links if none configured
+    if (links.length === 0) {
+      return [
+        { Icon: Twitter, href: 'https://twitter.com', label: 'Twitter', color: 'hover:text-sky-400' },
+        { Icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn', color: 'hover:text-blue-400' },
+        { Icon: Github, href: 'https://github.com', label: 'GitHub', color: 'hover:text-gray-300' },
+        { Icon: Mail, href: `mailto:${contactEmail}`, label: 'Email', color: 'hover:text-red-400' },
+      ]
+    }
+
+    return links
   }
 
-  // Default social links if none configured
-  if (socialLinks.length === 0) {
-    socialLinks.push(
-      { Icon: Twitter, href: 'https://twitter.com', label: 'Twitter', color: 'hover:text-sky-400' },
-      { Icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn', color: 'hover:text-blue-400' },
-      { Icon: Github, href: 'https://github.com', label: 'GitHub', color: 'hover:text-gray-300' },
-      { Icon: Mail, href: `mailto:${contactEmail}`, label: 'Email', color: 'hover:text-red-400' }
-    )
-  }
+  const socialLinks = buildSocialLinks()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,18 +91,6 @@ export default function Footer({ settings }: FooterProps) {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   }
-
-  const socialLinks = [
-    { Icon: Twitter, href: 'https://twitter.com', label: 'Twitter', color: 'hover:text-sky-400' },
-    {
-      Icon: Linkedin,
-      href: 'https://linkedin.com',
-      label: 'LinkedIn',
-      color: 'hover:text-blue-400',
-    },
-    { Icon: Github, href: 'https://github.com', label: 'GitHub', color: 'hover:text-gray-300' },
-    { Icon: Mail, href: 'mailto:hello@yarqatech.com', label: 'Email', color: 'hover:text-red-400' },
-  ]
 
   return (
     <footer className="relative bg-gradient-to-b from-gray-900 via-gray-900 to-black text-gray-300 border-t border-gray-800 overflow-hidden">
