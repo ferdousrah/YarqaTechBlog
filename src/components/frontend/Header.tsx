@@ -182,8 +182,8 @@ export default function Header({ settings }: HeaderProps) {
             </Link>
           </motion.div>
 
-          {/* Center Navigation - Desktop - Centered when scrolled */}
-          <nav className={`hidden lg:flex items-center space-x-1 ${scrolled ? 'mx-auto' : 'flex-1 justify-center'}`}>
+          {/* Center Navigation - Desktop - Hidden when scrolled */}
+          <nav className={`hidden lg:flex items-center space-x-1 flex-1 justify-center transition-opacity duration-300 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
             {navItems.map((item, index) => {
               const isActive = pathname === item.href
               const Icon = item.icon
@@ -216,6 +216,26 @@ export default function Header({ settings }: HeaderProps) {
               )
             })}
           </nav>
+
+          {/* Category Bar - Centered when scrolled */}
+          <div className={`hidden lg:flex items-center space-x-4 transition-opacity duration-300 ${scrolled ? 'opacity-100 mx-auto' : 'opacity-0 pointer-events-none absolute'}`}>
+            {[
+              'Web Development',
+              'Mobile Apps',
+              'AI & ML',
+              'Cloud',
+              'Security',
+              'Design',
+            ].map((category) => (
+              <Link
+                key={category}
+                href={`/category/${category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '')}`}
+                className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-all duration-300 px-3 py-1 rounded-lg hover:bg-gray-50"
+              >
+                {category}
+              </Link>
+            ))}
+          </div>
 
           {/* Right Actions - Hidden when scrolled */}
           <motion.div
