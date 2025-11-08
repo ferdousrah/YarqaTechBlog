@@ -2,6 +2,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -100,6 +101,10 @@ export default function Header({ settings }: HeaderProps) {
   const showSearch = settings?.showSearch !== false
   const authButtonStyle = settings?.authButtonStyle || 'both'
 
+  // Check if there's an uploaded logo
+  const hasUploadedLogo = settings?.logo && typeof settings.logo === 'object' && settings.logo?.url
+  const logoUrl = hasUploadedLogo ? settings.logo.url : null
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -120,16 +125,36 @@ export default function Header({ settings }: HeaderProps) {
             className="flex items-center"
           >
             <Link href="/" className="group flex items-center gap-2">
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg"
-              >
-                <span className="text-white font-bold text-xl">{logoText.letter}</span>
-              </motion.div>
-              <span className="text-2xl md:text-3xl font-bold">
-                <span className="gradient-text">{logoText.first}</span>
-                <span className="text-gray-900">{logoText.second}</span>
-              </span>
+              {logoUrl ? (
+                // Uploaded logo image
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="relative h-10 w-auto"
+                >
+                  <Image
+                    src={logoUrl}
+                    alt={settings?.siteName || 'Logo'}
+                    height={40}
+                    width={120}
+                    className="h-10 w-auto object-contain"
+                    priority
+                  />
+                </motion.div>
+              ) : (
+                // Default text-based logo
+                <>
+                  <motion.div
+                    whileHover={{ scale: 1.05, rotate: 5 }}
+                    className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg"
+                  >
+                    <span className="text-white font-bold text-xl">{logoText.letter}</span>
+                  </motion.div>
+                  <span className="text-2xl md:text-3xl font-bold">
+                    <span className="gradient-text">{logoText.first}</span>
+                    <span className="text-gray-900">{logoText.second}</span>
+                  </span>
+                </>
+              )}
             </Link>
           </motion.div>
 
@@ -482,15 +507,29 @@ export default function Header({ settings }: HeaderProps) {
                 animate={{ opacity: 1, y: 0 }}
                 className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50"
               >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold">{logoText.letter}</span>
+                {logoUrl ? (
+                  // Uploaded logo
+                  <div className="relative h-8 w-auto">
+                    <Image
+                      src={logoUrl}
+                      alt={settings?.siteName || 'Logo'}
+                      height={32}
+                      width={96}
+                      className="h-8 w-auto object-contain"
+                    />
                   </div>
-                  <span className="text-xl font-bold">
-                    <span className="gradient-text">{logoText.first}</span>
-                    <span className="text-gray-900">{logoText.second}</span>
-                  </span>
-                </div>
+                ) : (
+                  // Default text logo
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                      <span className="text-white font-bold">{logoText.letter}</span>
+                    </div>
+                    <span className="text-xl font-bold">
+                      <span className="gradient-text">{logoText.first}</span>
+                      <span className="text-gray-900">{logoText.second}</span>
+                    </span>
+                  </div>
+                )}
                 <motion.button
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
