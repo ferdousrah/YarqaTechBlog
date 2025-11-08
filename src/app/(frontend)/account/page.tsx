@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   User,
@@ -22,10 +23,12 @@ import { useAuth } from '@/contexts/AuthContext'
 export default function AccountPage() {
   const router = useRouter()
   const { user, loading: authLoading, refreshUser } = useAuth()
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [bio, setBio] = useState('')
+  const [avatar, setAvatar] = useState<{ url: string; alt?: string } | null>(null)
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -35,6 +38,7 @@ export default function AccountPage() {
   const [website, setWebsite] = useState('')
 
   const [loading, setLoading] = useState(false)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
 
@@ -61,6 +65,7 @@ export default function AccountPage() {
         setName(data.user.name || '')
         setEmail(data.user.email || '')
         setBio(data.user.bio || '')
+        setAvatar(data.user.avatar || null)
         setTwitter(data.user.socialLinks?.twitter || '')
         setLinkedin(data.user.socialLinks?.linkedin || '')
         setGithub(data.user.socialLinks?.github || '')
@@ -68,6 +73,50 @@ export default function AccountPage() {
       }
     } catch (error) {
       console.error('Error fetching user profile:', error)
+    }
+  }
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingAvatar(true)
+    setStatus('idle')
+    setMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('avatar', file)
+
+      const response = await fetch('/api/user/upload-avatar', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setStatus('success')
+        setMessage('Profile photo updated successfully!')
+        setAvatar(data.avatar)
+        await refreshUser()
+      } else {
+        setStatus('error')
+        setMessage(data.error || 'Failed to upload photo')
+      }
+    } catch (error) {
+      setStatus('error')
+      setMessage('An error occurred while uploading photo')
+    } finally {
+      setUploadingAvatar(false)
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
     }
   }
 
@@ -218,11 +267,43 @@ export default function AccountPage() {
               {/* Avatar */}
               <div className="text-center mb-6">
                 <div className="relative inline-block">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
-                    {user.name?.charAt(0).toUpperCase()}
-                  </div>
-                  <button className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-lg border-2 border-gray-100 hover:bg-gray-50 transition">
-                    <Camera className="w-4 h-4 text-gray-600" />
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
+
+                  {/* Avatar Display */}
+                  {avatar?.url ? (
+                    <div className="w-24 h-24 rounded-full overflow-hidden shadow-lg relative">
+                      <Image
+                        src={avatar.url}
+                        alt={avatar.alt || 'Profile photo'}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+
+                  {/* Camera Button */}
+                  <button
+                    onClick={handleAvatarClick}
+                    disabled={uploadingAvatar}
+                    className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-lg border-2 border-gray-100 hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Upload profile photo"
+                  >
+                    {uploadingAvatar ? (
+                      <Loader2 className="w-4 h-4 text-gray-600 animate-spin" />
+                    ) : (
+                      <Camera className="w-4 h-4 text-gray-600" />
+                    )}
                   </button>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mt-4">{user.name}</h3>
