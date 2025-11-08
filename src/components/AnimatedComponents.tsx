@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ReactNode } from 'react'
+import BookmarkButton from './BookmarkButton'
 
 // Animation variants
 export const fadeInUp = {
@@ -61,6 +62,11 @@ export function AnimatedHeroPost({ post, index = 0 }: HeroPostCardProps) {
 
           {/* Enhanced Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+
+          {/* Bookmark Button - Top Right */}
+          <div className="absolute top-4 right-4 z-10" onClick={(e) => e.stopPropagation()}>
+            <BookmarkButton postId={post.id} variant="icon-only" />
+          </div>
 
           {/* Content */}
           <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10 text-white">
@@ -146,6 +152,11 @@ export function AnimatedSmallPost({ post, index = 0 }: HeroPostCardProps) {
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
+          {/* Bookmark Button - Top Right */}
+          <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
+            <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
+          </div>
+
           {/* Content */}
           <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
             <div className="text-xs font-bold mb-2 text-blue-300 uppercase tracking-wide">
@@ -193,6 +204,10 @@ export function AnimatedPostCard({ post, index = 0 }: HeroPostCardProps) {
                 #{index + 1}
               </div>
             )}
+            {/* Bookmark Button - Top Right */}
+            <div className="absolute top-3 right-3 z-10" onClick={(e) => e.stopPropagation()}>
+              <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
+            </div>
           </div>
           <div className="p-5">
             <div className="flex items-center gap-2 mb-3">
