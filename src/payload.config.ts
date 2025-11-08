@@ -18,6 +18,9 @@ import { SearchQueries } from './collections/SearchQueries'
 import { PostViews } from './collections/PostViews'
 import { ReadingProgress } from './collections/ReadingProgress'
 
+// Globals
+import { SiteSettings } from './globals/SiteSettings'
+
 // Endpoints
 import { searchEndpoint } from './endpoints/search'
 import { trendingEndpoint } from './endpoints/trending'
@@ -66,6 +69,7 @@ export default buildConfig({
     PostViews,
     ReadingProgress,
   ],
+  globals: [SiteSettings],
   endpoints: [
     searchEndpoint,
     trendingEndpoint,

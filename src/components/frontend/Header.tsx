@@ -5,15 +5,35 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Menu, X, Home, BookOpen, Folder, Info } from 'lucide-react'
+import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
 
-export default function Header() {
+// Helper function to get icon component from string
+function getIconComponent(iconName?: string) {
+  const icons: Record<string, any> = {
+    home: Home,
+    book: BookOpen,
+    folder: Folder,
+    info: Info,
+    mail: Mail,
+    user: User,
+  }
+  return icons[iconName || 'home'] || Home
+}
+
+interface HeaderProps {
+  settings?: any
+}
+
+export default function Header({ settings }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [scrolled, setScrolled] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+  const { user, logout } = useAuth()
 
   // Handle scroll effect
   useEffect(() => {
@@ -49,12 +69,35 @@ export default function Header() {
     setMobileMenuOpen(false)
   }
 
-  const navItems = [
-    { href: '/', label: 'Home', icon: Home },
-    { href: '/blog', label: 'Latest', icon: BookOpen },
-    { href: '/categories', label: 'Categories', icon: Folder },
-    { href: '/about', label: 'About', icon: Info },
-  ]
+  const handleLogout = async () => {
+    await logout()
+    setShowUserMenu(false)
+    router.push('/')
+  }
+
+  // Use custom nav links from settings or default ones
+  const navItems = settings?.navigationLinks?.length
+    ? settings.navigationLinks.map((link: any) => ({
+        href: link.href,
+        label: link.label,
+        icon: getIconComponent(link.icon),
+      }))
+    : [
+        { href: '/', label: 'Home', icon: Home },
+        { href: '/blog', label: 'Latest', icon: BookOpen },
+        { href: '/categories', label: 'Categories', icon: Folder },
+        { href: '/about', label: 'About', icon: Info },
+      ]
+
+  // Get logo text from settings or use defaults
+  const logoText = {
+    first: settings?.logoText?.firstPart || 'Yarqa',
+    second: settings?.logoText?.secondPart || 'Tech',
+    letter: settings?.logoText?.logoLetter || 'Y',
+  }
+
+  const showAuthButtons = settings?.showAuthButtons !== false
+  const showSearch = settings?.showSearch !== false
 
   return (
     <motion.header
@@ -80,11 +123,11 @@ export default function Header() {
                 whileHover={{ scale: 1.05, rotate: 5 }}
                 className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg"
               >
-                <span className="text-white font-bold text-xl">Y</span>
+                <span className="text-white font-bold text-xl">{logoText.letter}</span>
               </motion.div>
               <span className="text-2xl md:text-3xl font-bold">
-                <span className="gradient-text">Yarqa</span>
-                <span className="text-gray-900">Tech</span>
+                <span className="gradient-text">{logoText.first}</span>
+                <span className="text-gray-900">{logoText.second}</span>
               </span>
             </Link>
           </motion.div>
@@ -132,16 +175,114 @@ export default function Header() {
             className="flex items-center space-x-2"
           >
             {/* Search Button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="hidden md:flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-              <span className="text-sm font-medium">Search</span>
-            </motion.button>
+            {showSearch && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="hidden md:flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+                aria-label="Search"
+              >
+                <Search className="w-5 h-5" />
+                <span className="text-sm font-medium">Search</span>
+              </motion.button>
+            )}
+
+            {/* Auth Buttons / User Menu */}
+            {showAuthButtons && (
+              <div className="hidden lg:flex items-center gap-2">
+                {user ? (
+                  <div className="relative">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+                    >
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">
+                          {user.name?.charAt(0).toUpperCase() || 'U'}
+                        </span>
+                      </div>
+                      <span className="text-sm font-medium">{user.name}</span>
+                    </motion.button>
+
+                    {/* User Dropdown */}
+                    <AnimatePresence>
+                      {showUserMenu && (
+                        <>
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-30"
+                            onClick={() => setShowUserMenu(false)}
+                          />
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-40"
+                          >
+                            <div className="px-4 py-3 border-b border-gray-100">
+                              <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                              <p className="text-xs text-gray-500">{user.email}</p>
+                            </div>
+                            <Link
+                              href="/account"
+                              onClick={() => setShowUserMenu(false)}
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                            >
+                              <User className="w-4 h-4" />
+                              My Account
+                            </Link>
+                            <Link
+                              href="/bookmarks"
+                              onClick={() => setShowUserMenu(false)}
+                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                            >
+                              <BookOpen className="w-4 h-4" />
+                              My Bookmarks
+                            </Link>
+                            <button
+                              onClick={handleLogout}
+                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                            >
+                              <LogIn className="w-4 h-4 rotate-180" />
+                              Sign Out
+                            </button>
+                          </motion.div>
+                        </>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <>
+                    <Link href="/login">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+                      >
+                        <LogIn className="w-4 h-4" />
+                        <span className="text-sm font-medium">Login</span>
+                      </motion.button>
+                    </Link>
+                    <Link href="/register">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                      >
+                        <UserPlus className="w-4 h-4" />
+                        <span className="text-sm font-medium">Register</span>
+                      </motion.button>
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <motion.button
@@ -273,11 +414,11 @@ export default function Header() {
               >
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold">Y</span>
+                    <span className="text-white font-bold">{logoText.letter}</span>
                   </div>
                   <span className="text-xl font-bold">
-                    <span className="gradient-text">Yarqa</span>
-                    <span className="text-gray-900">Tech</span>
+                    <span className="gradient-text">{logoText.first}</span>
+                    <span className="text-gray-900">{logoText.second}</span>
                   </span>
                 </div>
                 <motion.button
