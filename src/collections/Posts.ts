@@ -223,6 +223,15 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'dislikes',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+    },
+    {
       name: 'shares',
       type: 'number',
       defaultValue: 0,

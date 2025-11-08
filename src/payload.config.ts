@@ -18,6 +18,7 @@ import { SearchQueries } from './collections/SearchQueries'
 import { PostViews } from './collections/PostViews'
 import { ReadingProgress } from './collections/ReadingProgress'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
+import { PostReactions } from './collections/PostReactions'
 
 // Globals
 import { SiteSettings } from './globals/SiteSettings'
@@ -70,6 +71,7 @@ export default buildConfig({
     PostViews,
     ReadingProgress,
     NewsletterSubscribers,
+    PostReactions,
   ],
   globals: [SiteSettings],
   endpoints: [
