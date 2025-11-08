@@ -110,9 +110,20 @@ export function AnimatedHeroPost({ post, index = 0 }: HeroPostCardProps) {
               className="flex items-center gap-4 text-sm"
             >
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                  {typeof post.author === 'object' ? post.author.name.charAt(0) : 'A'}
-                </div>
+                {typeof post.author === 'object' && post.author.avatar && typeof post.author.avatar === 'object' && post.author.avatar.url ? (
+                  <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                    <Image
+                      src={post.author.avatar.url}
+                      alt={post.author.avatar.alt || post.author.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                    {typeof post.author === 'object' ? post.author.name.charAt(0) : 'A'}
+                  </div>
+                )}
                 <span className="font-medium">
                   {typeof post.author === 'object' ? post.author.name : ''}
                 </span>
