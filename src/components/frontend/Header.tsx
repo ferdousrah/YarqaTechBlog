@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail } from 'lucide-react'
+import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail, Bookmark } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
 // Helper function to get icon component from string
@@ -268,7 +268,7 @@ export default function Header({ settings }: HeaderProps) {
                               onClick={() => setShowUserMenu(false)}
                               className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
                             >
-                              <BookOpen className="w-4 h-4" />
+                              <Bookmark className="w-4 h-4" />
                               My Bookmarks
                             </Link>
                             <button
