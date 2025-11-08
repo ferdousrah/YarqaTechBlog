@@ -1,8 +1,15 @@
-// src/app/(frontend)/page.tsx - Pure Tailwind CSS
+// src/app/(frontend)/page.tsx - Modern design with animations
 import Link from 'next/link'
 import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import {
+  AnimatedHeroPost,
+  AnimatedSmallPost,
+  AnimatedPostCard,
+  AnimatedSectionHeader,
+  AnimatedContainer,
+} from '@/components/AnimatedComponents'
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
@@ -32,187 +39,40 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50">
       {/* Main Container */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <AnimatedContainer className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section - Large Post with 4 smaller posts */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
           {/* Large Hero Post - 2 columns */}
-          {heroPost && (
-            <div className="lg:col-span-2">
-              <Link href={`/blog/${heroPost.slug}`} className="group block">
-                <article className="relative h-[600px] rounded-2xl overflow-hidden bg-gray-900 shadow-2xl transform transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl">
-                  {/* Featured Image */}
-                  {typeof heroPost.featuredImage === 'object' && heroPost.featuredImage?.url && (
-                    <Image
-                      src={heroPost.featuredImage.url}
-                      alt={heroPost.featuredImage.alt || heroPost.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      priority
-                    />
-                  )}
-
-                  {/* Enhanced Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-
-                  {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10 text-white">
-                    <div className="flex items-center gap-3 mb-5">
-                      <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wide shadow-lg">
-                        {typeof heroPost.category === 'object' ? heroPost.category.name : ''}
-                      </span>
-                      <span className="text-gray-200 text-sm font-medium">
-                        {new Date(heroPost.publishedAt).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </span>
-                    </div>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5 leading-tight group-hover:text-blue-300 transition-colors duration-300">
-                      {heroPost.title}
-                    </h2>
-                    <p className="text-xl text-gray-100 mb-5 line-clamp-2 leading-relaxed">
-                      {heroPost.excerpt}
-                    </p>
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                          {typeof heroPost.author === 'object' ? heroPost.author.name.charAt(0) : 'A'}
-                        </div>
-                        <span className="font-medium">
-                          {typeof heroPost.author === 'object' ? heroPost.author.name : ''}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              </Link>
-            </div>
-          )}
+          {heroPost && <AnimatedHeroPost post={heroPost} />}
 
           {/* 4 Smaller Posts - 1 column */}
           <div className="flex flex-col gap-4">
-            {topStories.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="group block">
-                <article className="relative h-[140px] rounded-xl overflow-hidden bg-gray-900 shadow-lg transform transition-all duration-300 hover:scale-[1.03] hover:shadow-xl">
-                  {/* Featured Image */}
-                  {typeof post.featuredImage === 'object' && post.featuredImage?.url && (
-                    <Image
-                      src={post.featuredImage.url}
-                      alt={post.featuredImage.alt || post.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  )}
-
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-
-                  {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <div className="text-xs font-bold mb-2 text-blue-300 uppercase tracking-wide">
-                      {typeof post.category === 'object' ? post.category.name : ''}
-                    </div>
-                    <h3 className="font-bold text-sm line-clamp-2 group-hover:text-blue-200 transition-colors leading-snug">
-                      {post.title}
-                    </h3>
-                  </div>
-                </article>
-              </Link>
+            {topStories.map((post, index) => (
+              <AnimatedSmallPost key={post.id} post={post} index={index} />
             ))}
           </div>
         </div>
 
         {/* Trending Section */}
         <div className="mb-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Trending Now</h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"></div>
-            </div>
-            <Link
-              href="/blog"
-              className="text-blue-600 font-semibold text-sm hover:text-blue-700 transition flex items-center gap-2 group"
-            >
-              View All
-              <svg
-                className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
+          <AnimatedSectionHeader
+            title="Trending Now"
+            link={{ href: '/blog', label: 'View All' }}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {trendingPosts.map((post, index) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="group">
-                <article className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full border border-gray-100">
-                  <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                    {typeof post.featuredImage === 'object' && post.featuredImage?.url ? (
-                      <Image
-                        src={post.featuredImage.url}
-                        alt={post.featuredImage.alt || post.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200">
-                        <span className="text-5xl font-bold text-blue-600">{post.title.charAt(0)}</span>
-                      </div>
-                    )}
-                    <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-blue-600 text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                      #{index + 1}
-                    </div>
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-blue-600 font-bold text-xs uppercase tracking-wide">
-                        {typeof post.category === 'object' ? post.category.name : ''}
-                      </span>
-                      <span className="text-gray-300">•</span>
-                      <span className="text-gray-500 text-xs">
-                        {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </span>
-                    </div>
-                    <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2 leading-tight">
-                      {post.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">{post.excerpt}</p>
-                  </div>
-                </article>
-              </Link>
+              <AnimatedPostCard key={post.id} post={post} index={index} />
             ))}
           </div>
         </div>
 
         {/* Latest News Section */}
         <div className="mb-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Latest Articles</h2>
-              <div className="h-1 w-20 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"></div>
-            </div>
-            <Link
-              href="/blog"
-              className="text-blue-600 font-semibold text-sm hover:text-blue-700 transition flex items-center gap-2 group"
-            >
-              View All
-              <svg
-                className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
+          <AnimatedSectionHeader
+            title="Latest Articles"
+            link={{ href: '/blog', label: 'View All' }}
+          />
 
           <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
             <div className="space-y-6">
@@ -267,7 +127,7 @@ export default async function HomePage() {
         {categories.docs.slice(0, 3).map((category) => (
           <CategorySection key={category.id} category={category} payload={payload} />
         ))}
-      </div>
+      </AnimatedContainer>
 
       {/* Newsletter Section */}
       <div className="relative overflow-hidden">
