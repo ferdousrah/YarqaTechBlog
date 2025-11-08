@@ -30,11 +30,17 @@ export default function LexicalContent({ content }: LexicalContentProps) {
     return <p className="text-gray-600">No content available.</p>
   }
 
+  // Debug: Log the content structure
+  console.log('Lexical content structure:', JSON.stringify(content, null, 2))
+
   return <div className="prose prose-lg max-w-none">{renderNode(content.root)}</div>
 }
 
 function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
   if (!node) return null
+
+  // Debug: Log each node type
+  console.log('Rendering node:', { type: node.type, blockType: node.fields?.blockType, node })
 
   // Text node
   if (node.type === 'text') {
@@ -120,15 +126,17 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
     )
   }
 
-  // Link
-  if (node.type === 'link') {
+  // Link (support both 'link' and 'autolink' types)
+  if (node.type === 'link' || node.type === 'autolink') {
+    const url = node.url || node.fields?.url || node.fields?.linkType === 'custom' ? node.fields?.url : ''
+
     return (
       <a
         key={index}
-        href={node.url}
-        target={node.target || '_self'}
-        rel={node.rel}
-        className="text-blue-600 hover:text-blue-800 underline"
+        href={url}
+        target={node.target || node.fields?.newTab ? '_blank' : '_self'}
+        rel={node.rel || (node.fields?.newTab ? 'noopener noreferrer' : undefined)}
+        className="text-blue-600 hover:text-blue-800 underline transition-colors"
       >
         {node.children?.map((child, i) => renderNode(child, i))}
       </a>
@@ -150,6 +158,33 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
     return (
       <img key={index} src={node.src} alt={node.altText || ''} className="rounded-lg my-6 w-full" />
     )
+  }
+
+  // Upload node (inline images from Lexical upload feature)
+  if (node.type === 'upload') {
+    const value = node.value || node.fields?.value
+    const relationTo = node.relationTo || node.fields?.relationTo
+
+    if (value && typeof value === 'object' && value.url && relationTo === 'media') {
+      return (
+        <figure key={index} className="my-8">
+          <div className="relative w-full h-96 rounded-xl overflow-hidden">
+            <Image
+              src={value.url}
+              alt={value.alt || 'Content image'}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            />
+          </div>
+          {value.caption && (
+            <figcaption className="mt-3 text-center text-sm text-gray-600 italic">
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      )
+    }
   }
 
   // Block nodes (for custom blocks like MediaBlock, Banner, Code)
