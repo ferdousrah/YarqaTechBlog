@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useAuth } from '@/contexts/AuthContext'
@@ -9,6 +10,10 @@ import { AuthModal } from '@/components/Auth/AuthModal'
 interface Author {
   id: string | number
   name: string
+  avatar?: {
+    url: string
+    alt?: string
+  }
 }
 
 interface Comment {
@@ -131,9 +136,20 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
     return (
       <div className={`${isReply ? 'ml-8 mt-4' : 'mt-6'} border-l-2 border-gray-200 pl-4`}>
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
-            {authorName.charAt(0).toUpperCase()}
-          </div>
+          {comment.author?.avatar?.url ? (
+            <div className="w-10 h-10 rounded-full overflow-hidden relative flex-shrink-0">
+              <Image
+                src={comment.author.avatar.url}
+                alt={comment.author.avatar.alt || authorName}
+                fill
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
+              {authorName.charAt(0).toUpperCase()}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-semibold text-gray-900">{authorName}</span>

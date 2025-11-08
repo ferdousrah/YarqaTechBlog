@@ -23,6 +23,7 @@ export default async function HomePage() {
     },
     limit: 15,
     sort: '-publishedAt',
+    depth: 2, // Populate author.avatar and other nested relationships
   })
 
   const heroPost = latestPosts.docs[0]

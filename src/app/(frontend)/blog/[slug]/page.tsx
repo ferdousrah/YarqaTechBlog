@@ -33,6 +33,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       status: { equals: 'published' },
     },
     limit: 1,
+    depth: 2, // Populate author.avatar and other nested relationships
   })
 
   if (!result.docs.length) {
@@ -91,11 +92,22 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         {/* Author & Meta Info */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-gray-200">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">
-                {typeof post.author === 'object' ? post.author.name.charAt(0) : 'A'}
-              </span>
-            </div>
+            {typeof post.author === 'object' && post.author.avatar && typeof post.author.avatar === 'object' && post.author.avatar.url ? (
+              <div className="w-12 h-12 rounded-full overflow-hidden relative">
+                <Image
+                  src={post.author.avatar.url}
+                  alt={post.author.avatar.alt || post.author.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-lg">
+                  {typeof post.author === 'object' ? post.author.name.charAt(0) : 'A'}
+                </span>
+              </div>
+            )}
             <div>
               <div className="font-semibold text-gray-900">
                 {typeof post.author === 'object' ? post.author.name : ''}
