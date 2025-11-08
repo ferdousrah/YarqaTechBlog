@@ -5,11 +5,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { postId: string } }
+  { params }: { params: Promise<{ postId: string }> }
 ) {
   try {
+    const { postId } = await params
     const payload = await getPayload({ config })
-    const postId = params.postId
 
     // Convert postId to number if needed
     const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) : postId

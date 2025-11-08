@@ -26,11 +26,14 @@ export async function GET(
       return NextResponse.json({ success: false, error: 'Not authenticated' }, { status: 401 })
     }
 
+    // Convert postId to number if needed (for relationship fields)
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) : postId
+
     // Find user's reaction to this post
     const reactions = await payload.find({
       collection: 'post-reactions',
       where: {
-        and: [{ user: { equals: user.id } }, { post: { equals: postId } }],
+        and: [{ user: { equals: user.id } }, { post: { equals: numericPostId } }],
       },
       limit: 1,
     })
@@ -87,11 +90,14 @@ export async function POST(
       )
     }
 
+    // Convert postId to number if needed (for relationship fields)
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) : postId
+
     // Check if user already has a reaction
     const existing = await payload.find({
       collection: 'post-reactions',
       where: {
-        and: [{ user: { equals: user.id } }, { post: { equals: postId } }],
+        and: [{ user: { equals: user.id } }, { post: { equals: numericPostId } }],
       },
       limit: 1,
     })
@@ -101,7 +107,7 @@ export async function POST(
     // Get current post stats
     const post = await payload.findByID({
       collection: 'posts',
-      id: postId,
+      id: numericPostId,
     })
 
     let newLikes = post.likes || 0
@@ -125,7 +131,7 @@ export async function POST(
 
         await payload.update({
           collection: 'posts',
-          id: postId,
+          id: numericPostId,
           data: {
             likes: newLikes,
             dislikes: newDislikes,
@@ -159,7 +165,7 @@ export async function POST(
 
         await payload.update({
           collection: 'posts',
-          id: postId,
+          id: numericPostId,
           data: {
             likes: newLikes,
             dislikes: newDislikes,
@@ -179,7 +185,7 @@ export async function POST(
         collection: 'post-reactions',
         data: {
           user: user.id,
-          post: postId,
+          post: numericPostId,
           reactionType,
         },
       })
@@ -193,7 +199,7 @@ export async function POST(
 
       await payload.update({
         collection: 'posts',
-        id: postId,
+        id: numericPostId,
         data: {
           likes: newLikes,
           dislikes: newDislikes,
