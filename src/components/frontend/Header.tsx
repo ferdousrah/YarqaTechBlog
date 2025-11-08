@@ -141,12 +141,12 @@ export default function Header({ settings }: HeaderProps) {
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo with animation */}
+          {/* Logo with animation - Hidden when scrolled */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            animate={{ opacity: scrolled ? 0 : 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="flex items-center"
+            className={`flex items-center ${scrolled ? 'pointer-events-none' : ''}`}
           >
             <Link href="/" className="group flex items-center gap-2">
               {logoUrl ? (
@@ -182,8 +182,8 @@ export default function Header({ settings }: HeaderProps) {
             </Link>
           </motion.div>
 
-          {/* Center Navigation - Desktop */}
-          <nav className="hidden lg:flex items-center space-x-1 flex-1 justify-center">
+          {/* Center Navigation - Desktop - Centered when scrolled */}
+          <nav className={`hidden lg:flex items-center space-x-1 ${scrolled ? 'mx-auto' : 'flex-1 justify-center'}`}>
             {navItems.map((item, index) => {
               const isActive = pathname === item.href
               const Icon = item.icon
@@ -217,12 +217,12 @@ export default function Header({ settings }: HeaderProps) {
             })}
           </nav>
 
-          {/* Right Actions */}
+          {/* Right Actions - Hidden when scrolled */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            animate={{ opacity: scrolled ? 0 : 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex items-center space-x-2"
+            className={`flex items-center space-x-2 ${scrolled ? 'pointer-events-none' : ''}`}
           >
             {/* Search Button */}
             {showSearch && (
@@ -477,12 +477,14 @@ export default function Header({ settings }: HeaderProps) {
         )}
       </AnimatePresence>
 
-      {/* Category Bar - Desktop with gradient background */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="hidden lg:block border-t border-gray-200 bg-gradient-to-r from-gray-50 via-blue-50/30 to-gray-50"
-      >
+      {/* Category Bar - Desktop with gradient background - Hidden when scrolled */}
+      {!scrolled && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="hidden lg:block border-t border-gray-200 bg-gradient-to-r from-gray-50 via-blue-50/30 to-gray-50"
+        >
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-6 overflow-x-auto py-3 text-sm">
             {[
@@ -509,7 +511,8 @@ export default function Header({ settings }: HeaderProps) {
             ))}
           </div>
         </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* Mobile Menu Overlay with animation */}
       <AnimatePresence>
