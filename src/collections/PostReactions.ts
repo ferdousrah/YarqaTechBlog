@@ -42,10 +42,8 @@ export const PostReactions: CollectionConfig = {
   ],
   indexes: [
     {
-      fields: {
-        user: 1,
-        post: 1,
-      },
+      name: 'user_post_unique',
+      fields: ['user', 'post'],
       options: {
         unique: true,
       },
