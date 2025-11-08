@@ -2,6 +2,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Twitter, Linkedin, Github, Mail, ArrowUp, Facebook, Instagram, Youtube } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -26,6 +27,10 @@ export default function Footer({ settings }: FooterProps) {
     second: settings?.logoText?.secondPart || 'Tech',
     letter: settings?.logoText?.logoLetter || 'Y',
   }
+
+  // Check for uploaded logo
+  const hasUploadedLogo = settings?.logo && typeof settings.logo === 'object' && settings.logo?.url
+  const logoUrl = hasUploadedLogo ? settings.logo.url : null
 
   // Build social links array from settings
   const buildSocialLinks = () => {
@@ -111,18 +116,32 @@ export default function Footer({ settings }: FooterProps) {
           {/* Brand */}
           <motion.div variants={itemVariants} className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/50"
-              >
-                <span className="text-white font-bold text-xl">{logoText.letter}</span>
-              </motion.div>
-              <span className="text-2xl font-bold">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
-                  {logoText.first}
-                </span>
-                <span className="text-white">{logoText.second}</span>
-              </span>
+              {logoUrl ? (
+                <motion.div whileHover={{ scale: 1.05 }} className="relative h-10 w-auto">
+                  <Image
+                    src={logoUrl}
+                    alt={settings?.siteName || 'Logo'}
+                    height={40}
+                    width={120}
+                    className="h-10 w-auto object-contain"
+                  />
+                </motion.div>
+              ) : (
+                <>
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/50"
+                  >
+                    <span className="text-white font-bold text-xl">{logoText.letter}</span>
+                  </motion.div>
+                  <span className="text-2xl font-bold">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                      {logoText.first}
+                    </span>
+                    <span className="text-white">{logoText.second}</span>
+                  </span>
+                </>
+              )}
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">
               {siteDescription}
