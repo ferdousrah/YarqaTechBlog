@@ -98,6 +98,7 @@ export default function Header({ settings }: HeaderProps) {
 
   const showAuthButtons = settings?.showAuthButtons !== false
   const showSearch = settings?.showSearch !== false
+  const authButtonStyle = settings?.authButtonStyle || 'both'
 
   return (
     <motion.header
@@ -259,26 +260,95 @@ export default function Header({ settings }: HeaderProps) {
                   </div>
                 ) : (
                   <>
-                    <Link href="/login">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
-                      >
-                        <LogIn className="w-4 h-4" />
-                        <span className="text-sm font-medium">Login</span>
-                      </motion.button>
-                    </Link>
-                    <Link href="/register">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                      >
-                        <UserPlus className="w-4 h-4" />
-                        <span className="text-sm font-medium">Register</span>
-                      </motion.button>
-                    </Link>
+                    {authButtonStyle === 'dropdown' ? (
+                      // Dropdown style - compact account button
+                      <div className="relative">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setShowUserMenu(!showUserMenu)}
+                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+                        >
+                          <User className="w-5 h-5" />
+                          <span className="text-sm font-medium">Account</span>
+                        </motion.button>
+
+                        {/* Account Dropdown */}
+                        <AnimatePresence>
+                          {showUserMenu && (
+                            <>
+                              <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 z-30"
+                                onClick={() => setShowUserMenu(false)}
+                              />
+                              <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.2 }}
+                                className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-40"
+                              >
+                                <Link
+                                  href="/login"
+                                  onClick={() => setShowUserMenu(false)}
+                                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                                >
+                                  <LogIn className="w-4 h-4" />
+                                  Login
+                                </Link>
+                                <Link
+                                  href="/register"
+                                  onClick={() => setShowUserMenu(false)}
+                                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                                >
+                                  <UserPlus className="w-4 h-4" />
+                                  Register
+                                </Link>
+                              </motion.div>
+                            </>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : authButtonStyle === 'login' ? (
+                      // Login only
+                      <Link href="/login">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          <LogIn className="w-4 h-4" />
+                          <span className="text-sm font-medium">Login</span>
+                        </motion.button>
+                      </Link>
+                    ) : (
+                      // Both buttons (default)
+                      <>
+                        <Link href="/login">
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+                          >
+                            <LogIn className="w-4 h-4" />
+                            <span className="text-sm font-medium">Login</span>
+                          </motion.button>
+                        </Link>
+                        <Link href="/register">
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                          >
+                            <UserPlus className="w-4 h-4" />
+                            <span className="text-sm font-medium">Register</span>
+                          </motion.button>
+                        </Link>
+                      </>
+                    )}
                   </>
                 )}
               </div>
