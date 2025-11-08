@@ -3,12 +3,60 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Twitter, Linkedin, Github, Mail, ArrowUp } from 'lucide-react'
+import { Twitter, Linkedin, Github, Mail, ArrowUp, Facebook, Instagram, Youtube } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
-export default function Footer() {
+interface FooterProps {
+  settings?: any
+}
+
+export default function Footer({ settings }: FooterProps) {
   const currentYear = new Date().getFullYear()
   const [showScrollTop, setShowScrollTop] = useState(false)
+
+  // Get settings or use defaults
+  const copyrightText = settings?.copyrightText || 'Yarqa Tech. All rights reserved.'
+  const footerTagline = settings?.footerTagline || 'Made with passion for developers'
+  const showBuiltWith = settings?.showBuiltWith !== false
+  const siteDescription = settings?.siteDescription || 'Your source for the latest in technology, development, and innovation. Stay updated with expert insights and tutorials that matter.'
+  const contactEmail = settings?.contactEmail || 'hello@yarqatech.com'
+
+  const logoText = {
+    first: settings?.logoText?.firstPart || 'Yarqa',
+    second: settings?.logoText?.secondPart || 'Tech',
+    letter: settings?.logoText?.logoLetter || 'Y',
+  }
+
+  // Build social links array from settings
+  const socialLinks = []
+  if (settings?.socialLinks?.twitter) {
+    socialLinks.push({ Icon: Twitter, href: settings.socialLinks.twitter, label: 'Twitter', color: 'hover:text-sky-400' })
+  }
+  if (settings?.socialLinks?.linkedin) {
+    socialLinks.push({ Icon: Linkedin, href: settings.socialLinks.linkedin, label: 'LinkedIn', color: 'hover:text-blue-400' })
+  }
+  if (settings?.socialLinks?.github) {
+    socialLinks.push({ Icon: Github, href: settings.socialLinks.github, label: 'GitHub', color: 'hover:text-gray-300' })
+  }
+  if (settings?.socialLinks?.facebook) {
+    socialLinks.push({ Icon: Facebook, href: settings.socialLinks.facebook, label: 'Facebook', color: 'hover:text-blue-500' })
+  }
+  if (settings?.socialLinks?.instagram) {
+    socialLinks.push({ Icon: Instagram, href: settings.socialLinks.instagram, label: 'Instagram', color: 'hover:text-pink-400' })
+  }
+  if (settings?.socialLinks?.youtube) {
+    socialLinks.push({ Icon: Youtube, href: settings.socialLinks.youtube, label: 'YouTube', color: 'hover:text-red-500' })
+  }
+
+  // Default social links if none configured
+  if (socialLinks.length === 0) {
+    socialLinks.push(
+      { Icon: Twitter, href: 'https://twitter.com', label: 'Twitter', color: 'hover:text-sky-400' },
+      { Icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn', color: 'hover:text-blue-400' },
+      { Icon: Github, href: 'https://github.com', label: 'GitHub', color: 'hover:text-gray-300' },
+      { Icon: Mail, href: `mailto:${contactEmail}`, label: 'Email', color: 'hover:text-red-400' }
+    )
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,18 +120,17 @@ export default function Footer() {
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/50"
               >
-                <span className="text-white font-bold text-xl">Y</span>
+                <span className="text-white font-bold text-xl">{logoText.letter}</span>
               </motion.div>
               <span className="text-2xl font-bold">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
-                  Yarqa
+                  {logoText.first}
                 </span>
-                <span className="text-white">Tech</span>
+                <span className="text-white">{logoText.second}</span>
               </span>
             </div>
             <p className="text-gray-400 mb-6 max-w-md leading-relaxed">
-              Your source for the latest in technology, development, and innovation. Stay updated
-              with expert insights and tutorials that matter.
+              {siteDescription}
             </p>
             <div className="flex space-x-3">
               {socialLinks.map(({ Icon, href, label, color }) => (
@@ -152,11 +199,15 @@ export default function Footer() {
         >
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm">
-              © {currentYear} Yarqa Tech. All rights reserved. Built with{' '}
-              <span className="text-red-400">♥</span> using Next.js & Tailwind CSS
+              © {currentYear} {copyrightText}
+              {showBuiltWith && (
+                <>
+                  {' '}Built with <span className="text-red-400">♥</span> using Next.js & Tailwind CSS
+                </>
+              )}
             </p>
             <div className="flex items-center gap-4 text-sm text-gray-400">
-              <span>Made with passion for developers</span>
+              <span>{footerTagline}</span>
             </div>
           </div>
         </motion.div>
