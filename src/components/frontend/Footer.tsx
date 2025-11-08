@@ -28,9 +28,10 @@ export default function Footer({ settings }: FooterProps) {
     letter: settings?.logoText?.logoLetter || 'Y',
   }
 
-  // Check for uploaded logo
-  const hasUploadedLogo = settings?.logo && typeof settings.logo === 'object' && settings.logo?.url
-  const logoUrl = hasUploadedLogo ? settings.logo.url : null
+  // Check for uploaded footer logo, fallback to main logo
+  const hasFooterLogo = settings?.footerLogo && typeof settings.footerLogo === 'object' && settings.footerLogo?.url
+  const hasMainLogo = settings?.logo && typeof settings.logo === 'object' && settings.logo?.url
+  const logoUrl = hasFooterLogo ? settings.footerLogo.url : (hasMainLogo ? settings.logo.url : null)
 
   // Build social links array from settings
   const buildSocialLinks = () => {
