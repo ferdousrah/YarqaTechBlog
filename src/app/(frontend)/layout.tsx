@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import HeaderWrapper from '@/components/frontend/HeaderWrapper'
 import FooterWrapper from '@/components/frontend/FooterWrapper'
 import { Providers } from '@/components/Providers'
+import ThemeDebugger from '@/components/ThemeDebugger'
 import { fontVariables } from '@/utils/fonts'
 import './globals.css'
 
@@ -21,6 +22,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="flex-grow">{children}</main>
             <FooterWrapper />
           </div>
+          {/* Theme Debugger - Remove this in production */}
+          <ThemeDebugger />
         </Providers>
       </body>
     </html>
