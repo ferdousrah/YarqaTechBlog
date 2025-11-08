@@ -57,7 +57,7 @@ export const Comments: CollectionConfig = {
       name: 'author',
       type: 'relationship',
       relationTo: 'users',
-      required: true,
+      required: false, // Temporarily set to false to allow migration
       admin: {
         position: 'sidebar',
         readOnly: true,
