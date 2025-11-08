@@ -30,17 +30,11 @@ export default function LexicalContent({ content }: LexicalContentProps) {
     return <p className="text-gray-600">No content available.</p>
   }
 
-  // Debug: Log the content structure
-  console.log('Lexical content structure:', JSON.stringify(content, null, 2))
-
   return <div className="prose prose-lg max-w-none">{renderNode(content.root)}</div>
 }
 
 function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
   if (!node) return null
-
-  // Debug: Log each node type
-  console.log('Rendering node:', { type: node.type, blockType: node.fields?.blockType, node })
 
   // Text node
   if (node.type === 'text') {
@@ -156,7 +150,13 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
   // Image (if you have image nodes)
   if (node.type === 'image') {
     return (
-      <img key={index} src={node.src} alt={node.altText || ''} className="rounded-lg my-6 w-full" />
+      <div key={index} className="rounded-lg my-6 overflow-hidden group cursor-pointer">
+        <img
+          src={node.src}
+          alt={node.altText || ''}
+          className="w-full transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
     )
   }
 
@@ -168,12 +168,12 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
     if (value && typeof value === 'object' && value.url && relationTo === 'media') {
       return (
         <figure key={index} className="my-8">
-          <div className="relative w-full h-96 rounded-xl overflow-hidden">
+          <div className="relative w-full h-96 rounded-xl overflow-hidden group cursor-pointer">
             <Image
               src={value.url}
               alt={value.alt || 'Content image'}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
             />
           </div>
@@ -198,12 +198,12 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
       if (media && typeof media === 'object' && media.url) {
         return (
           <figure key={index} className="my-8">
-            <div className="relative w-full h-96 rounded-xl overflow-hidden">
+            <div className="relative w-full h-96 rounded-xl overflow-hidden group cursor-pointer">
               <Image
                 src={media.url}
                 alt={media.alt || 'Content image'}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               />
             </div>

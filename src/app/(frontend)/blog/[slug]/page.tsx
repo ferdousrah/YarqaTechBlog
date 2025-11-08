@@ -147,12 +147,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         {/* Featured Image */}
         {typeof post.featuredImage === 'object' && post.featuredImage?.url && (
-          <div className="relative w-full h-96 mb-12 rounded-xl overflow-hidden">
+          <div className="relative w-full h-96 mb-12 rounded-xl overflow-hidden group cursor-pointer">
             <Image
               src={post.featuredImage.url}
               alt={post.featuredImage.alt || post.title}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
               priority
             />
           </div>
