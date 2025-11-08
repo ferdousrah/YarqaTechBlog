@@ -52,11 +52,13 @@ export interface Theme {
 interface ThemeContextType {
   theme: Theme | null
   loading: boolean
+  refreshTheme: () => Promise<void>
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: null,
   loading: true,
+  refreshTheme: async () => {},
 })
 
 export const useTheme = () => useContext(ThemeContext)
@@ -120,23 +122,31 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchTheme = async () => {
-      try {
-        const response = await fetch('/api/theme')
-        const data = await response.json()
+  const fetchTheme = async () => {
+    try {
+      // Add timestamp to prevent caching
+      const response = await fetch(`/api/theme?t=${Date.now()}`, {
+        cache: 'no-store',
+      })
+      const data = await response.json()
 
-        if (data.success) {
-          setTheme(data.theme)
-          applyThemeToDOM(data.theme)
-        }
-      } catch (error) {
-        console.error('Failed to fetch theme:', error)
-      } finally {
-        setLoading(false)
+      if (data.success) {
+        setTheme(data.theme)
+        applyThemeToDOM(data.theme)
       }
+    } catch (error) {
+      console.error('Failed to fetch theme:', error)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  const refreshTheme = async () => {
+    setLoading(true)
+    await fetchTheme()
+  }
+
+  useEffect(() => {
     fetchTheme()
   }, [])
 
@@ -202,7 +212,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, loading }}>
+    <ThemeContext.Provider value={{ theme, loading, refreshTheme }}>
       {children}
     </ThemeContext.Provider>
   )
