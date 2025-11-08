@@ -43,10 +43,31 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
   const [content, setContent] = useState('')
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [userAvatar, setUserAvatar] = useState<{ url: string; alt?: string } | null>(null)
 
   useEffect(() => {
     fetchComments()
   }, [postIdString])
+
+  // Fetch user avatar when user is logged in
+  useEffect(() => {
+    const fetchUserAvatar = async () => {
+      if (user) {
+        try {
+          const response = await fetch('/api/user/profile')
+          const data = await response.json()
+          if (data.success && data.user?.avatar) {
+            setUserAvatar(data.user.avatar)
+          }
+        } catch (err) {
+          console.error('Error fetching user avatar:', err)
+        }
+      } else {
+        setUserAvatar(null)
+      }
+    }
+    fetchUserAvatar()
+  }, [user])
 
   const fetchComments = async () => {
     try {
@@ -231,9 +252,20 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
             {user ? (
               <>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
+                  {userAvatar?.url ? (
+                    <div className="w-10 h-10 rounded-full overflow-hidden relative flex-shrink-0">
+                      <Image
+                        src={userAvatar.url}
+                        alt={userAvatar.alt || user.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div>
                     <div className="font-semibold text-gray-900">{user.name}</div>
                     <div className="text-sm text-gray-500">{user.email}</div>
