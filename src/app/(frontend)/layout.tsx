@@ -1,12 +1,10 @@
 // src/app/(frontend)/layout.tsx
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import HeaderWrapper from '@/components/frontend/HeaderWrapper'
 import FooterWrapper from '@/components/frontend/FooterWrapper'
 import { Providers } from '@/components/Providers'
+import { fontVariables } from '@/utils/fonts'
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
   title: 'Yarqa Tech Blog',
@@ -15,8 +13,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="bg-white text-gray-900 antialiased">
+    <html lang="en" className={fontVariables}>
+      <body className="antialiased">
         <Providers>
           <div className="flex flex-col min-h-screen">
             <HeaderWrapper />
