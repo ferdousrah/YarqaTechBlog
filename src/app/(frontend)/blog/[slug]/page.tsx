@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import LexicalContent from '@/components/frontend/LexicalContent'
 import { Comments } from '@/components/Comments'
 import BookmarkButtonWrapper from '@/components/BookmarkButtonWrapper'
+import ClickableImage from '@/components/ClickableImage'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
@@ -147,12 +148,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         {/* Featured Image */}
         {typeof post.featuredImage === 'object' && post.featuredImage?.url && (
-          <div className="relative w-full h-96 mb-12 rounded-xl overflow-hidden group cursor-pointer">
-            <Image
+          <div className="mb-12">
+            <ClickableImage
               src={post.featuredImage.url}
               alt={post.featuredImage.alt || post.title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
+              caption={post.featuredImage.caption}
               priority
             />
           </div>

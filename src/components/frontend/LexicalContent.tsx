@@ -1,7 +1,7 @@
 // src/components/frontend/LexicalContent.tsx
 'use client'
 
-import Image from 'next/image'
+import { ContentImage } from '@/components/ContentImage'
 
 interface LexicalNode {
   type: string
@@ -149,15 +149,7 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
 
   // Image (if you have image nodes)
   if (node.type === 'image') {
-    return (
-      <div key={index} className="rounded-lg my-6 overflow-hidden group cursor-pointer">
-        <img
-          src={node.src}
-          alt={node.altText || ''}
-          className="w-full transition-transform duration-700 group-hover:scale-110"
-        />
-      </div>
-    )
+    return <ContentImage key={index} src={node.src} alt={node.altText || ''} />
   }
 
   // Upload node (inline images from Lexical upload feature)
@@ -167,22 +159,12 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
 
     if (value && typeof value === 'object' && value.url && relationTo === 'media') {
       return (
-        <figure key={index} className="my-8">
-          <div className="relative w-full h-96 rounded-xl overflow-hidden group cursor-pointer">
-            <Image
-              src={value.url}
-              alt={value.alt || 'Content image'}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-            />
-          </div>
-          {value.caption && (
-            <figcaption className="mt-3 text-center text-sm text-gray-600 italic">
-              {value.caption}
-            </figcaption>
-          )}
-        </figure>
+        <ContentImage
+          key={index}
+          src={value.url}
+          alt={value.alt || 'Content image'}
+          caption={value.caption}
+        />
       )
     }
   }
@@ -197,22 +179,12 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
 
       if (media && typeof media === 'object' && media.url) {
         return (
-          <figure key={index} className="my-8">
-            <div className="relative w-full h-96 rounded-xl overflow-hidden group cursor-pointer">
-              <Image
-                src={media.url}
-                alt={media.alt || 'Content image'}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-              />
-            </div>
-            {media.caption && (
-              <figcaption className="mt-3 text-center text-sm text-gray-600 italic">
-                {media.caption}
-              </figcaption>
-            )}
-          </figure>
+          <ContentImage
+            key={index}
+            src={media.url}
+            alt={media.alt || 'Content image'}
+            caption={media.caption}
+          />
         )
       }
     }
