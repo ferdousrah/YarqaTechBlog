@@ -7,9 +7,10 @@ import { cookies } from 'next/headers'
 // GET - Get user's reaction to a post
 export async function GET(
   request: NextRequest,
-  { params }: { params: { postId: string } },
+  { params }: { params: Promise<{ postId: string }> },
 ) {
   try {
+    const { postId } = await params
     const payload = await getPayload({ config })
     const cookieStore = await cookies()
     const token = cookieStore.get('payload-token')?.value
@@ -29,7 +30,7 @@ export async function GET(
     const reactions = await payload.find({
       collection: 'post-reactions',
       where: {
-        and: [{ user: { equals: user.id } }, { post: { equals: params.postId } }],
+        and: [{ user: { equals: user.id } }, { post: { equals: postId } }],
       },
       limit: 1,
     })
@@ -57,9 +58,10 @@ export async function GET(
 // POST - Add or update reaction
 export async function POST(
   request: NextRequest,
-  { params }: { params: { postId: string } },
+  { params }: { params: Promise<{ postId: string }> },
 ) {
   try {
+    const { postId } = await params
     const payload = await getPayload({ config })
     const cookieStore = await cookies()
     const token = cookieStore.get('payload-token')?.value
@@ -89,7 +91,7 @@ export async function POST(
     const existing = await payload.find({
       collection: 'post-reactions',
       where: {
-        and: [{ user: { equals: user.id } }, { post: { equals: params.postId } }],
+        and: [{ user: { equals: user.id } }, { post: { equals: postId } }],
       },
       limit: 1,
     })
@@ -99,7 +101,7 @@ export async function POST(
     // Get current post stats
     const post = await payload.findByID({
       collection: 'posts',
-      id: params.postId,
+      id: postId,
     })
 
     let newLikes = post.likes || 0
@@ -123,7 +125,7 @@ export async function POST(
 
         await payload.update({
           collection: 'posts',
-          id: params.postId,
+          id: postId,
           data: {
             likes: newLikes,
             dislikes: newDislikes,
@@ -157,7 +159,7 @@ export async function POST(
 
         await payload.update({
           collection: 'posts',
-          id: params.postId,
+          id: postId,
           data: {
             likes: newLikes,
             dislikes: newDislikes,
@@ -177,7 +179,7 @@ export async function POST(
         collection: 'post-reactions',
         data: {
           user: user.id,
-          post: params.postId,
+          post: postId,
           reactionType,
         },
       })
@@ -191,7 +193,7 @@ export async function POST(
 
       await payload.update({
         collection: 'posts',
-        id: params.postId,
+        id: postId,
         data: {
           likes: newLikes,
           dislikes: newDislikes,
