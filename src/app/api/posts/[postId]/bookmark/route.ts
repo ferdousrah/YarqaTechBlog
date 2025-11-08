@@ -32,6 +32,28 @@ export async function POST(
 
     const { postId } = await params
 
+    console.log('[Bookmark API] Attempting to bookmark post with ID:', postId)
+
+    // Verify post exists
+    try {
+      const postExists = await payload.findByID({
+        collection: 'posts',
+        id: postId,
+      })
+
+      if (!postExists) {
+        return NextResponse.json(
+          { success: false, error: 'Post not found' },
+          { status: 404 }
+        )
+      }
+    } catch (error) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid post ID or post not found' },
+        { status: 404 }
+      )
+    }
+
     // Check if bookmark exists
     const existing = await payload.find({
       collection: 'bookmarks',
