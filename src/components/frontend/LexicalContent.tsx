@@ -1,6 +1,8 @@
 // src/components/frontend/LexicalContent.tsx
 'use client'
 
+import Image from 'next/image'
+
 interface LexicalNode {
   type: string
   version: number
@@ -12,6 +14,8 @@ interface LexicalNode {
   indent?: number
   direction?: string
   tag?: string
+  blockType?: string
+  fields?: any
   [key: string]: any
 }
 
@@ -146,6 +150,76 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
     return (
       <img key={index} src={node.src} alt={node.altText || ''} className="rounded-lg my-6 w-full" />
     )
+  }
+
+  // Block nodes (for custom blocks like MediaBlock, Banner, Code)
+  if (node.type === 'block') {
+    const blockType = node.fields?.blockType
+
+    // MediaBlock - render image
+    if (blockType === 'mediaBlock') {
+      const media = node.fields?.media
+
+      if (media && typeof media === 'object' && media.url) {
+        return (
+          <figure key={index} className="my-8">
+            <div className="relative w-full h-96 rounded-xl overflow-hidden">
+              <Image
+                src={media.url}
+                alt={media.alt || 'Content image'}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+              />
+            </div>
+            {media.caption && (
+              <figcaption className="mt-3 text-center text-sm text-gray-600 italic">
+                {media.caption}
+              </figcaption>
+            )}
+          </figure>
+        )
+      }
+    }
+
+    // Banner block
+    if (blockType === 'banner') {
+      const content = node.fields?.content
+      const style = node.fields?.style || 'info'
+
+      const styleClasses = {
+        info: 'bg-blue-50 border-blue-200 text-blue-900',
+        warning: 'bg-yellow-50 border-yellow-200 text-yellow-900',
+        error: 'bg-red-50 border-red-200 text-red-900',
+        success: 'bg-green-50 border-green-200 text-green-900',
+      }
+
+      return (
+        <div
+          key={index}
+          className={`my-6 p-6 border-l-4 rounded-r-lg ${styleClasses[style as keyof typeof styleClasses] || styleClasses.info}`}
+        >
+          {content && renderNode({ ...content, type: 'paragraph' })}
+        </div>
+      )
+    }
+
+    // Code block (custom block)
+    if (blockType === 'code') {
+      const code = node.fields?.code || ''
+      const language = node.fields?.language || 'text'
+
+      return (
+        <div key={index} className="my-6">
+          <div className="bg-gray-900 rounded-t-lg px-4 py-2">
+            <span className="text-gray-400 text-xs font-mono uppercase">{language}</span>
+          </div>
+          <pre className="bg-gray-900 text-gray-100 p-4 rounded-b-lg overflow-x-auto">
+            <code>{code}</code>
+          </pre>
+        </div>
+      )
+    }
   }
 
   // Default: render children if they exist
