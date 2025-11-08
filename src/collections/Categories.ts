@@ -66,11 +66,16 @@ export const Categories: CollectionConfig = {
         description: 'Select parent to create subcategory',
       },
       filterOptions: ({ id }) => {
-        return {
-          id: {
-            not_equals: id,
-          },
+        // Only filter out self when editing an existing category
+        if (id) {
+          return {
+            id: {
+              not_equals: id,
+            },
+          }
         }
+        // When creating a new category, allow all categories to be selected as parent
+        return {}
       },
     },
     {
