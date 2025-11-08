@@ -32,13 +32,16 @@ export async function POST(
 
     const { postId } = await params
 
-    console.log('[Bookmark API] Attempting to bookmark post with ID:', postId)
+    // Try to parse postId as number if it's a numeric string (for PostgreSQL auto-increment IDs)
+    const parsedPostId = /^\d+$/.test(postId) ? parseInt(postId, 10) : postId
+
+    console.log('[Bookmark API] Attempting to bookmark post with ID:', parsedPostId, 'type:', typeof parsedPostId)
 
     // Verify post exists
     try {
       const postExists = await payload.findByID({
         collection: 'posts',
-        id: postId,
+        id: parsedPostId,
       })
 
       if (!postExists) {
@@ -60,7 +63,7 @@ export async function POST(
       where: {
         and: [
           { user: { equals: user.id } },
-          { post: { equals: postId } }
+          { post: { equals: parsedPostId } }
         ],
       },
       limit: 1,
@@ -80,11 +83,16 @@ export async function POST(
       })
     } else {
       // Add bookmark
+      // Try to parse postId as number if it's a numeric string (for PostgreSQL auto-increment IDs)
+      const parsedPostId = /^\d+$/.test(postId) ? parseInt(postId, 10) : postId
+
+      console.log('[Bookmark API] Creating bookmark with postId:', parsedPostId, 'type:', typeof parsedPostId)
+
       await payload.create({
         collection: 'bookmarks',
         data: {
           user: user.id,
-          post: postId,
+          post: parsedPostId,
         },
       })
 
