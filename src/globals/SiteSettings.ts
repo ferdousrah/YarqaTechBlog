@@ -161,6 +161,14 @@ export const SiteSettings: GlobalConfig = {
           label: 'Footer',
           fields: [
             {
+              name: 'footerLogo',
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: 'Upload footer logo (optional, defaults to main logo if not set)',
+              },
+            },
+            {
               name: 'copyrightText',
               type: 'text',
               defaultValue: 'Yarqa Tech. All rights reserved.',
