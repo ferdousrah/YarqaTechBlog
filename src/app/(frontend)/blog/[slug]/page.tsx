@@ -9,6 +9,7 @@ import { Comments } from '@/components/Comments'
 import BookmarkButtonWrapper from '@/components/BookmarkButtonWrapper'
 import ClickableImage from '@/components/ClickableImage'
 import ShareButtons from '@/components/ShareButtons'
+import LikeDislike from '@/components/LikeDislike'
 import { headers } from 'next/headers'
 
 export async function generateStaticParams() {
@@ -167,6 +168,15 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         {/* Social Share Buttons */}
         <ShareButtons title={post.title} url={fullUrl} />
+
+        {/* Like/Dislike Buttons */}
+        <div className="mb-12">
+          <LikeDislike
+            postId={post.id}
+            initialLikes={post.likes || 0}
+            initialDislikes={post.dislikes || 0}
+          />
+        </div>
 
         {/* Comments Section */}
         <Comments
