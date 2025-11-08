@@ -6,8 +6,9 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail, Bookmark } from 'lucide-react'
+import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail, Bookmark, Grid3x3 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import CategoryMegaMenu from '@/components/CategoryMegaMenu'
 
 // Helper function to get icon component from string
 function getIconComponent(iconName?: string) {
@@ -33,6 +34,8 @@ export default function Header({ settings }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [userAvatar, setUserAvatar] = useState<{ url: string; alt?: string } | null>(null)
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false)
+  const [featuredCategories, setFeaturedCategories] = useState<any[]>([])
   const router = useRouter()
   const pathname = usePathname()
   const { user, logout } = useAuth()
@@ -80,6 +83,24 @@ export default function Header({ settings }: HeaderProps) {
     }
     fetchUserAvatar()
   }, [user])
+
+  // Fetch featured categories
+  useEffect(() => {
+    const fetchFeaturedCategories = async () => {
+      try {
+        const response = await fetch('/api/categories')
+        const data = await response.json()
+        if (data.success) {
+          // Filter only featured categories and exclude subcategories (no parent)
+          const featured = data.categories.filter((cat: any) => cat.featured && !cat.parent)
+          setFeaturedCategories(featured.slice(0, 6)) // Limit to 6 categories
+        }
+      } catch (error) {
+        console.error('Failed to fetch featured categories:', error)
+      }
+    }
+    fetchFeaturedCategories()
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -217,24 +238,27 @@ export default function Header({ settings }: HeaderProps) {
             })}
           </nav>
 
-          {/* Category Bar - Centered when scrolled */}
+          {/* Category Bar - Featured Categories when scrolled */}
           <div className={`hidden lg:flex items-center space-x-4 transition-opacity duration-300 ${scrolled ? 'opacity-100 mx-auto' : 'opacity-0 pointer-events-none absolute'}`}>
-            {[
-              'Web Development',
-              'Mobile Apps',
-              'AI & ML',
-              'Cloud',
-              'Security',
-              'Design',
-            ].map((category) => (
+            {featuredCategories.map((category) => (
               <Link
-                key={category}
-                href={`/category/${category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '')}`}
+                key={category.id}
+                href={`/category/${category.slug}`}
                 className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-all duration-300 px-3 py-1 rounded-lg hover:bg-gray-50"
               >
-                {category}
+                {category.name}
               </Link>
             ))}
+            {/* Mega Menu Icon */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setMegaMenuOpen(true)}
+              className="p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all duration-300"
+              aria-label="View all categories"
+            >
+              <Grid3x3 className="w-5 h-5" />
+            </motion.button>
           </div>
 
           {/* Right Actions - Hidden when scrolled */}
@@ -506,29 +530,35 @@ export default function Header({ settings }: HeaderProps) {
           className="hidden lg:block border-t border-gray-200 bg-gradient-to-r from-gray-50 via-blue-50/30 to-gray-50"
         >
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-6 overflow-x-auto py-3 text-sm">
-            {[
-              'Web Development',
-              'Mobile Apps',
-              'AI & ML',
-              'Cloud',
-              'Security',
-              'Design',
-            ].map((category, index) => (
-              <motion.div
-                key={category}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + index * 0.05 }}
-              >
-                <Link
-                  href={`/category/${category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '')}`}
-                  className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-all duration-300 px-3 py-1 rounded-lg hover:bg-white"
+          <div className="flex items-center justify-between space-x-6 py-3 text-sm">
+            <div className="flex items-center space-x-6 overflow-x-auto">
+              {featuredCategories.map((category, index) => (
+                <motion.div
+                  key={category.id}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + index * 0.05 }}
                 >
-                  {category}
-                </Link>
-              </motion.div>
-            ))}
+                  <Link
+                    href={`/category/${category.slug}`}
+                    className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-all duration-300 px-3 py-1 rounded-lg hover:bg-white"
+                  >
+                    {category.name}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+            {/* Mega Menu Icon */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setMegaMenuOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-white rounded-lg transition-all duration-300 font-medium"
+              aria-label="View all categories"
+            >
+              <Grid3x3 className="w-5 h-5" />
+              <span>All Categories</span>
+            </motion.button>
           </div>
         </div>
         </motion.div>
@@ -709,6 +739,9 @@ export default function Header({ settings }: HeaderProps) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Category Mega Menu */}
+      <CategoryMegaMenu isOpen={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} />
     </motion.header>
   )
 }
