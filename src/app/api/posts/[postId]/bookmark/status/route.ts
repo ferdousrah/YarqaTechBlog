@@ -32,13 +32,16 @@ export async function GET(
 
     const { postId } = await params
 
+    // Try to parse postId as number if it's a numeric string (for PostgreSQL auto-increment IDs)
+    const parsedPostId = /^\d+$/.test(postId) ? parseInt(postId, 10) : postId
+
     // Check if bookmark exists
     const existing = await payload.find({
       collection: 'bookmarks',
       where: {
         and: [
           { user: { equals: user.id } },
-          { post: { equals: postId } }
+          { post: { equals: parsedPostId } }
         ],
       },
       limit: 1,
