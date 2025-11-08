@@ -32,6 +32,7 @@ export default function Header({ settings }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [scrolled, setScrolled] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [userAvatar, setUserAvatar] = useState<{ url: string; alt?: string } | null>(null)
   const router = useRouter()
   const pathname = usePathname()
   const { user, logout } = useAuth()
@@ -56,6 +57,29 @@ export default function Header({ settings }: HeaderProps) {
       document.body.style.overflow = 'unset'
     }
   }, [mobileMenuOpen])
+
+  // Fetch user avatar when authenticated
+  useEffect(() => {
+    const fetchUserAvatar = async () => {
+      if (user) {
+        try {
+          const response = await fetch('/api/user/profile')
+          const data = await response.json()
+          if (data.success && data.user?.avatar) {
+            setUserAvatar(data.user.avatar)
+          } else {
+            setUserAvatar(null)
+          }
+        } catch (error) {
+          console.error('Failed to fetch user avatar:', error)
+          setUserAvatar(null)
+        }
+      } else {
+        setUserAvatar(null)
+      }
+    }
+    fetchUserAvatar()
+  }, [user])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -225,11 +249,22 @@ export default function Header({ settings }: HeaderProps) {
                       onClick={() => setShowUserMenu(!showUserMenu)}
                       className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
                     >
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">
-                          {user.name?.charAt(0).toUpperCase() || 'U'}
-                        </span>
-                      </div>
+                      {userAvatar?.url ? (
+                        <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                          <Image
+                            src={userAvatar.url}
+                            alt={userAvatar.alt || user.name || 'Profile photo'}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">
+                            {user.name?.charAt(0).toUpperCase() || 'U'}
+                          </span>
+                        </div>
+                      )}
                       <span className="text-sm font-medium">{user.name}</span>
                     </motion.button>
 
