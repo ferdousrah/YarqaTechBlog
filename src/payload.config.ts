@@ -17,6 +17,7 @@ import { Bookmarks } from './collections/Bookmarks'
 import { SearchQueries } from './collections/SearchQueries'
 import { PostViews } from './collections/PostViews'
 import { ReadingProgress } from './collections/ReadingProgress'
+import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
 
 // Globals
 import { SiteSettings } from './globals/SiteSettings'
@@ -68,6 +69,7 @@ export default buildConfig({
     SearchQueries,
     PostViews,
     ReadingProgress,
+    NewsletterSubscribers,
   ],
   globals: [SiteSettings],
   endpoints: [
