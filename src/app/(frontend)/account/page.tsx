@@ -48,11 +48,28 @@ export default function AccountPage() {
   // Load user data
   useEffect(() => {
     if (user) {
-      setName(user.name || '')
-      setEmail(user.email || '')
-      // Note: Bio and social links would need to be fetched from the full user profile
+      fetchUserProfile()
     }
   }, [user])
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch('/api/user/profile')
+      const data = await response.json()
+
+      if (data.success && data.user) {
+        setName(data.user.name || '')
+        setEmail(data.user.email || '')
+        setBio(data.user.bio || '')
+        setTwitter(data.user.socialLinks?.twitter || '')
+        setLinkedin(data.user.socialLinks?.linkedin || '')
+        setGithub(data.user.socialLinks?.github || '')
+        setWebsite(data.user.socialLinks?.website || '')
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error)
+    }
+  }
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -82,6 +99,8 @@ export default function AccountPage() {
         setStatus('success')
         setMessage('Profile updated successfully!')
         await refreshUser()
+        // Refresh the full profile data
+        await fetchUserProfile()
       } else {
         setStatus('error')
         setMessage(data.error || 'Failed to update profile')
