@@ -1,8 +1,8 @@
 // src/app/(frontend)/layout.tsx
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Header from '@/components/frontend/Header'
-import Footer from '@/components/frontend/Footer'
+import HeaderWrapper from '@/components/frontend/HeaderWrapper'
+import FooterWrapper from '@/components/frontend/FooterWrapper'
 import { Providers } from '@/components/Providers'
 import './globals.css'
 
@@ -19,9 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-white text-gray-900 antialiased">
         <Providers>
           <div className="flex flex-col min-h-screen">
-            <Header />
+            <HeaderWrapper />
             <main className="flex-grow">{children}</main>
-            <Footer />
+            <FooterWrapper />
           </div>
         </Providers>
       </body>
