@@ -6,6 +6,7 @@ import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import LexicalContent from '@/components/frontend/LexicalContent'
 import { Comments } from '@/components/Comments'
+import BookmarkButtonWrapper from '@/components/BookmarkButtonWrapper'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
@@ -88,7 +89,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         <p className="text-xl text-gray-600 mb-8 leading-relaxed">{post.excerpt}</p>
 
         {/* Author & Meta Info */}
-        <div className="flex items-center justify-between pb-8 mb-8 border-b border-gray-200">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-gray-200">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-lg">
@@ -104,6 +105,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             </div>
           </div>
+
+          {/* Bookmark Button */}
+          <BookmarkButtonWrapper postId={post.id} variant="large" />
 
           {/* View Count */}
           <div className="flex items-center gap-6 text-gray-500">
