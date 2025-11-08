@@ -63,8 +63,8 @@ export function AnimatedHeroPost({ post, index = 0 }: HeroPostCardProps) {
           {/* Enhanced Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
 
-          {/* Bookmark Button - Top Right */}
-          <div className="absolute top-4 right-4 z-10" onClick={(e) => e.stopPropagation()}>
+          {/* Bookmark Button - Top Right (visible on hover) */}
+          <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" onClick={(e) => e.stopPropagation()}>
             <BookmarkButton postId={post.id} variant="icon-only" />
           </div>
 
@@ -163,8 +163,8 @@ export function AnimatedSmallPost({ post, index = 0 }: HeroPostCardProps) {
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
-          {/* Bookmark Button - Top Right */}
-          <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
+          {/* Bookmark Button - Top Right (visible on hover) */}
+          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" onClick={(e) => e.stopPropagation()}>
             <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
           </div>
 
@@ -215,8 +215,8 @@ export function AnimatedPostCard({ post, index = 0 }: HeroPostCardProps) {
                 #{index + 1}
               </div>
             )}
-            {/* Bookmark Button - Top Right */}
-            <div className="absolute top-3 right-3 z-10" onClick={(e) => e.stopPropagation()}>
+            {/* Bookmark Button - Top Right (visible on hover) */}
+            <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" onClick={(e) => e.stopPropagation()}>
               <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
             </div>
           </div>
