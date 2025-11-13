@@ -79,32 +79,34 @@ export default function LikeDislike({
 
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <button
           onClick={() => handleReaction('like')}
           disabled={loading}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+          className={`w-10 h-10 rounded-full flex items-center justify-center font-medium transition-all duration-300 ${
             userReaction === 'like'
               ? 'bg-blue-600 text-white shadow-lg'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          aria-label={`Like (${likes})`}
         >
           <ThumbsUp className={`w-5 h-5 ${userReaction === 'like' ? 'fill-current' : ''}`} />
-          <span className="font-semibold">{likes}</span>
         </button>
+        <span className="text-sm font-semibold text-gray-700">{likes}</span>
 
         <button
           onClick={() => handleReaction('dislike')}
           disabled={loading}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+          className={`w-10 h-10 rounded-full flex items-center justify-center font-medium transition-all duration-300 ${
             userReaction === 'dislike'
               ? 'bg-red-600 text-white shadow-lg'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          aria-label={`Dislike (${dislikes})`}
         >
           <ThumbsDown className={`w-5 h-5 ${userReaction === 'dislike' ? 'fill-current' : ''}`} />
-          <span className="font-semibold">{dislikes}</span>
         </button>
+        <span className="text-sm font-semibold text-gray-700">{dislikes}</span>
       </div>
 
       <AuthModal
