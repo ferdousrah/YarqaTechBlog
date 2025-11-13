@@ -88,7 +88,7 @@ export default function Header({ settings }: HeaderProps) {
   useEffect(() => {
     const fetchFeaturedCategories = async () => {
       try {
-        const response = await fetch('/api/categories')
+        const response = await fetch('/api/frontend-categories')
         const data = await response.json()
         if (data.success) {
           // Filter only featured categories and exclude subcategories (no parent)
