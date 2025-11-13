@@ -100,10 +100,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         <p className="text-xl text-gray-600 mb-8 leading-relaxed">{post.excerpt}</p>
 
         {/* Author & Meta Info */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-8 mb-8 border-b border-gray-200">
-          <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between gap-4 pb-8 mb-8 border-b border-gray-200">
+          <div className="flex items-center gap-4 min-w-0 flex-1">
             {typeof post.author === 'object' && post.author.avatar && typeof post.author.avatar === 'object' && post.author.avatar.url ? (
-              <div className="w-12 h-12 rounded-full overflow-hidden relative">
+              <div className="w-12 h-12 rounded-full overflow-hidden relative flex-shrink-0">
                 <Image
                   src={post.author.avatar.url}
                   alt={post.author.avatar.alt || post.author.name}
@@ -112,14 +112,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 />
               </div>
             ) : (
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-bold text-lg">
                   {typeof post.author === 'object' ? post.author.name.charAt(0) : 'A'}
                 </span>
               </div>
             )}
-            <div>
-              <div className="font-semibold text-gray-900">
+            <div className="min-w-0">
+              <div className="font-semibold text-gray-900 truncate">
                 {typeof post.author === 'object' ? post.author.name : ''}
               </div>
               <div className="text-sm text-gray-500">
@@ -131,7 +131,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
 
           {/* Bookmark Button - Right aligned, icon only */}
-          <BookmarkButtonWrapper postId={post.id} variant="icon-only" />
+          <div className="flex-shrink-0">
+            <BookmarkButtonWrapper postId={post.id} variant="icon-only" />
+          </div>
         </div>
 
         {/* Featured Image */}
@@ -167,11 +169,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         )}
 
         {/* Share and Like/Dislike Section */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12 pb-12 border-b border-gray-200">
-          {/* Social Share Buttons - Left */}
+        <div className="flex flex-col gap-6 mb-12 pb-12 border-b border-gray-200">
+          {/* Social Share Buttons */}
           <ShareButtons title={post.title} url={fullUrl} />
 
-          {/* Like/Dislike Buttons - Right */}
+          {/* Like/Dislike Buttons */}
           <LikeDislike
             postId={post.id}
             initialLikes={post.likes || 0}
