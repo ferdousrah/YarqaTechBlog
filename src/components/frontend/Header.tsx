@@ -36,6 +36,7 @@ export default function Header({ settings }: HeaderProps) {
   const [userAvatar, setUserAvatar] = useState<{ url: string; alt?: string } | null>(null)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [featuredCategories, setFeaturedCategories] = useState<any[]>([])
+  const [navigationPages, setNavigationPages] = useState<any[]>([])
   const router = useRouter()
   const pathname = usePathname()
   const { user, logout } = useAuth()
@@ -102,6 +103,22 @@ export default function Header({ settings }: HeaderProps) {
     fetchFeaturedCategories()
   }, [])
 
+  // Fetch pages for navigation
+  useEffect(() => {
+    const fetchNavigationPages = async () => {
+      try {
+        const response = await fetch('/api/pages?where[showInNavigation][equals]=true&where[status][equals]=published&sort=navigationOrder')
+        const data = await response.json()
+        if (data.docs) {
+          setNavigationPages(data.docs)
+        }
+      } catch (error) {
+        console.error('Failed to fetch navigation pages:', error)
+      }
+    }
+    fetchNavigationPages()
+  }, [])
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
@@ -122,7 +139,7 @@ export default function Header({ settings }: HeaderProps) {
   }
 
   // Use custom nav links from settings or default ones
-  const navItems = settings?.navigationLinks?.length
+  const defaultNavItems = settings?.navigationLinks?.length
     ? settings.navigationLinks.map((link: any) => ({
         href: link.href,
         label: link.label,
@@ -132,8 +149,17 @@ export default function Header({ settings }: HeaderProps) {
         { href: '/', label: 'Home', icon: Home },
         { href: '/blog', label: 'Latest', icon: BookOpen },
         { href: '/categories', label: 'Categories', icon: Folder },
-        { href: '/about', label: 'About', icon: Info },
       ]
+
+  // Add navigation pages from database
+  const pageNavItems = navigationPages.map((page) => ({
+    href: `/${page.slug}`,
+    label: page.title,
+    icon: Info, // Default icon for pages
+  }))
+
+  // Combine default nav items with pages
+  const navItems = [...defaultNavItems, ...pageNavItems]
 
   // Get logo text from settings or use defaults
   const logoText = {
