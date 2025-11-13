@@ -9,6 +9,7 @@ interface ClickableImageProps {
   src: string
   alt: string
   caption?: string
+  credit?: string
   className?: string
   containerClassName?: string
   priority?: boolean
@@ -19,6 +20,7 @@ export default function ClickableImage({
   src,
   alt,
   caption,
+  credit,
   className = 'object-cover transition-transform duration-700 group-hover:scale-110',
   containerClassName = 'relative w-full h-96 rounded-xl overflow-hidden group cursor-pointer',
   priority = false,
@@ -34,8 +36,11 @@ export default function ClickableImage({
         </div>
 
         {/* Caption/Photo Credit */}
-        {caption && (
-          <p className="text-sm text-gray-500 italic mt-3 text-center">{caption}</p>
+        {(caption || credit) && (
+          <div className="text-sm text-gray-500 italic mt-3 text-center">
+            {caption && <p>{caption}</p>}
+            {credit && <p className={caption ? 'mt-1' : ''}>Photo: {credit}</p>}
+          </div>
         )}
       </div>
 
@@ -44,7 +49,7 @@ export default function ClickableImage({
         onClose={() => setLightboxOpen(false)}
         src={src}
         alt={alt}
-        caption={caption}
+        caption={caption || credit}
       />
     </>
   )
