@@ -106,11 +106,30 @@ export default async function HomePage() {
 
 // Category Section Component
 async function CategorySection({ category, payload }: any) {
+  // Fetch subcategories for this parent category
+  const subcategories = await payload.find({
+    collection: 'categories',
+    where: {
+      parent: { equals: category.id },
+    },
+    limit: 100,
+  })
+
+  // Build array of category IDs (parent + all subcategories)
+  const categoryIds = [category.id, ...subcategories.docs.map((sub: any) => sub.id)]
+
+  // Fetch posts from parent category and all its subcategories
   const categoryPosts = await payload.find({
     collection: 'posts',
     where: {
-      status: { equals: 'published' },
-      category: { equals: category.id },
+      and: [
+        { status: { equals: 'published' } },
+        {
+          category: {
+            in: categoryIds,
+          },
+        },
+      ],
     },
     limit: 6,
     sort: '-publishedAt',
