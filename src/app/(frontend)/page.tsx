@@ -106,13 +106,16 @@ async function CategorySection({ category, payload }: any) {
       status: { equals: 'published' },
       category: { equals: category.id },
     },
-    limit: 2,
+    limit: 6,
     sort: '-publishedAt',
+    depth: 2,
   })
 
   if (categoryPosts.docs.length === 0) return null
 
   const borderColor = category.color || '#2563eb' // Default blue-600
+  const featuredPost = categoryPosts.docs[0]
+  const sidebarPosts = categoryPosts.docs.slice(1, 6)
 
   return (
     <div className="mb-16">
@@ -138,15 +141,56 @@ async function CategorySection({ category, payload }: any) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {categoryPosts.docs.map((post) => (
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Featured Post (Large) */}
+        <div className="lg:col-span-2">
           <ArticleCardWithBookmark
-            key={post.id}
-            post={post}
+            post={featuredPost}
             variant="card"
             borderColor={borderColor}
           />
-        ))}
+        </div>
+
+        {/* Right Column - Small Posts List */}
+        <div className="space-y-4">
+          {sidebarPosts.map((post) => (
+            <Link
+              key={post.id}
+              href={`/blog/${post.slug}`}
+              className="group flex gap-4 bg-white rounded-lg p-4 hover:shadow-md transition-all duration-300 border border-gray-100"
+            >
+              {/* Small Thumbnail */}
+              {typeof post.featuredImage === 'object' && post.featuredImage?.url ? (
+                <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-200">
+                  <Image
+                    src={post.featuredImage.url}
+                    alt={post.featuredImage.alt || post.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+              ) : (
+                <div className="w-20 h-20 flex-shrink-0 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">{post.title.charAt(0)}</span>
+                </div>
+              )}
+
+              {/* Title */}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 text-sm leading-tight mb-1">
+                  {post.title}
+                </h3>
+                <p className="text-xs text-gray-500">
+                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   )
