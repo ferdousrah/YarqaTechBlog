@@ -1,110 +1,105 @@
+// src/app/(frontend)/[slug]/page.tsx - Dynamic page route
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { notFound } from 'next/navigation'
+import Image from 'next/image'
+import LexicalContent from '@/components/frontend/LexicalContent'
 import type { Metadata } from 'next'
 
-import { PayloadRedirects } from '@/components/PayloadRedirects'
-import configPromise from '@payload-config'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
-import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
-import { homeStatic } from '@/endpoints/seed/home-static'
-
-import { RenderBlocks } from '@/blocks/RenderBlocks'
-import { RenderHero } from '@/heros/RenderHero'
-import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const pages = await payload.find({
-    collection: 'pages',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
-
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
-    })
-
-  return params
-}
-
-type Args = {
-  params: Promise<{
-    slug?: string
-  }>
-}
-
-export default async function Page({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
-  const url = '/' + slug
-
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
-
-  page = await queryPageBySlug({
-    slug,
-  })
-
-  // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
-    page = homeStatic
-  }
-
-  if (!page) {
-    return <PayloadRedirects url={url} />
-  }
-
-  const { hero, layout } = page
-
-  return (
-    <article className="pt-16 pb-24">
-      <PageClient />
-      {/* Allows redirects for valid pages too */}
-      <PayloadRedirects disableNotFound url={url} />
-
-      {draft && <LivePreviewListener />}
-
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
-    </article>
-  )
-}
-
-export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
-  const page = await queryPageBySlug({
-    slug,
-  })
-
-  return generateMeta({ doc: page })
-}
-
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
-  const { isEnabled: draft } = await draftMode()
-
-  const payload = await getPayload({ config: configPromise })
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const payload = await getPayload({ config })
 
   const result = await payload.find({
     collection: 'pages',
-    draft,
-    limit: 1,
-    pagination: false,
-    overrideAccess: draft,
     where: {
-      slug: {
-        equals: slug,
-      },
+      slug: { equals: params.slug },
+      status: { equals: 'published' },
     },
+    limit: 1,
   })
 
-  return result.docs?.[0] || null
-})
+  if (!result.docs.length) {
+    return {
+      title: 'Page Not Found',
+    }
+  }
+
+  const page = result.docs[0]
+
+  return {
+    title: page.seo?.metaTitle || page.title,
+    description: page.seo?.metaDescription || page.excerpt,
+  }
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config })
+  const pages = await payload.find({
+    collection: 'pages',
+    where: {
+      status: { equals: 'published' },
+    },
+    limit: 1000,
+  })
+
+  return pages.docs.map((page) => ({
+    slug: page.slug,
+  }))
+}
+
+export default async function Page({ params }: { params: { slug: string } }) {
+  const payload = await getPayload({ config })
+
+  const result = await payload.find({
+    collection: 'pages',
+    where: {
+      slug: { equals: params.slug },
+      status: { equals: 'published' },
+    },
+    limit: 1,
+    depth: 2,
+  })
+
+  if (!result.docs.length) {
+    notFound()
+  }
+
+  const page = result.docs[0]
+
+  return (
+    <div className="bg-white">
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Page Header */}
+        <header className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            {page.title}
+          </h1>
+
+          {page.excerpt && (
+            <p className="text-xl text-gray-600 leading-relaxed">{page.excerpt}</p>
+          )}
+        </header>
+
+        {/* Featured Image */}
+        {typeof page.featuredImage === 'object' && page.featuredImage?.url && (
+          <div className="mb-12">
+            <div className="relative w-full h-96 rounded-xl overflow-hidden">
+              <Image
+                src={page.featuredImage.url}
+                alt={page.featuredImage.alt || page.title}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Page Content */}
+        <div className="prose prose-lg max-w-none">
+          <LexicalContent content={page.content} />
+        </div>
+      </article>
+    </div>
+  )
+}

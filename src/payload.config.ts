@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url'
 // Collections
 import { Users } from './collections/Users'
 import { Posts } from './collections/Posts'
+import { Pages } from './collections/Pages'
 import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
 import { Media } from './collections/Media'
@@ -65,6 +66,7 @@ export default buildConfig({
     Categories,
     Tags,
     Posts,
+    Pages,
     Comments,
     Bookmarks,
     SearchQueries,
