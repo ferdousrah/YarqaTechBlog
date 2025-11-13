@@ -4,16 +4,12 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Grid3x3, Code, Smartphone, Cloud, Database, Shield, Palette, Briefcase, BookOpen, Newspaper, Brain } from 'lucide-react'
+import { X, Grid3x3 } from 'lucide-react'
 
 interface Category {
   id: number
   name: string
   slug: string
-  description?: string
-  icon?: string
-  color?: string
-  postCount?: number
   parent?: number
   subcategories?: Category[]
 }
@@ -21,20 +17,6 @@ interface Category {
 interface CategoryMegaMenuProps {
   isOpen: boolean
   onClose: () => void
-}
-
-// Icon mapping
-const iconMap: Record<string, any> = {
-  code: Code,
-  mobile: Smartphone,
-  cloud: Cloud,
-  database: Database,
-  security: Shield,
-  design: Palette,
-  business: Briefcase,
-  tutorial: BookOpen,
-  news: Newspaper,
-  ai: Brain,
 }
 
 export default function CategoryMegaMenu({ isOpen, onClose }: CategoryMegaMenuProps) {
@@ -84,11 +66,6 @@ export default function CategoryMegaMenu({ isOpen, onClose }: CategoryMegaMenuPr
     }
   }, [isOpen])
 
-  const getIcon = (iconName?: string) => {
-    const IconComponent = iconMap[iconName || 'code'] || Code
-    return IconComponent
-  }
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -130,95 +107,62 @@ export default function CategoryMegaMenu({ isOpen, onClose }: CategoryMegaMenuPr
                   </motion.button>
                 </div>
 
-                {/* Categories Grid */}
+                {/* Categories List */}
                 {loading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {[...Array(8)].map((_, i) => (
-                      <div key={i} className="animate-pulse">
-                        <div className="h-32 bg-gray-200 rounded-xl"></div>
+                      <div key={i} className="space-y-3">
+                        <div className="h-6 bg-gray-200 rounded animate-pulse w-32"></div>
+                        <div className="h-4 bg-gray-100 rounded animate-pulse w-24"></div>
+                        <div className="h-4 bg-gray-100 rounded animate-pulse w-28"></div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {categories.map((category, index) => {
-                      const Icon = getIcon(category.icon)
-                      const bgColor = category.color || '#3B82F6'
-
-                      return (
-                        <motion.div
-                          key={category.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05 }}
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    {categories.map((category, index) => (
+                      <motion.div
+                        key={category.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.03 }}
+                        className="space-y-3"
+                      >
+                        {/* Parent Category */}
+                        <Link
+                          href={`/category/${category.slug}`}
+                          onClick={onClose}
+                          className="block text-gray-900 hover:text-blue-600 font-bold text-base transition-colors"
                         >
-                          <Link
-                            href={`/category/${category.slug}`}
-                            onClick={onClose}
-                            className="block group"
-                          >
-                            <div className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl p-6 hover:shadow-xl hover:scale-105 transition-all duration-300">
-                              {/* Icon and Title */}
-                              <div className="flex items-start gap-4 mb-3">
-                                <div
-                                  className="w-12 h-12 rounded-lg flex items-center justify-center text-white flex-shrink-0"
-                                  style={{ backgroundColor: bgColor }}
+                          {category.name}
+                        </Link>
+
+                        {/* Subcategories */}
+                        {category.subcategories && category.subcategories.length > 0 && (
+                          <ul className="space-y-2 pl-0">
+                            {category.subcategories.map((subcat) => (
+                              <li key={subcat.id}>
+                                <Link
+                                  href={`/category/${subcat.slug}`}
+                                  onClick={onClose}
+                                  className="block text-gray-600 hover:text-blue-600 text-sm transition-colors"
                                 >
-                                  <Icon className="w-6 h-6" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h3 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-blue-600 transition">
-                                    {category.name}
-                                  </h3>
-                                  {category.postCount !== undefined && category.postCount > 0 && (
-                                    <p className="text-sm text-gray-500">
-                                      {category.postCount} {category.postCount === 1 ? 'article' : 'articles'}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Description */}
-                              {category.description && (
-                                <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                                  {category.description}
-                                </p>
-                              )}
-
-                              {/* Subcategories */}
-                              {category.subcategories && category.subcategories.length > 0 && (
-                                <div className="mt-4 pt-4 border-t border-gray-100">
-                                  <p className="text-xs font-semibold text-gray-500 mb-2">Subcategories:</p>
-                                  <div className="flex flex-wrap gap-2">
-                                    {category.subcategories.slice(0, 3).map((subcat) => (
-                                      <span
-                                        key={subcat.id}
-                                        className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-md"
-                                      >
-                                        {subcat.name}
-                                      </span>
-                                    ))}
-                                    {category.subcategories.length > 3 && (
-                                      <span className="text-xs text-gray-500">
-                                        +{category.subcategories.length - 3} more
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </Link>
-                        </motion.div>
-                      )
-                    })}
+                                  {subcat.name}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </motion.div>
+                    ))}
                   </div>
                 )}
 
                 {/* Empty State */}
                 {!loading && categories.length === 0 && (
                   <div className="text-center py-12">
-                    <Grid3x3 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500 text-lg">No categories available yet</p>
+                    <Grid3x3 className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-500">No categories available yet</p>
                   </div>
                 )}
               </div>
