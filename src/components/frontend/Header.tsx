@@ -37,6 +37,7 @@ export default function Header({ settings }: HeaderProps) {
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [featuredCategories, setFeaturedCategories] = useState<any[]>([])
   const [navigationPages, setNavigationPages] = useState<any[]>([])
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const router = useRouter()
   const pathname = usePathname()
   const { user, logout } = useAuth()
@@ -107,10 +108,32 @@ export default function Header({ settings }: HeaderProps) {
   useEffect(() => {
     const fetchNavigationPages = async () => {
       try {
-        const response = await fetch('/api/pages?where[showInNavigation][equals]=true&where[status][equals]=published&sort=navigationOrder')
+        const response = await fetch('/api/pages?where[showInNavigation][equals]=true&where[status][equals]=published&sort=navigationOrder&depth=1')
         const data = await response.json()
         if (data.docs) {
-          setNavigationPages(data.docs)
+          // Organize pages with parent-child relationships
+          const pageMap = new Map()
+          const rootPages: any[] = []
+
+          // First pass: create map
+          data.docs.forEach((page: any) => {
+            pageMap.set(page.id, { ...page, subPages: [] })
+          })
+
+          // Second pass: organize hierarchy
+          data.docs.forEach((page: any) => {
+            const pageObj = pageMap.get(page.id)
+            if (page.parent && typeof page.parent === 'object') {
+              const parentPage = pageMap.get(page.parent.id)
+              if (parentPage) {
+                parentPage.subPages.push(pageObj)
+              }
+            } else if (!page.parent) {
+              rootPages.push(pageObj)
+            }
+          })
+
+          setNavigationPages(rootPages)
         }
       } catch (error) {
         console.error('Failed to fetch navigation pages:', error)
@@ -151,11 +174,12 @@ export default function Header({ settings }: HeaderProps) {
         { href: '/categories', label: 'Categories', icon: Folder },
       ]
 
-  // Add navigation pages from database
+  // Add navigation pages from database (only parent pages)
   const pageNavItems = navigationPages.map((page) => ({
     href: `/${page.slug}`,
     label: page.title,
     icon: Info, // Default icon for pages
+    subPages: page.subPages || [],
   }))
 
   // Combine default nav items with pages
@@ -234,12 +258,17 @@ export default function Header({ settings }: HeaderProps) {
             {navItems.map((item, index) => {
               const isActive = pathname === item.href
               const Icon = item.icon
+              const hasSubPages = item.subPages && item.subPages.length > 0
+
               return (
                 <motion.div
                   key={item.href}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + index * 0.05 }}
+                  className="relative"
+                  onMouseEnter={() => hasSubPages && setOpenDropdown(item.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <Link
                     href={item.href}
@@ -259,6 +288,26 @@ export default function Header({ settings }: HeaderProps) {
                       />
                     )}
                   </Link>
+
+                  {/* Dropdown for sub-pages */}
+                  {hasSubPages && openDropdown === item.label && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50"
+                    >
+                      {item.subPages.map((subPage: any) => (
+                        <Link
+                          key={subPage.id}
+                          href={`/${subPage.slug}`}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition"
+                        >
+                          {subPage.title}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
                 </motion.div>
               )
             })}
@@ -685,6 +734,8 @@ export default function Header({ settings }: HeaderProps) {
                 <div className="space-y-2">
                   {navItems.map((item, index) => {
                     const Icon = item.icon
+                    const hasSubPages = item.subPages && item.subPages.length > 0
+
                     return (
                       <motion.div
                         key={item.href}
@@ -700,6 +751,22 @@ export default function Header({ settings }: HeaderProps) {
                           <Icon className="w-5 h-5 text-blue-600" />
                           {item.label}
                         </Link>
+
+                        {/* Sub-pages for mobile */}
+                        {hasSubPages && (
+                          <div className="ml-8 mt-1 space-y-1">
+                            {item.subPages.map((subPage: any) => (
+                              <Link
+                                key={subPage.id}
+                                href={`/${subPage.slug}`}
+                                onClick={closeMobileMenu}
+                                className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition"
+                              >
+                                {subPage.title}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
                       </motion.div>
                     )
                   })}
