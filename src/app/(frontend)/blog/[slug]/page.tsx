@@ -143,6 +143,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               src={post.featuredImage.url}
               alt={post.featuredImage.alt || post.title}
               caption={post.featuredImage.caption}
+              credit={post.featuredImage.credit}
               priority
             />
           </div>
