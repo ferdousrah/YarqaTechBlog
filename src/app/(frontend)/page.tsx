@@ -147,8 +147,8 @@ async function CategorySection({ category, payload }: any) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Featured Post (Large) */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        {/* Left Column - Featured Post */}
         <div className="lg:col-span-2">
           <ArticleCardWithBookmark
             post={featuredPost}
@@ -157,8 +157,8 @@ async function CategorySection({ category, payload }: any) {
           />
         </div>
 
-        {/* Right Column - Small Posts List */}
-        <div className="space-y-4">
+        {/* Right Column - Small Posts List (Wider) */}
+        <div className="lg:col-span-3 space-y-4">
           {sidebarPosts.map((post) => (
             <Link
               key={post.id}
