@@ -169,7 +169,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         )}
 
         {/* Share and Like/Dislike Section */}
-        <div className="flex flex-col gap-6 mb-12 pb-12 border-b border-gray-200">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12 pb-12 border-b border-gray-200">
           {/* Social Share Buttons */}
           <ShareButtons title={post.title} url={fullUrl} />
 
