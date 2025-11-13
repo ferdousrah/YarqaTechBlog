@@ -28,8 +28,15 @@ export default function ClickableImage({
 
   return (
     <>
-      <div className={containerClassName} onClick={() => setLightboxOpen(true)}>
-        <Image src={src} alt={alt} fill className={className} sizes={sizes} priority={priority} />
+      <div>
+        <div className={containerClassName} onClick={() => setLightboxOpen(true)}>
+          <Image src={src} alt={alt} fill className={className} sizes={sizes} priority={priority} />
+        </div>
+
+        {/* Caption/Photo Credit */}
+        {caption && (
+          <p className="text-sm text-gray-500 italic mt-3 text-center">{caption}</p>
+        )}
       </div>
 
       <ImageLightbox
