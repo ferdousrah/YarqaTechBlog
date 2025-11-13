@@ -55,7 +55,7 @@ export default buildConfig({
     components: {
       views: {
         dashboard: {
-          //Component: Dashboard,
+          Component: Dashboard,
         },
       },
     },

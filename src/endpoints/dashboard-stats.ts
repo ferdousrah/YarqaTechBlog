@@ -102,6 +102,48 @@ export const dashboardStatsEndpoint: Endpoint = {
         sort: '-createdAt',
       })
 
+      // Generate monthly analytics for the last 6 months
+      const now = new Date()
+      const monthlyAnalytics = []
+
+      for (let i = 5; i >= 0; i--) {
+        const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1)
+        const nextMonthDate = new Date(now.getFullYear(), now.getMonth() - i + 1, 1)
+
+        // Get posts created in this month
+        const monthPosts = await req.payload.find({
+          collection: 'posts',
+          where: {
+            and: [
+              { createdAt: { greater_than_equal: monthDate.toISOString() } },
+              { createdAt: { less_than: nextMonthDate.toISOString() } },
+            ],
+          },
+          limit: 0,
+        })
+
+        // Get views for posts published in this month
+        const monthPublishedPosts = await req.payload.find({
+          collection: 'posts',
+          where: {
+            and: [
+              { publishedAt: { greater_than_equal: monthDate.toISOString() } },
+              { publishedAt: { less_than: nextMonthDate.toISOString() } },
+              { status: { equals: 'published' } },
+            ],
+          },
+          limit: 1000,
+        })
+
+        const monthViews = monthPublishedPosts.docs.reduce((sum, post) => sum + (post.views || 0), 0)
+
+        monthlyAnalytics.push({
+          month: monthDate.toLocaleDateString('en-US', { month: 'short' }),
+          posts: monthPosts.totalDocs,
+          views: monthViews,
+        })
+      }
+
       return Response.json({
         totalPosts: allPosts.totalDocs,
         publishedPosts: publishedPosts.totalDocs,
@@ -115,6 +157,7 @@ export const dashboardStatsEndpoint: Endpoint = {
         recentPosts: recentPosts.docs,
         topPosts: topPosts.docs,
         recentComments: recentComments.docs,
+        analytics: monthlyAnalytics,
       })
     } catch (error) {
       console.error('Dashboard stats error:', error)
