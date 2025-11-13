@@ -26,7 +26,7 @@ export default function CategoryMegaMenu({ isOpen, onClose }: CategoryMegaMenuPr
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('/api/categories')
+        const response = await fetch('/api/frontend-categories')
         const data = await response.json()
 
         if (data.success) {
