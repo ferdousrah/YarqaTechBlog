@@ -32,9 +32,15 @@ export default async function HomePage() {
   const trendingPosts = latestPosts.docs.slice(5, 9)
   const latestNews = latestPosts.docs.slice(9, 15)
 
-  // Fetch categories for sections
+  // Fetch categories for sections (only parent categories that are featured)
   const categories = await payload.find({
     collection: 'categories',
+    where: {
+      and: [
+        { featured: { equals: true } },
+        { parent: { exists: false } },
+      ],
+    },
     limit: 10,
     sort: 'order',
   })
@@ -87,7 +93,7 @@ export default async function HomePage() {
         </div>
 
         {/* Category Sections */}
-        {categories.docs.slice(0, 3).map((category) => (
+        {categories.docs.map((category) => (
           <CategorySection key={category.id} category={category} payload={payload} />
         ))}
       </AnimatedContainer>
