@@ -74,7 +74,7 @@ export default function DashboardClient() {
   if (loading) {
     return (
       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full">
           <div className="h-10 bg-gray-200 rounded-xl w-72 mb-8 animate-pulse"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {[1, 2, 3, 4].map((i) => (
@@ -103,7 +103,7 @@ export default function DashboardClient() {
 
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full">
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-4 mb-3">

@@ -72,24 +72,19 @@ export const dashboardStatsEndpoint: Endpoint = {
         }),
       ])
 
-      // Calculate total views efficiently using a single query with pagination
-      const postsForViews = await req.payload.find({
+      // Fetch all posts for analytics and views calculation in one query
+      const allPostsForAnalytics = await req.payload.find({
         collection: 'posts',
-        limit: 100, // Limit to recent posts to keep it fast
+        limit: 10000, // High limit to get all posts
         pagination: false,
       })
-      const totalViews = postsForViews.docs.reduce((sum, post) => sum + (post.views || 0), 0)
+
+      // Calculate total views from all posts
+      const totalViews = allPostsForAnalytics.docs.reduce((sum, post) => sum + (post.views || 0), 0)
 
       // Generate monthly analytics efficiently
       const now = new Date()
       const monthlyAnalytics = []
-
-      // Fetch all posts for analytics in one query
-      const allPostsForAnalytics = await req.payload.find({
-        collection: 'posts',
-        limit: 1000,
-        pagination: false,
-      })
 
       for (let i = 5; i >= 0; i--) {
         const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1)
