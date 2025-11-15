@@ -11,6 +11,7 @@ import ClickableImage from '@/components/ClickableImage'
 import ShareButtons from '@/components/ShareButtons'
 import LikeDislike from '@/components/LikeDislike'
 import { headers } from 'next/headers'
+import BlogPageClient from './page.client'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config })
@@ -27,13 +28,14 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const payload = await getPayload({ config })
 
   const result = await payload.find({
     collection: 'posts',
     where: {
-      slug: { equals: params.slug },
+      slug: { equals: slug },
       status: { equals: 'published' },
     },
     limit: 1,
@@ -78,6 +80,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   return (
     <div className="bg-white">
+      <BlogPageClient postId={post.id} />
+
       {/* Article Header */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Category & Date */}
