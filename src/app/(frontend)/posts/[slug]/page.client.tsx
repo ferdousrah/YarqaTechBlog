@@ -20,12 +20,20 @@ const PageClient: React.FC<PageClientProps> = ({ postId }) => {
     // Increment view count when post is viewed
     const incrementView = async () => {
       try {
-        await fetch(`/api/posts/${postId}/view`, {
+        const response = await fetch(`/api/posts/${postId}/view`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
         })
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}))
+          console.error('Failed to increment view - Status:', response.status, errorData)
+        } else {
+          const data = await response.json()
+          console.log('View incremented successfully:', data)
+        }
       } catch (error) {
         console.error('Failed to increment view:', error)
       }
