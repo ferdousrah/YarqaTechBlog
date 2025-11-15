@@ -38,8 +38,6 @@ import { createCommentEndpoint } from './endpoints/create-comment'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-import Dashboard from './components/Dashboard'
-
 export default buildConfig({
   admin: {
     css: path.resolve(__dirname, './styles/admin-overrides.css'),
@@ -55,7 +53,7 @@ export default buildConfig({
     components: {
       views: {
         dashboard: {
-          Component: Dashboard,
+          Component: '@/components/Dashboard',
         },
       },
     },
