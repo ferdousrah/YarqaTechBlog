@@ -1,3 +1,8 @@
+/* Import Tailwind CSS for dashboard components */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Hide Payload's empty background if present */
 .payload__main--empty,
 .payload__app--empty,
@@ -8,7 +13,7 @@
 /* Hard cover the admin content area with a solid layer behind your UI */
 .dashboard-wrapper {
   position: relative;
-  min-height: 100vh;         /* fill viewport so the icon doesn’t peek below */
+  min-height: 100vh;         /* fill viewport so the icon doesn't peek below */
 }
 
 .dashboard-wrapper::before {
