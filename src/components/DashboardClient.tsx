@@ -38,11 +38,32 @@ export default function DashboardClient() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch('/api/dashboard-stats')
+        const res = await fetch('/api/dashboard-stats', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!res.ok) {
+          console.error('Dashboard fetch failed with status:', res.status)
+          setStats(null)
+          setLoading(false)
+          return
+        }
+
         const data = await res.json()
-        setStats(data)
+
+        // Validate response structure
+        if (data && typeof data.totalPosts !== 'undefined') {
+          setStats(data)
+        } else {
+          console.error('Invalid dashboard data structure:', data)
+          setStats(null)
+        }
       } catch (err) {
         console.error('Dashboard fetch failed:', err)
+        setStats(null)
       } finally {
         setLoading(false)
       }
