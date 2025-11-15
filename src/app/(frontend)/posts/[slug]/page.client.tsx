@@ -1,14 +1,40 @@
 'use client'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 import React, { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
-const PageClient: React.FC = () => {
+interface PageClientProps {
+  postId: string
+}
+
+const PageClient: React.FC<PageClientProps> = ({ postId }) => {
   /* Force the header to be dark mode while we have an image behind it */
   const { setHeaderTheme } = useHeaderTheme()
+  const pathname = usePathname()
 
   useEffect(() => {
     setHeaderTheme('dark')
   }, [setHeaderTheme])
+
+  useEffect(() => {
+    // Increment view count when post is viewed
+    const incrementView = async () => {
+      try {
+        await fetch(`/api/posts/${postId}/view`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      } catch (error) {
+        console.error('Failed to increment view:', error)
+      }
+    }
+
+    // Only increment view once per page load
+    incrementView()
+  }, [postId])
+
   return <React.Fragment />
 }
 
