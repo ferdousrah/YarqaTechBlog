@@ -16,130 +16,107 @@ export const dashboardStatsEndpoint: Endpoint = {
     }
 
     try {
-      // Get total posts
-      const allPosts = await req.payload.find({
+      // Fetch all data in parallel to improve performance
+      const [
+        allPosts,
+        publishedPosts,
+        draftPosts,
+        allComments,
+        pendingComments,
+        allUsers,
+        allCategories,
+        allTags,
+        recentPosts,
+        topPosts,
+        recentComments,
+      ] = await Promise.all([
+        // Posts stats
+        req.payload.find({ collection: 'posts', limit: 0 }),
+        req.payload.find({
+          collection: 'posts',
+          where: { status: { equals: 'published' } },
+          limit: 0,
+        }),
+        req.payload.find({
+          collection: 'posts',
+          where: { status: { equals: 'draft' } },
+          limit: 0,
+        }),
+        // Comments stats
+        req.payload.find({ collection: 'comments', limit: 0 }),
+        req.payload.find({
+          collection: 'comments',
+          where: { status: { equals: 'pending' } },
+          limit: 0,
+        }),
+        // Other collections
+        req.payload.find({ collection: 'users', limit: 0 }),
+        req.payload.find({ collection: 'categories', limit: 0 }),
+        req.payload.find({ collection: 'tags', limit: 0 }),
+        // Recent and top posts
+        req.payload.find({
+          collection: 'posts',
+          limit: 5,
+          sort: '-createdAt',
+        }),
+        req.payload.find({
+          collection: 'posts',
+          where: { status: { equals: 'published' } },
+          limit: 5,
+          sort: '-views',
+        }),
+        req.payload.find({
+          collection: 'comments',
+          limit: 5,
+          sort: '-createdAt',
+        }),
+      ])
+
+      // Calculate total views efficiently using a single query with pagination
+      const postsForViews = await req.payload.find({
         collection: 'posts',
-        limit: 0,
+        limit: 100, // Limit to recent posts to keep it fast
+        pagination: false,
       })
+      const totalViews = postsForViews.docs.reduce((sum, post) => sum + (post.views || 0), 0)
 
-      // Get published posts
-      const publishedPosts = await req.payload.find({
-        collection: 'posts',
-        where: {
-          status: { equals: 'published' },
-        },
-        limit: 0,
-      })
-
-      // Get draft posts
-      const draftPosts = await req.payload.find({
-        collection: 'posts',
-        where: {
-          status: { equals: 'draft' },
-        },
-        limit: 0,
-      })
-
-      // Calculate total views
-      const postsWithViews = await req.payload.find({
-        collection: 'posts',
-        limit: 1000,
-      })
-      const totalViews = postsWithViews.docs.reduce((sum, post) => sum + (post.views || 0), 0)
-
-      // Get comments stats
-      const allComments = await req.payload.find({
-        collection: 'comments',
-        limit: 0,
-      })
-
-      const pendingComments = await req.payload.find({
-        collection: 'comments',
-        where: {
-          status: { equals: 'pending' },
-        },
-        limit: 0,
-      })
-
-      // Get users count
-      const allUsers = await req.payload.find({
-        collection: 'users',
-        limit: 0,
-      })
-
-      // Get categories and tags count
-      const allCategories = await req.payload.find({
-        collection: 'categories',
-        limit: 0,
-      })
-
-      const allTags = await req.payload.find({
-        collection: 'tags',
-        limit: 0,
-      })
-
-      // Get recent posts (last 5)
-      const recentPosts = await req.payload.find({
-        collection: 'posts',
-        limit: 5,
-        sort: '-createdAt',
-      })
-
-      // Get top posts by views (last 5)
-      const topPosts = await req.payload.find({
-        collection: 'posts',
-        where: {
-          status: { equals: 'published' },
-        },
-        limit: 5,
-        sort: '-views',
-      })
-
-      // Get recent comments (last 5)
-      const recentComments = await req.payload.find({
-        collection: 'comments',
-        limit: 5,
-        sort: '-createdAt',
-      })
-
-      // Generate monthly analytics for the last 6 months
+      // Generate monthly analytics efficiently
       const now = new Date()
       const monthlyAnalytics = []
+
+      // Fetch all posts for analytics in one query
+      const allPostsForAnalytics = await req.payload.find({
+        collection: 'posts',
+        limit: 1000,
+        pagination: false,
+      })
 
       for (let i = 5; i >= 0; i--) {
         const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1)
         const nextMonthDate = new Date(now.getFullYear(), now.getMonth() - i + 1, 1)
 
-        // Get posts created in this month
-        const monthPosts = await req.payload.find({
-          collection: 'posts',
-          where: {
-            and: [
-              { createdAt: { greater_than_equal: monthDate.toISOString() } },
-              { createdAt: { less_than: nextMonthDate.toISOString() } },
-            ],
-          },
-          limit: 0,
+        // Filter posts created in this month from the cached data
+        const monthPosts = allPostsForAnalytics.docs.filter((post) => {
+          const createdAt = new Date(post.createdAt)
+          return createdAt >= monthDate && createdAt < nextMonthDate
         })
 
-        // Get views for posts published in this month
-        const monthPublishedPosts = await req.payload.find({
-          collection: 'posts',
-          where: {
-            and: [
-              { publishedAt: { greater_than_equal: monthDate.toISOString() } },
-              { publishedAt: { less_than: nextMonthDate.toISOString() } },
-              { status: { equals: 'published' } },
-            ],
-          },
-          limit: 1000,
-        })
-
-        const monthViews = monthPublishedPosts.docs.reduce((sum, post) => sum + (post.views || 0), 0)
+        // Calculate views for posts published in this month
+        const monthViews = monthPosts
+          .filter((post) => {
+            const publishedAt = post.publishedAt ? new Date(post.publishedAt) : null
+            return (
+              publishedAt &&
+              publishedAt >= monthDate &&
+              publishedAt < nextMonthDate &&
+              post.status === 'published'
+            )
+          })
+          .reduce((sum, post) => sum + (post.views || 0), 0)
 
         monthlyAnalytics.push({
           month: monthDate.toLocaleDateString('en-US', { month: 'short' }),
-          posts: monthPosts.totalDocs,
+          posts: monthPosts.length,
           views: monthViews,
         })
       }
