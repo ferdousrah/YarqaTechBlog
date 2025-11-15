@@ -73,7 +73,7 @@ export default function DashboardClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="h-10 bg-gray-200 rounded-xl w-72 mb-8 animate-pulse"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -88,19 +88,21 @@ export default function DashboardClient() {
 
   if (!stats) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8 flex items-center justify-center">
-        <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md text-center">
-          <div className="text-6xl mb-4">📊</div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Oops!</h3>
-          <p className="text-red-600 font-semibold text-lg mb-2">Failed to load dashboard</p>
-          <p className="text-gray-500 text-sm">Please refresh the page</p>
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
+        <div className="flex items-center justify-center" style={{ minHeight: '400px' }}>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md text-center">
+            <div className="text-6xl mb-4">📊</div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Oops!</h3>
+            <p className="text-red-600 font-semibold text-lg mb-2">Failed to load dashboard</p>
+            <p className="text-gray-500 text-sm">Please refresh the page</p>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
+    <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-10">

@@ -1,10 +1,7 @@
-import { Gutter } from '@payloadcms/ui'
+'use client'
+
 import DashboardClient from './DashboardClient'
 
 export default function Dashboard() {
-  return (
-    <Gutter>
-      <DashboardClient />
-    </Gutter>
-  )
+  return <DashboardClient />
 }
