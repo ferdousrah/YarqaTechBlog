@@ -1,0 +1,11 @@
+/* Import Tailwind CSS for Payload admin (including dashboard) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom admin styles */
+.payload__main--empty,
+.payload__app--empty,
+.payload__template--empty {
+  background: none !important;
+}

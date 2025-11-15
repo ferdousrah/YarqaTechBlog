@@ -1,33 +1,21 @@
-/* Import Tailwind CSS for dashboard components */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Additional admin panel styles */
+/* Tailwind CSS is imported in src/app/(payload)/custom.scss */
 
-/* Hide Payload's empty background if present */
-.payload__main--empty,
-.payload__app--empty,
-.payload__template--empty {
-  background: none !important;
-}
-
-/* Hard cover the admin content area with a solid layer behind your UI */
 .dashboard-wrapper {
   position: relative;
-  min-height: 100vh;         /* fill viewport so the icon doesn't peek below */
+  min-height: 100vh;
 }
 
 .dashboard-wrapper::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: #fff;          /* or your gradient if you prefer */
-  z-index: 0;                /* sits behind your UI */
+  background: #fff;
+  z-index: 0;
 }
 
 .dashboard-inner {
   position: relative;
-  z-index: 1;                /* your UI sits above the cover layer */
+  z-index: 1;
   padding: 2rem;
-  /* optional: your gradient */
-  /* background: linear-gradient(to bottom right, #f9fafb, #ffffff); */
 }
