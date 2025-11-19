@@ -80,15 +80,6 @@ export default async function CategoryPage({
     sort: '-publishedAt',
   })
 
-  // Get subcategories if any
-  const subcategories = await payload.find({
-    collection: 'categories',
-    where: {
-      parent: { equals: category.id },
-    },
-    limit: 20,
-  })
-
   const categoryColor = category.color || '#3B82F6'
 
   return (
@@ -135,30 +126,6 @@ export default async function CategoryPage({
       </div>
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Subcategories */}
-        {subcategories.docs.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Subcategories</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {subcategories.docs.map((subcat) => (
-                <Link
-                  key={subcat.id}
-                  href={`/category/${subcat.slug}`}
-                  className="bg-white p-4 rounded-xl text-center hover:shadow-lg transition group"
-                >
-                  <div className="text-3xl mb-2">{getCategoryIcon(subcat.icon)}</div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition text-sm">
-                    {subcat.name}
-                  </h3>
-                  {subcat.postCount > 0 && (
-                    <p className="text-xs text-gray-500 mt-1">{subcat.postCount} posts</p>
-                  )}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Posts Grid */}
         {posts.docs.length > 0 ? (
           <>
