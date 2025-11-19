@@ -32,12 +32,12 @@ export default function RegisterPage() {
   const [savingPreferences, setSavingPreferences] = useState(false)
   const [newUserId, setNewUserId] = useState<string | null>(null)
 
-  // Redirect if already logged in
+  // Redirect if already logged in (but not during registration flow)
   useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && user && !showCategoryModal) {
       router.push('/')
     }
-  }, [user, authLoading, router])
+  }, [user, authLoading, router, showCategoryModal])
 
   // Fetch categories when modal opens
   useEffect(() => {
