@@ -1,18 +1,8 @@
 // src/app/api/auth/logout/route.ts
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export async function POST(request: NextRequest) {
   try {
-    const payload = await getPayload({ config })
-
-    // Log out from Payload
-    await payload.logout({
-      collection: 'users',
-    })
-
     // Create response
     const response = NextResponse.json({
       success: true,
@@ -21,6 +11,12 @@ export async function POST(request: NextRequest) {
 
     // Clear auth cookie
     response.cookies.delete('payload-token')
+
+    // Also try to clear with path specified
+    response.cookies.set('payload-token', '', {
+      expires: new Date(0),
+      path: '/',
+    })
 
     return response
   } catch (error) {
