@@ -12,6 +12,7 @@ import {
 } from '@/components/AnimatedComponents'
 import NewsletterWrapper from '@/components/frontend/NewsletterWrapper'
 import { ArticleCardWithBookmark } from '@/components/ArticleCardWithBookmark'
+import PersonalizedSection from '@/components/frontend/PersonalizedSection'
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
@@ -49,6 +50,9 @@ export default async function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50">
       {/* Main Container */}
       <AnimatedContainer className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Personalized Section for logged-in users */}
+        <PersonalizedSection />
+
         {/* Hero Section - Large Post with 4 smaller posts */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
           {/* Large Hero Post - 2 columns */}
