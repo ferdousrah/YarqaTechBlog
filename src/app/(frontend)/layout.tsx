@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import HeaderWrapper from '@/components/frontend/HeaderWrapper'
 import SidebarWrapper from '@/components/frontend/SidebarWrapper'
 import FooterWrapper from '@/components/frontend/FooterWrapper'
+import MainContent from '@/components/frontend/MainContent'
 import { Providers } from '@/components/Providers'
 import ThemeDebugger from '@/components/ThemeDebugger'
 import { fontVariables } from '@/utils/fonts'
@@ -20,11 +21,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <div className="flex min-h-screen">
             <SidebarWrapper />
-            <div className="flex flex-col flex-1 lg:ml-64">
+            <MainContent>
               <HeaderWrapper />
               <main className="flex-grow">{children}</main>
               <FooterWrapper />
-            </div>
+            </MainContent>
           </div>
           {/* Theme Debugger - Remove this in production */}
           <ThemeDebugger />
