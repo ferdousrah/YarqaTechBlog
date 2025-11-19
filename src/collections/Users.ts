@@ -117,5 +117,22 @@ export const Users: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'interestedCategories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true,
+      admin: {
+        description: 'Categories the user is interested in for personalized content',
+      },
+    },
+    {
+      name: 'hasCompletedOnboarding',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Whether the user has completed the category selection onboarding',
+      },
+    },
   ],
 }
