@@ -1,5 +1,6 @@
 // src/app/(frontend)/layout.tsx
 import type { Metadata } from 'next'
+import HeaderWrapper from '@/components/frontend/HeaderWrapper'
 import SidebarWrapper from '@/components/frontend/SidebarWrapper'
 import FooterWrapper from '@/components/frontend/FooterWrapper'
 import { Providers } from '@/components/Providers'
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex min-h-screen">
             <SidebarWrapper />
             <div className="flex flex-col flex-1 lg:ml-64">
+              <HeaderWrapper />
               <main className="flex-grow">{children}</main>
               <FooterWrapper />
             </div>

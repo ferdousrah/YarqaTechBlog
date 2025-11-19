@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
 interface Category {
@@ -26,9 +25,6 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
   useEffect(() => {
     setIsMobileOpen(false)
   }, [pathname])
-
-  // Get logo from settings
-  const logo = settings?.logo
 
   return (
     <>
@@ -70,44 +66,32 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Light Theme */}
       <aside
         className={`
-          fixed top-0 left-0 h-full bg-gray-900 text-white z-40
+          fixed top-0 left-0 h-full bg-gray-50 border-r border-gray-200 z-40
           transition-all duration-300 ease-in-out
           ${isCollapsed ? 'w-16' : 'w-64'}
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
           flex flex-col
         `}
       >
-        {/* Logo & Collapse Button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-800">
+        {/* Collapse Toggle Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
           {!isCollapsed && (
-            <Link href="/" className="flex items-center gap-2">
-              {logo && typeof logo === 'object' && logo.url ? (
-                <Image
-                  src={logo.url}
-                  alt={logo.alt || 'Logo'}
-                  width={120}
-                  height={40}
-                  className="h-8 w-auto"
-                />
-              ) : (
-                <span className="text-xl font-bold text-white">
-                  {settings?.siteName || 'Yarqa Tech'}
-                </span>
-              )}
-            </Link>
+            <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+              Categories
+            </h2>
           )}
 
           {/* Collapse Toggle - Desktop only */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-800 transition-colors"
+            className={`hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors ${isCollapsed ? 'mx-auto' : ''}`}
             aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <svg
-              className={`w-5 h-5 text-gray-400 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
+              className={`w-5 h-5 text-gray-500 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -122,31 +106,25 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
           </button>
         </div>
 
-        {/* New Post Button */}
+        {/* All Posts Button */}
         <div className="p-3">
           <Link
             href="/blog"
             className={`
               flex items-center gap-3 px-3 py-2.5 rounded-lg
-              bg-gray-800 hover:bg-gray-700 transition-colors
+              bg-blue-600 hover:bg-blue-700 text-white transition-colors
               ${isCollapsed ? 'justify-center' : ''}
             `}
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
             </svg>
-            {!isCollapsed && <span className="font-medium">All Posts</span>}
+            {!isCollapsed && <span className="font-medium text-sm">All Posts</span>}
           </Link>
         </div>
 
         {/* Categories Section */}
         <div className="flex-1 overflow-y-auto">
-          <div className={`px-3 py-2 ${isCollapsed ? 'hidden' : ''}`}>
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              Categories
-            </h3>
-          </div>
-
           <nav className="px-3 space-y-1">
             {categories.map((category) => {
               const isActive = pathname === `/category/${category.slug}`
@@ -158,8 +136,8 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                     flex items-center gap-3 px-3 py-2.5 rounded-lg
                     transition-colors group relative
                     ${isActive
-                      ? 'bg-gray-800 text-white'
-                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                      ? 'bg-blue-100 text-blue-700 font-medium'
+                      : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'
                     }
                     ${isCollapsed ? 'justify-center' : ''}
                   `}
@@ -194,35 +172,34 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
           </nav>
         </div>
 
-        {/* Bottom Section - Home & Search */}
-        <div className="border-t border-gray-800 p-3 space-y-1">
+        {/* Bottom Section - Auth */}
+        <div className="border-t border-gray-200 p-3 space-y-1">
           <Link
-            href="/"
+            href="/login"
             className={`
               flex items-center gap-3 px-3 py-2.5 rounded-lg
-              text-gray-300 hover:bg-gray-800 hover:text-white transition-colors
+              text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors
               ${isCollapsed ? 'justify-center' : ''}
-              ${pathname === '/' ? 'bg-gray-800 text-white' : ''}
             `}
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
-            {!isCollapsed && <span className="text-sm">Home</span>}
+            {!isCollapsed && <span className="text-sm">Sign In</span>}
           </Link>
 
           <Link
-            href="/search"
+            href="/register"
             className={`
               flex items-center gap-3 px-3 py-2.5 rounded-lg
-              text-gray-300 hover:bg-gray-800 hover:text-white transition-colors
+              bg-gray-900 hover:bg-gray-800 text-white transition-colors
               ${isCollapsed ? 'justify-center' : ''}
             `}
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
-            {!isCollapsed && <span className="text-sm">Search</span>}
+            {!isCollapsed && <span className="text-sm font-medium">Sign Up</span>}
           </Link>
         </div>
       </aside>
