@@ -6,9 +6,8 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail, Bookmark, Grid3x3 } from 'lucide-react'
+import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail, Bookmark } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import CategoryMegaMenu from '@/components/CategoryMegaMenu'
 
 // Helper function to get icon component from string
 function getIconComponent(iconName?: string) {
@@ -34,8 +33,6 @@ export default function Header({ settings }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [userAvatar, setUserAvatar] = useState<{ url: string; alt?: string } | null>(null)
-  const [megaMenuOpen, setMegaMenuOpen] = useState(false)
-  const [featuredCategories, setFeaturedCategories] = useState<any[]>([])
   const [navigationPages, setNavigationPages] = useState<any[]>([])
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const router = useRouter()
@@ -85,24 +82,6 @@ export default function Header({ settings }: HeaderProps) {
     }
     fetchUserAvatar()
   }, [user])
-
-  // Fetch featured categories
-  useEffect(() => {
-    const fetchFeaturedCategories = async () => {
-      try {
-        const response = await fetch('/api/frontend-categories')
-        const data = await response.json()
-        if (data.success) {
-          // Filter only featured categories and exclude subcategories (no parent)
-          const featured = data.categories.filter((cat: any) => cat.featured && !cat.parent)
-          setFeaturedCategories(featured.slice(0, 6)) // Limit to 6 categories
-        }
-      } catch (error) {
-        console.error('Failed to fetch featured categories:', error)
-      }
-    }
-    fetchFeaturedCategories()
-  }, [])
 
   // Fetch pages for navigation
   useEffect(() => {
@@ -171,7 +150,6 @@ export default function Header({ settings }: HeaderProps) {
     : [
         { href: '/', label: 'Home', icon: Home },
         { href: '/blog', label: 'Latest', icon: BookOpen },
-        { href: '/categories', label: 'Categories', icon: Folder },
       ]
 
   // Add navigation pages from database (only parent pages)
@@ -204,7 +182,7 @@ export default function Header({ settings }: HeaderProps) {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-30 transition-all duration-300 ${
         scrolled
           ? 'bg-white/80 backdrop-blur-xl shadow-lg border-b border-gray-200'
           : 'bg-white border-b border-gray-200'
@@ -212,12 +190,12 @@ export default function Header({ settings }: HeaderProps) {
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo with animation - Hidden when scrolled */}
+          {/* Logo with animation */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: scrolled ? 0 : 1, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className={`flex items-center ${scrolled ? 'pointer-events-none' : ''}`}
+            className="flex items-center"
           >
             <Link href="/" className="group flex items-center gap-2">
               {logoUrl ? (
@@ -253,8 +231,8 @@ export default function Header({ settings }: HeaderProps) {
             </Link>
           </motion.div>
 
-          {/* Center Navigation - Desktop - Hidden when scrolled */}
-          <nav className={`hidden lg:flex items-center space-x-1 flex-1 justify-center transition-opacity duration-300 ${scrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+          {/* Center Navigation - Desktop */}
+          <nav className="hidden lg:flex items-center space-x-1 flex-1 justify-center">
             {navItems.map((item, index) => {
               const isActive = pathname === item.href
               const Icon = item.icon
@@ -313,35 +291,12 @@ export default function Header({ settings }: HeaderProps) {
             })}
           </nav>
 
-          {/* Category Bar - Featured Categories when scrolled */}
-          <div className={`hidden lg:flex items-center space-x-4 transition-opacity duration-300 ${scrolled ? 'opacity-100 mx-auto' : 'opacity-0 pointer-events-none absolute'}`}>
-            {featuredCategories.map((category) => (
-              <Link
-                key={category.id}
-                href={`/category/${category.slug}`}
-                className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-all duration-300 px-3 py-1 rounded-lg hover:bg-gray-50"
-              >
-                {category.name}
-              </Link>
-            ))}
-            {/* Mega Menu Icon */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setMegaMenuOpen(true)}
-              className="p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all duration-300"
-              aria-label="View all categories"
-            >
-              <Grid3x3 className="w-5 h-5" />
-            </motion.button>
-          </div>
-
-          {/* Right Actions - Hidden when scrolled */}
+          {/* Right Actions */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: scrolled ? 0 : 1, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className={`flex items-center space-x-2 ${scrolled ? 'pointer-events-none' : ''}`}
+            className="flex items-center space-x-2"
           >
             {/* Search Button */}
             {showSearch && (
@@ -596,49 +551,6 @@ export default function Header({ settings }: HeaderProps) {
         )}
       </AnimatePresence>
 
-      {/* Category Bar - Desktop with gradient background - Hidden when scrolled */}
-      {!scrolled && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="hidden lg:block border-t border-gray-200 bg-gradient-to-r from-gray-50 via-blue-50/30 to-gray-50"
-        >
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between space-x-6 py-3 text-sm">
-            <div className="flex items-center space-x-6 overflow-x-auto">
-              {featuredCategories.map((category, index) => (
-                <motion.div
-                  key={category.id}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + index * 0.05 }}
-                >
-                  <Link
-                    href={`/category/${category.slug}`}
-                    className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-all duration-300 px-3 py-1 rounded-lg hover:bg-white"
-                  >
-                    {category.name}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-            {/* Mega Menu Icon */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setMegaMenuOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-white rounded-lg transition-all duration-300 font-medium"
-              aria-label="View all categories"
-            >
-              <Grid3x3 className="w-5 h-5" />
-              <span>All Categories</span>
-            </motion.button>
-          </div>
-        </div>
-        </motion.div>
-      )}
-
       {/* Mobile Menu Overlay with animation */}
       <AnimatePresence>
         {mobileMenuOpen && (
@@ -771,42 +683,6 @@ export default function Header({ settings }: HeaderProps) {
                     )
                   })}
                 </div>
-
-                {/* Popular Categories */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="mt-8"
-                >
-                  <h3 className="px-4 text-xs font-bold text-gray-500 uppercase mb-3 tracking-wider">
-                    Popular Categories
-                  </h3>
-                  <div className="space-y-1">
-                    {[
-                      { name: 'Web Development', icon: '💻' },
-                      { name: 'Mobile Apps', icon: '📱' },
-                      { name: 'AI & ML', icon: '🤖' },
-                      { name: 'Cloud', icon: '☁️' },
-                    ].map((cat, index) => (
-                      <motion.div
-                        key={cat.name}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 + index * 0.05 }}
-                      >
-                        <Link
-                          href={`/category/${cat.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '')}`}
-                          onClick={closeMobileMenu}
-                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg text-sm transition-all duration-300"
-                        >
-                          <span>{cat.icon}</span>
-                          {cat.name}
-                        </Link>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
               </nav>
 
               {/* Mobile Menu Footer */}
@@ -832,9 +708,6 @@ export default function Header({ settings }: HeaderProps) {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Category Mega Menu */}
-      <CategoryMegaMenu isOpen={megaMenuOpen} onClose={() => setMegaMenuOpen(false)} />
     </motion.header>
   )
 }
