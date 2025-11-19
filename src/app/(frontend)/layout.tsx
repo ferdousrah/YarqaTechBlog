@@ -1,6 +1,6 @@
 // src/app/(frontend)/layout.tsx
 import type { Metadata } from 'next'
-import HeaderWrapper from '@/components/frontend/HeaderWrapper'
+import SidebarWrapper from '@/components/frontend/SidebarWrapper'
 import FooterWrapper from '@/components/frontend/FooterWrapper'
 import { Providers } from '@/components/Providers'
 import ThemeDebugger from '@/components/ThemeDebugger'
@@ -17,10 +17,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={fontVariables} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         <Providers>
-          <div className="flex flex-col min-h-screen">
-            <HeaderWrapper />
-            <main className="flex-grow">{children}</main>
-            <FooterWrapper />
+          <div className="flex min-h-screen">
+            <SidebarWrapper />
+            <div className="flex flex-col flex-1 lg:ml-64">
+              <main className="flex-grow">{children}</main>
+              <FooterWrapper />
+            </div>
           </div>
           {/* Theme Debugger - Remove this in production */}
           <ThemeDebugger />
