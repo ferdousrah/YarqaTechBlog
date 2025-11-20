@@ -49,16 +49,24 @@ export interface Theme {
   animations: ThemeAnimations
 }
 
+type ColorMode = 'light' | 'dark'
+
 interface ThemeContextType {
   theme: Theme | null
   loading: boolean
   refreshTheme: () => Promise<void>
+  colorMode: ColorMode
+  toggleColorMode: () => void
+  setColorMode: (mode: ColorMode) => void
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: null,
   loading: true,
   refreshTheme: async () => {},
+  colorMode: 'light',
+  toggleColorMode: () => {},
+  setColorMode: () => {},
 })
 
 export const useTheme = () => useContext(ThemeContext)
@@ -121,6 +129,45 @@ const buttonRadiusMap: Record<string, string> = {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme | null>(null)
   const [loading, setLoading] = useState(true)
+  const [colorMode, setColorModeState] = useState<ColorMode>('light')
+  const [mounted, setMounted] = useState(false)
+
+  // Load color mode from localStorage on mount
+  useEffect(() => {
+    const savedMode = localStorage.getItem('colorMode') as ColorMode | null
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+    if (savedMode) {
+      setColorModeState(savedMode)
+    } else if (prefersDark) {
+      setColorModeState('dark')
+    }
+
+    setMounted(true)
+  }, [])
+
+  // Apply color mode to document
+  useEffect(() => {
+    if (!mounted) return
+
+    const root = document.documentElement
+
+    if (colorMode === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+
+    localStorage.setItem('colorMode', colorMode)
+  }, [colorMode, mounted])
+
+  const toggleColorMode = () => {
+    setColorModeState(prev => prev === 'light' ? 'dark' : 'light')
+  }
+
+  const setColorMode = (mode: ColorMode) => {
+    setColorModeState(mode)
+  }
 
   const fetchTheme = async () => {
     try {
@@ -212,7 +259,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, loading, refreshTheme }}>
+    <ThemeContext.Provider value={{ theme, loading, refreshTheme, colorMode, toggleColorMode, setColorMode }}>
       {children}
     </ThemeContext.Provider>
   )

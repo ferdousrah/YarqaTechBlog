@@ -396,6 +396,21 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                 {!isCollapsed && <span className="text-sm">My Interests</span>}
               </Link>
 
+              {/* My Bookmarks */}
+              <Link
+                href="/bookmarks"
+                className={`
+                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors
+                  ${isCollapsed ? 'justify-center' : ''}
+                `}
+                title={isCollapsed ? 'My Bookmarks' : undefined}
+              >
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                </svg>
+                {!isCollapsed && <span className="text-sm">My Bookmarks</span>}
+              </Link>
+
               {/* Account Settings */}
               <Link
                 href="/settings/account"

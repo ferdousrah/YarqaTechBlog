@@ -6,8 +6,9 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail, Bookmark } from 'lucide-react'
+import { Search, Menu, X, Home, BookOpen, Folder, Info, User, LogIn, UserPlus, Mail, Bookmark, Sun, Moon } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 
 // Helper function to get icon component from string
 function getIconComponent(iconName?: string) {
@@ -38,6 +39,7 @@ export default function Header({ settings }: HeaderProps) {
   const router = useRouter()
   const pathname = usePathname()
   const { user, logout } = useAuth()
+  const { colorMode, toggleColorMode } = useTheme()
 
   // Handle scroll effect
   useEffect(() => {
@@ -312,181 +314,20 @@ export default function Header({ settings }: HeaderProps) {
               </motion.button>
             )}
 
-            {/* Auth Buttons / User Menu */}
-            {showAuthButtons && (
-              <div className="hidden lg:flex items-center gap-2">
-                {user ? (
-                  <div className="relative">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setShowUserMenu(!showUserMenu)}
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
-                    >
-                      {userAvatar?.url ? (
-                        <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                          <Image
-                            src={userAvatar.url}
-                            alt={userAvatar.alt || user.name || 'Profile photo'}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-800 rounded-full flex items-center justify-center">
-                          <span className="text-white font-bold text-sm">
-                            {user.name?.charAt(0).toUpperCase() || 'U'}
-                          </span>
-                        </div>
-                      )}
-                      <span className="text-sm font-medium">{user.name}</span>
-                    </motion.button>
-
-                    {/* User Dropdown */}
-                    <AnimatePresence>
-                      {showUserMenu && (
-                        <>
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-30"
-                            onClick={() => setShowUserMenu(false)}
-                          />
-                          <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-40"
-                          >
-                            <div className="px-4 py-3 border-b border-gray-100">
-                              <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                              <p className="text-xs text-gray-500">{user.email}</p>
-                            </div>
-                            <Link
-                              href="/account"
-                              onClick={() => setShowUserMenu(false)}
-                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-                            >
-                              <User className="w-4 h-4" />
-                              My Account
-                            </Link>
-                            <Link
-                              href="/bookmarks"
-                              onClick={() => setShowUserMenu(false)}
-                              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-                            >
-                              <Bookmark className="w-4 h-4" />
-                              My Bookmarks
-                            </Link>
-                            <button
-                              onClick={handleLogout}
-                              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
-                            >
-                              <LogIn className="w-4 h-4 rotate-180" />
-                              Sign Out
-                            </button>
-                          </motion.div>
-                        </>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <>
-                    {authButtonStyle === 'dropdown' ? (
-                      // Dropdown style - compact account button
-                      <div className="relative">
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => setShowUserMenu(!showUserMenu)}
-                          className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
-                        >
-                          <User className="w-5 h-5" />
-                          <span className="text-sm font-medium">Account</span>
-                        </motion.button>
-
-                        {/* Account Dropdown */}
-                        <AnimatePresence>
-                          {showUserMenu && (
-                            <>
-                              <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-30"
-                                onClick={() => setShowUserMenu(false)}
-                              />
-                              <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.2 }}
-                                className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-40"
-                              >
-                                <Link
-                                  href="/login"
-                                  onClick={() => setShowUserMenu(false)}
-                                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-                                >
-                                  <LogIn className="w-4 h-4" />
-                                  Login
-                                </Link>
-                                <Link
-                                  href="/register"
-                                  onClick={() => setShowUserMenu(false)}
-                                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-                                >
-                                  <UserPlus className="w-4 h-4" />
-                                  Register
-                                </Link>
-                              </motion.div>
-                            </>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : authButtonStyle === 'login' ? (
-                      // Login only
-                      <Link href="/login">
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                        >
-                          <LogIn className="w-4 h-4" />
-                          <span className="text-sm font-medium">Login</span>
-                        </motion.button>
-                      </Link>
-                    ) : (
-                      // Both buttons (default)
-                      <>
-                        <Link href="/login">
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
-                          >
-                            <LogIn className="w-4 h-4" />
-                            <span className="text-sm font-medium">Login</span>
-                          </motion.button>
-                        </Link>
-                        <Link href="/register">
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                          >
-                            <UserPlus className="w-4 h-4" />
-                            <span className="text-sm font-medium">Register</span>
-                          </motion.button>
-                        </Link>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
+            {/* Theme Toggle Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleColorMode}
+              className="hidden md:flex items-center justify-center w-10 h-10 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+              aria-label={colorMode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+            >
+              {colorMode === 'light' ? (
+                <Moon className="w-5 h-5" />
+              ) : (
+                <Sun className="w-5 h-5" />
+              )}
+            </motion.button>
 
             {/* Mobile Menu Button */}
             <motion.button
