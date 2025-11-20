@@ -78,70 +78,90 @@ export default function DashboardClient() {
   const [analyticsStats, setAnalyticsStats] = useState<AnalyticsStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [analyticsLoading, setAnalyticsLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetch('/api/dashboard-stats', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+  const fetchStats = async (silent = false) => {
+    if (!silent) setLoading(true)
+    try {
+      const res = await fetch('/api/dashboard-stats', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
-        if (!res.ok) {
-          console.error('Dashboard fetch failed with status:', res.status)
-          setStats(null)
-          setLoading(false)
-          return
-        }
-
-        const data = await res.json()
-
-        // Validate response structure
-        if (data && typeof data.totalPosts !== 'undefined') {
-          setStats(data)
-        } else {
-          console.error('Invalid dashboard data structure:', data)
-          setStats(null)
-        }
-      } catch (err) {
-        console.error('Dashboard fetch failed:', err)
+      if (!res.ok) {
+        console.error('Dashboard fetch failed with status:', res.status)
         setStats(null)
-      } finally {
-        setLoading(false)
+        return
       }
+
+      const data = await res.json()
+
+      // Validate response structure
+      if (data && typeof data.totalPosts !== 'undefined') {
+        setStats(data)
+        setLastUpdated(new Date())
+      } else {
+        console.error('Invalid dashboard data structure:', data)
+        setStats(null)
+      }
+    } catch (err) {
+      console.error('Dashboard fetch failed:', err)
+      setStats(null)
+    } finally {
+      setLoading(false)
+      setRefreshing(false)
     }
+  }
+
+  const fetchAnalytics = async (silent = false) => {
+    if (!silent) setAnalyticsLoading(true)
+    try {
+      const res = await fetch('/api/analytics-stats', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!res.ok) {
+        console.error('Analytics fetch failed with status:', res.status)
+        setAnalyticsStats(null)
+        return
+      }
+
+      const data = await res.json()
+      setAnalyticsStats(data)
+    } catch (err) {
+      console.error('Analytics fetch failed:', err)
+      setAnalyticsStats(null)
+    } finally {
+      setAnalyticsLoading(false)
+      setRefreshing(false)
+    }
+  }
+
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    await Promise.all([fetchStats(true), fetchAnalytics(true)])
+  }
+
+  // Initial fetch
+  useEffect(() => {
     fetchStats()
+    fetchAnalytics()
   }, [])
 
+  // Auto-refresh every 30 seconds
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const res = await fetch('/api/analytics-stats', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
+    const interval = setInterval(() => {
+      fetchStats(true)
+      fetchAnalytics(true)
+    }, 30000) // 30 seconds
 
-        if (!res.ok) {
-          console.error('Analytics fetch failed with status:', res.status)
-          setAnalyticsStats(null)
-          setAnalyticsLoading(false)
-          return
-        }
-
-        const data = await res.json()
-        setAnalyticsStats(data)
-      } catch (err) {
-        console.error('Analytics fetch failed:', err)
-        setAnalyticsStats(null)
-      } finally {
-        setAnalyticsLoading(false)
-      }
-    }
-    fetchAnalytics()
+    return () => clearInterval(interval)
   }, [])
 
   if (loading) {
@@ -179,17 +199,60 @@ export default function DashboardClient() {
       <div className="w-full">
         {/* Header */}
         <div className="mb-10">
-          <div className="flex items-center gap-4 mb-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl text-4xl">
-              📊
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl text-4xl">
+                📊
+              </div>
+              <div>
+                <h1 className="text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Dashboard
+                </h1>
+                <p className="text-gray-600 text-lg font-medium mt-1">
+                  Welcome back! Here's what's happening today ✨
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Dashboard
-              </h1>
-              <p className="text-gray-600 text-lg font-medium mt-1">
-                Welcome back! Here's what's happening today ✨
-              </p>
+
+            {/* Refresh Button and Last Updated */}
+            <div className="flex items-center gap-4">
+              {/* Live Badge */}
+              <div className="flex items-center gap-2 px-3 py-2 bg-green-100 border border-green-300 rounded-lg">
+                <div className="relative">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                </div>
+                <span className="text-xs font-bold text-green-700">LIVE</span>
+              </div>
+
+              {lastUpdated && (
+                <div className="text-sm text-gray-500 font-medium">
+                  Updated: {lastUpdated.toLocaleTimeString()}
+                </div>
+              )}
+
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className={`
+                  px-6 py-3 rounded-xl font-bold transition-all duration-300
+                  flex items-center gap-2 shadow-lg
+                  ${refreshing
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:shadow-xl hover:scale-105'
+                  }
+                `}
+              >
+                <svg
+                  className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                {refreshing ? 'Refreshing...' : 'Refresh'}
+              </button>
             </div>
           </div>
         </div>
