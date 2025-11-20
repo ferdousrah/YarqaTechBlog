@@ -6,7 +6,7 @@ export const PostReactions: CollectionConfig = {
   admin: {
     useAsTitle: 'id',
     defaultColumns: ['user', 'post', 'reactionType', 'createdAt'],
-    group: 'Content',
+    group: 'Engagement',
     description: 'User reactions (likes/dislikes) on posts',
   },
   access: {

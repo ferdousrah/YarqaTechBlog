@@ -6,7 +6,7 @@ export const Bookmarks: CollectionConfig = {
   admin: {
     useAsTitle: 'id',
     defaultColumns: ['user', 'post', 'createdAt'],
-    group: 'Content',
+    group: 'Engagement',
     description: 'User bookmarked posts',
   },
   access: {
