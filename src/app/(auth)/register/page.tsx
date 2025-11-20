@@ -176,7 +176,7 @@ export default function RegisterPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
@@ -186,7 +186,7 @@ export default function RegisterPage() {
     <>
       <div className="min-h-screen flex">
         {/* Left Column - Register Form */}
-        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-white overflow-y-auto">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-white dark:bg-gray-900 overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -195,14 +195,14 @@ export default function RegisterPage() {
           >
             {/* Header */}
             <div className="mb-8">
-              <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900 mb-8">
+              <Link href="/" className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white mb-8">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
                   <span className="text-white font-bold text-lg">Y</span>
                 </div>
                 Yarqa Tech
               </Link>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Create your account</h1>
-              <p className="text-gray-600">Join our community of tech enthusiasts</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create your account</h1>
+              <p className="text-gray-600 dark:text-gray-400">Join our community of tech enthusiasts</p>
             </div>
 
             {/* Error Message */}
@@ -210,7 +210,7 @@ export default function RegisterPage() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm"
+                className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400 text-sm"
               >
                 {error}
               </motion.div>
@@ -220,12 +220,12 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Name Field */}
               <div>
-                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Full Name
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <User className="w-5 h-5 text-gray-400" />
+                    <User className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     id="name"
@@ -234,19 +234,19 @@ export default function RegisterPage() {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="John Doe"
                     required
-                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 focus:bg-white"
+                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                 </div>
               </div>
 
               {/* Email Field */}
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Mail className="w-5 h-5 text-gray-400" />
+                    <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     id="email"
@@ -255,19 +255,19 @@ export default function RegisterPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
-                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 focus:bg-white"
+                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                 </div>
               </div>
 
               {/* Password Field */}
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="w-5 h-5 text-gray-400" />
+                    <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     id="password"
@@ -277,7 +277,7 @@ export default function RegisterPage() {
                     placeholder="At least 8 characters"
                     required
                     minLength={8}
-                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 focus:bg-white"
+                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                 </div>
 
@@ -292,10 +292,10 @@ export default function RegisterPage() {
                       <div key={req.label} className="flex items-center gap-2 text-sm">
                         <CheckCircle2
                           className={`w-4 h-4 ${
-                            req.met ? 'text-green-500' : 'text-gray-300'
+                            req.met ? 'text-green-500' : 'text-gray-300 dark:text-gray-600'
                           }`}
                         />
-                        <span className={req.met ? 'text-green-600' : 'text-gray-500'}>
+                        <span className={req.met ? 'text-green-600 dark:text-green-500' : 'text-gray-500 dark:text-gray-400'}>
                           {req.label}
                         </span>
                       </div>
@@ -306,12 +306,12 @@ export default function RegisterPage() {
 
               {/* Confirm Password Field */}
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Confirm Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="w-5 h-5 text-gray-400" />
+                    <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <input
                     id="confirmPassword"
@@ -320,14 +320,14 @@ export default function RegisterPage() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm your password"
                     required
-                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 focus:bg-white"
+                    className="w-full pl-12 pr-4 py-3.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-gray-50 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                 </div>
                 {confirmPassword && password !== confirmPassword && (
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="mt-2 text-sm text-red-600"
+                    className="mt-2 text-sm text-red-600 dark:text-red-400"
                   >
                     Passwords do not match
                   </motion.p>
@@ -357,24 +357,24 @@ export default function RegisterPage() {
             </form>
 
             {/* Terms */}
-            <p className="text-xs text-gray-500 text-center mt-4">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
               By creating an account, you agree to our{' '}
-              <Link href="/terms" className="text-blue-600 hover:underline">
+              <Link href="/terms" className="text-blue-600 dark:text-blue-400 hover:underline">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link href="/privacy" className="text-blue-600 hover:underline">
+              <Link href="/privacy" className="text-blue-600 dark:text-blue-400 hover:underline">
                 Privacy Policy
               </Link>
             </p>
 
             {/* Login Link */}
             <div className="mt-8 text-center">
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Already have an account?{' '}
                 <Link
                   href="/login"
-                  className="font-semibold text-blue-600 hover:text-blue-700 transition"
+                  className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 transition"
                 >
                   Sign in
                 </Link>
@@ -478,20 +478,20 @@ export default function RegisterPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
             >
               {/* Modal Header */}
-              <div className="p-6 border-b border-gray-100">
+              <div className="p-6 border-b border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Welcome aboard! 🎉</h2>
-                    <p className="text-gray-600 mt-1">Select topics you're interested in</p>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome aboard! 🎉</h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">Select topics you're interested in</p>
                   </div>
                   <button
                     onClick={handleSkip}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                   >
-                    <X className="w-5 h-5 text-gray-500" />
+                    <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                   </button>
                 </div>
               </div>
@@ -511,15 +511,15 @@ export default function RegisterPage() {
                           px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200
                           flex items-center gap-2 border-2
                           ${isSelected
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                            : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                           }
                         `}
                       >
                         <span className="text-lg">{getCategoryIcon(category.icon)}</span>
                         {category.name}
                         {isSelected && (
-                          <CheckCircle2 className="w-4 h-4 text-blue-500" />
+                          <CheckCircle2 className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                         )}
                       </motion.button>
                     )
@@ -529,15 +529,15 @@ export default function RegisterPage() {
                 {categories.length === 0 && (
                   <div className="text-center py-8">
                     <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-3" />
-                    <p className="text-gray-500">Loading categories...</p>
+                    <p className="text-gray-500 dark:text-gray-400">Loading categories...</p>
                   </div>
                 )}
               </div>
 
               {/* Modal Footer */}
-              <div className="p-6 border-t border-gray-100 bg-gray-50">
+              <div className="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {selectedCategories.length > 0
                       ? `${selectedCategories.length} topic${selectedCategories.length > 1 ? 's' : ''} selected`
                       : 'You can update this later in settings'}
@@ -545,7 +545,7 @@ export default function RegisterPage() {
                   <div className="flex gap-3">
                     <button
                       onClick={handleSkip}
-                      className="px-5 py-2.5 text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                      className="px-5 py-2.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
                     >
                       Skip for now
                     </button>
