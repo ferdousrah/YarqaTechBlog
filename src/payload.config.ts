@@ -69,7 +69,7 @@ export default buildConfig({
         Icon: '@/components/admin/Logo',
         Logo: '@/components/admin/Logo',
       },
-      Root: '@/components/admin/CustomRoot',
+      providers: ['@/components/admin/AdminProvider'],
     },
     livePreview: {
       collections: ['posts', 'pages'],
