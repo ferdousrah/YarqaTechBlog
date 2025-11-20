@@ -114,13 +114,13 @@ export default function PersonalizedSection() {
             <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">For You</h2>
-            <p className="text-sm text-gray-500">Based on your interests</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">For You</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Based on your interests</p>
           </div>
         </div>
         <Link
           href="/settings/interests"
-          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           <Settings className="w-4 h-4" />
           <span className="hidden sm:inline">Manage Interests</span>
@@ -135,7 +135,7 @@ export default function PersonalizedSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group"
+            className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group border border-gray-100 dark:border-gray-700"
           >
             <Link href={`/blog/${post.slug}`}>
               <div className="relative h-48 bg-gray-200 overflow-hidden">
@@ -170,12 +170,12 @@ export default function PersonalizedSection() {
 
             <div className="p-4">
               <Link href={`/blog/${post.slug}`}>
-                <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors line-clamp-2 mb-2">
+                <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-2 mb-2">
                   {post.title}
                 </h3>
               </Link>
 
-              <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                 <span>
                   {new Date(post.publishedAt).toLocaleDateString('en-US', {
                     month: 'short',
