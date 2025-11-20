@@ -195,7 +195,7 @@ export function AnimatedPostCard({ post, index = 0 }: HeroPostCardProps) {
         <motion.article
           whileHover={{ y: -8, scale: 1.02 }}
           transition={{ duration: 0.3 }}
-          className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl h-full border border-gray-100"
+          className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-2xl h-full border border-gray-100 dark:border-gray-700"
         >
           <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
             {typeof post.featuredImage === 'object' && post.featuredImage?.url ? (
@@ -226,17 +226,17 @@ export function AnimatedPostCard({ post, index = 0 }: HeroPostCardProps) {
                 {typeof post.category === 'object' ? post.category.name : ''}
               </span>
               <span className="text-gray-300">•</span>
-              <span className="text-gray-500 text-xs">
+              <span className="text-gray-500 dark:text-gray-400 text-xs">
                 {new Date(post.publishedAt).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                 })}
               </span>
             </div>
-            <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2 leading-tight">
+            <h3 className="font-bold text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2 line-clamp-2 leading-tight">
               {post.title}
             </h3>
-            <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">{post.excerpt}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">{post.excerpt}</p>
           </div>
         </motion.article>
       </Link>
@@ -260,7 +260,7 @@ export function AnimatedSectionHeader({ title, link }: SectionHeaderProps) {
       className="flex items-center justify-between mb-8"
     >
       <div>
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{title}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">{title}</h2>
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: 80 }}

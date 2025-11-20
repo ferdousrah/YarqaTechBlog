@@ -16,7 +16,7 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
       <div className="group relative">
         <Link
           href={`/blog/${post.slug}`}
-          className="flex gap-5 pb-6 border-b border-gray-100 last:border-0 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent transition-all duration-300 p-4 -m-4 rounded-xl"
+          className="flex gap-5 pb-6 border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gradient-to-r hover:from-blue-50/50 dark:hover:from-blue-900/20 hover:to-transparent transition-all duration-300 p-4 -m-4 rounded-xl"
         >
           {/* Image */}
           <div className="relative w-40 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-gray-200 shadow-md">
@@ -41,17 +41,17 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
                 {typeof post.category === 'object' ? post.category.name : ''}
               </span>
               <span className="text-gray-300">•</span>
-              <span className="text-gray-500 text-xs">
+              <span className="text-gray-500 dark:text-gray-400 text-xs">
                 {new Date(post.publishedAt).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                 })}
               </span>
             </div>
-            <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2 leading-tight">
+            <h3 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2 line-clamp-2 leading-tight">
               {post.title}
             </h3>
-            <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">{post.excerpt}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">{post.excerpt}</p>
           </div>
         </Link>
 
@@ -70,7 +70,7 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
   return (
     <div className="group relative">
       <Link href={`/blog/${post.slug}`}>
-        <article className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full border border-gray-100">
+        <article className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full border border-gray-100 dark:border-gray-700">
           <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
             {typeof post.featuredImage === 'object' && post.featuredImage?.url ? (
               <Image
@@ -100,11 +100,11 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
             >
               {typeof post.category === 'object' ? post.category.name : ''}
             </div>
-            <h3 className="font-bold text-2xl text-gray-900 group-hover:opacity-80 transition mb-3 line-clamp-2 leading-tight">
+            <h3 className="font-bold text-2xl text-gray-900 dark:text-white group-hover:opacity-80 transition mb-3 line-clamp-2 leading-tight">
               {post.title}
             </h3>
-            <p className="text-gray-600 text-sm line-clamp-3 mb-4 leading-relaxed">{post.excerpt}</p>
-            <div className="flex items-center gap-3 text-xs text-gray-500 pt-3 border-t border-gray-100">
+            <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-4 leading-relaxed">{post.excerpt}</p>
+            <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-700">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center text-white font-bold text-xs">
                   {typeof post.author === 'object' ? post.author.name.charAt(0) : 'A'}

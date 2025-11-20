@@ -47,7 +47,7 @@ export default async function HomePage() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Main Container */}
       <AnimatedContainer className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Personalized Section for logged-in users */}
@@ -87,7 +87,7 @@ export default async function HomePage() {
             link={{ href: '/blog', label: 'View All' }}
           />
 
-          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 dark:border-gray-700">
             <div className="space-y-6">
               {latestNews.map((post) => (
                 <ArticleCardWithBookmark key={post.id} post={post} variant="list" />
@@ -150,7 +150,7 @@ async function CategorySection({ category, payload }: any) {
     <div className="mb-16">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{category.name}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">{category.name}</h2>
           <div className="h-1 w-20 rounded-full" style={{ background: borderColor }}></div>
         </div>
         <Link
@@ -186,7 +186,7 @@ async function CategorySection({ category, payload }: any) {
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
-              className="group flex gap-4 bg-white rounded-lg p-4 hover:shadow-md transition-all duration-300 border border-gray-100"
+              className="group flex gap-4 bg-white dark:bg-gray-800 rounded-lg p-4 hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-700"
             >
               {/* Small Thumbnail */}
               {typeof post.featuredImage === 'object' && post.featuredImage?.url ? (
@@ -206,10 +206,10 @@ async function CategorySection({ category, payload }: any) {
 
               {/* Title */}
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 text-sm leading-tight mb-1">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 text-sm leading-tight mb-1">
                   {post.title}
                 </h3>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   {new Date(post.publishedAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',

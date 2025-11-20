@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   })
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-gray-900">
       <BlogPageClient postId={post.id} />
 
       {/* Article Header */}
@@ -92,19 +92,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           >
             {typeof post.category === 'object' ? post.category.name : ''}
           </Link>
-          <span className="text-gray-500 text-sm">{formattedDate}</span>
+          <span className="text-gray-500 dark:text-gray-400 text-sm">{formattedDate}</span>
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
           {post.title}
         </h1>
 
         {/* Excerpt */}
-        <p className="text-xl text-gray-600 mb-8 leading-relaxed">{post.excerpt}</p>
+        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">{post.excerpt}</p>
 
         {/* Author & Meta Info */}
-        <div className="flex items-center justify-between gap-4 pb-8 mb-8 border-b border-gray-200">
+        <div className="flex items-center justify-between gap-4 pb-8 mb-8 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-4 min-w-0 flex-1">
             {typeof post.author === 'object' && post.author.avatar && typeof post.author.avatar === 'object' && post.author.avatar.url ? (
               <div className="w-12 h-12 rounded-full overflow-hidden relative flex-shrink-0">
@@ -123,10 +123,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
             )}
             <div className="min-w-0">
-              <div className="font-semibold text-gray-900 truncate">
+              <div className="font-semibold text-gray-900 dark:text-white truncate">
                 {typeof post.author === 'object' ? post.author.name : ''}
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
                 {post.readTime && `${post.readTime} min read`}
                 {post.views > 0 && post.readTime && ' • '}
                 {post.views > 0 && `${post.views} views`}
@@ -158,13 +158,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Tags */}
         {Array.isArray(post.tags) && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-12 pt-12 mb-12 pb-12 border-t border-b border-gray-200">
+          <div className="flex flex-wrap gap-2 mt-12 pt-12 mb-12 pb-12 border-t border-b border-gray-200 dark:border-gray-700">
             {post.tags.map((tag) =>
               typeof tag === 'object' ? (
                 <Link
                   key={tag.id}
                   href={`/tag/${tag.slug}`}
-                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full text-sm font-medium transition"
+                  className="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium transition"
                 >
                   #{tag.name}
                 </Link>
@@ -174,7 +174,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         )}
 
         {/* Share and Like/Dislike Section */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12 pb-12 border-b border-gray-200">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12 pb-12 border-b border-gray-200 dark:border-gray-700">
           {/* Social Share Buttons */}
           <ShareButtons title={post.title} url={fullUrl} />
 
@@ -195,13 +195,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* Related Posts */}
       {relatedPosts.docs.length > 0 && (
-        <section className="bg-gray-50 py-16">
+        <section className="bg-gray-50 dark:bg-gray-800 py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Articles</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Related Articles</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {relatedPosts.docs.map((relatedPost) => (
                 <Link key={relatedPost.id} href={`/blog/${relatedPost.slug}`} className="group">
-                  <article className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
+                  <article className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
                     <div className="relative h-48 bg-gray-200">
                       {typeof relatedPost.featuredImage === 'object' &&
                       relatedPost.featuredImage?.url ? (
@@ -223,10 +223,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                       <div className="text-blue-600 font-bold text-xs uppercase mb-2">
                         {typeof relatedPost.category === 'object' ? relatedPost.category.name : ''}
                       </div>
-                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600 transition mb-2 line-clamp-2">
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition mb-2 line-clamp-2">
                         {relatedPost.title}
                       </h3>
-                      <p className="text-gray-600 text-sm line-clamp-2">{relatedPost.excerpt}</p>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">{relatedPost.excerpt}</p>
                     </div>
                   </article>
                 </Link>
