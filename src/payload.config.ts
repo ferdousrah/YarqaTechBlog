@@ -45,7 +45,10 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    css: path.resolve(__dirname, './styles/admin-overrides.css'),
+    css: [
+      path.resolve(__dirname, './styles/admin-overrides.css'),
+      path.resolve(__dirname, './styles/admin-custom-nav.css'),
+    ],
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
@@ -55,11 +58,16 @@ export default buildConfig({
       favicon: '/favicon.ico',
       ogImage: '/og-image.jpg',
     },
+    autoLogin: false,
     components: {
       views: {
         dashboard: {
           Component: '@/components/Dashboard',
         },
+      },
+      graphics: {
+        Icon: '@/components/admin/Logo',
+        Logo: '@/components/admin/Logo',
       },
     },
     livePreview: {
