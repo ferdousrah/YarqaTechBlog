@@ -186,8 +186,8 @@ export default function Header({ settings }: HeaderProps) {
       animate={{ y: 0 }}
       className={`sticky top-0 z-30 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/80 backdrop-blur-xl shadow-lg border-b border-gray-200'
-          : 'bg-white border-b border-gray-200'
+          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-lg border-b border-gray-200 dark:border-gray-700'
+          : 'bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700'
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -226,7 +226,7 @@ export default function Header({ settings }: HeaderProps) {
                   </motion.div>
                   <span className="text-2xl md:text-3xl font-bold">
                     <span className="bg-gradient-to-r from-slate-400 to-slate-600 bg-clip-text text-transparent">{logoText.first}</span>
-                    <span className="text-slate-700">{logoText.second}</span>
+                    <span className="text-slate-700 dark:text-slate-300">{logoText.second}</span>
                   </span>
                 </>
               )}
@@ -254,8 +254,8 @@ export default function Header({ settings }: HeaderProps) {
                     href={item.href}
                     className={`relative px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 ${
                       isActive
-                        ? 'text-blue-600'
-                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'text-blue-600 dark:text-blue-400'
+                        : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -306,7 +306,7 @@ export default function Header({ settings }: HeaderProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="hidden md:flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+                className="hidden md:flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-300"
                 aria-label="Search"
               >
                 <Search className="w-5 h-5" />
@@ -319,7 +319,7 @@ export default function Header({ settings }: HeaderProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleColorMode}
-              className="hidden md:flex items-center justify-center w-10 h-10 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300"
+              className="hidden md:flex items-center justify-center w-10 h-10 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-300"
               aria-label={colorMode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
             >
               {colorMode === 'light' ? (
