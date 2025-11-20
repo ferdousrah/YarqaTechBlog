@@ -27,6 +27,7 @@ import { default as default_b39f2d96c5778d5698b3c9e7777aa63a } from '@/component
 import Logo from '@/components/admin/Logo'
 import DashboardComponent from '@/components/Dashboard'
 import CustomAdminNav from '@/components/admin/CustomAdminNav'
+import CustomRoot from '@/components/admin/CustomRoot'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -54,5 +55,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/components/admin/Logo#default": Logo,
   "@/components/Dashboard#default": DashboardComponent,
-  "@/components/admin/CustomAdminNav#default": CustomAdminNav
+  "@/components/admin/CustomAdminNav#default": CustomAdminNav,
+  "@/components/admin/CustomRoot#default": CustomRoot
 }
