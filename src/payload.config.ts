@@ -62,6 +62,9 @@ export default buildConfig({
         },
       },
     },
+    livePreview: {
+      collections: ['posts', 'pages'],
+    },
   },
   collections: [
     Users,
