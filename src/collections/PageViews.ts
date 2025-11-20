@@ -28,14 +28,6 @@ export const PageViews: CollectionConfig = {
       index: true,
     },
     {
-      name: 'session',
-      type: 'relationship',
-      relationTo: 'visitor-sessions',
-      admin: {
-        description: 'Related visitor session',
-      },
-    },
-    {
       name: 'user',
       type: 'relationship',
       relationTo: 'users',

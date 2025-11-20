@@ -192,7 +192,6 @@ export async function POST(request: NextRequest) {
         data: {
           visitorId,
           sessionId,
-          session: session.id,
           path: data.path,
           title: data.title,
           post: data.postId || null,
