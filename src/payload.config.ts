@@ -21,6 +21,9 @@ import { ReadingProgress } from './collections/ReadingProgress'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
 import { PostReactions } from './collections/PostReactions'
 import { DeletionFeedback } from './collections/DeletionFeedback'
+import { VisitorSessions } from './collections/VisitorSessions'
+import { PageViews } from './collections/PageViews'
+import { LogoutFeedback } from './collections/LogoutFeedback'
 
 // Globals
 import { SiteSettings } from './globals/SiteSettings'
@@ -35,6 +38,7 @@ import { readingProgressEndpoint } from './endpoints/reading-progress'
 import { dashboardStatsEndpoint } from './endpoints/dashboard-stats'
 import { getCommentsEndpoint } from './endpoints/get-comments'
 import { createCommentEndpoint } from './endpoints/create-comment'
+import { analyticsStatsEndpoint } from './endpoints/analytics-stats'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -74,6 +78,9 @@ export default buildConfig({
     NewsletterSubscribers,
     PostReactions,
     DeletionFeedback,
+    VisitorSessions,
+    PageViews,
+    LogoutFeedback,
   ],
   globals: [SiteSettings],
   endpoints: [
@@ -86,6 +93,7 @@ export default buildConfig({
     dashboardStatsEndpoint,
     getCommentsEndpoint,
     createCommentEndpoint,
+    analyticsStatsEndpoint,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSidebar } from '@/contexts/SidebarContext'
 import { useAuth } from '@/contexts/AuthContext'
+import LogoutFeedbackModal from './LogoutFeedbackModal'
 
 interface Category {
   id: string
@@ -22,12 +23,37 @@ interface SidebarProps {
 export default function Sidebar({ categories, settings }: SidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [expandedMenus, setExpandedMenus] = useState<string[]>([])
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
   const { isCollapsed, toggleSidebar } = useSidebar()
   const pathname = usePathname()
   const router = useRouter()
   const { user, logout } = useAuth()
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
+    setShowLogoutModal(true)
+  }
+
+  const handleLogoutFeedback = async (rating: string, feedback: string) => {
+    // Submit feedback if rating is provided
+    if (rating && user) {
+      try {
+        await fetch('/api/logout-feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            rating,
+            feedback,
+            userEmail: user.email,
+            userName: user.name,
+          }),
+        })
+      } catch (error) {
+        console.error('Failed to submit logout feedback:', error)
+      }
+    }
+
+    // Perform logout
     await logout()
     router.push('/')
   }
@@ -476,6 +502,17 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
           scrollbar-color: #d1d5db #f1f1f1;
         }
       `}</style>
+
+      {/* Logout Feedback Modal */}
+      {user && (
+        <LogoutFeedbackModal
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onSubmit={handleLogoutFeedback}
+          userEmail={user.email || ''}
+          userName={user.name || ''}
+        />
+      )}
     </>
   )
 }

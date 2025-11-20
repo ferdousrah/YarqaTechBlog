@@ -33,6 +33,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Update user login tracking
+    try {
+      await payload.update({
+        collection: 'users',
+        id: loginResult.user.id,
+        data: {
+          lastLoginAt: new Date().toISOString(),
+          loginCount: (loginResult.user.loginCount || 0) + 1,
+        },
+      })
+    } catch (trackingError) {
+      console.error('Failed to update login tracking:', trackingError)
+      // Don't fail login if tracking fails
+    }
+
     // Create response with user data
     const response = NextResponse.json({
       success: true,

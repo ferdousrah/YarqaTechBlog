@@ -134,5 +134,41 @@ export const Users: CollectionConfig = {
         description: 'Whether the user has completed the category selection onboarding',
       },
     },
+    {
+      name: 'lastLoginAt',
+      type: 'date',
+      admin: {
+        description: 'Last time the user logged in',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
+    {
+      name: 'lastLogoutAt',
+      type: 'date',
+      admin: {
+        description: 'Last time the user logged out',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
+    {
+      name: 'totalLoginTime',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        description: 'Total time spent logged in (in seconds)',
+      },
+    },
+    {
+      name: 'loginCount',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        description: 'Total number of times user has logged in',
+      },
+    },
   ],
 }
