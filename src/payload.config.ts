@@ -20,6 +20,7 @@ import { PostViews } from './collections/PostViews'
 import { ReadingProgress } from './collections/ReadingProgress'
 import { NewsletterSubscribers } from './collections/NewsletterSubscribers'
 import { PostReactions } from './collections/PostReactions'
+import { DeletionFeedback } from './collections/DeletionFeedback'
 
 // Globals
 import { SiteSettings } from './globals/SiteSettings'
@@ -72,6 +73,7 @@ export default buildConfig({
     ReadingProgress,
     NewsletterSubscribers,
     PostReactions,
+    DeletionFeedback,
   ],
   globals: [SiteSettings],
   endpoints: [

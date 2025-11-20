@@ -29,6 +29,19 @@ interface DashboardStats {
     posts: number
     views: number
   }[]
+  totalDeletedUsers?: number
+  deletionReasons?: { reason: string; count: number }[]
+  recentDeletions?: any[]
+}
+
+const deletionReasonLabels: Record<string, string> = {
+  not_relevant: 'Not finding relevant content',
+  too_many_emails: 'Too many emails/notifications',
+  privacy: 'Privacy concerns',
+  better_alternative: 'Found a better alternative',
+  technical_issues: 'Technical issues',
+  not_using: 'Not using the platform anymore',
+  other: 'Other',
 }
 
 export default function DashboardClient() {
@@ -459,6 +472,93 @@ export default function DashboardClient() {
             )}
           </div>
         </div>
+
+        {/* User Deletion Stats */}
+        {(stats.totalDeletedUsers !== undefined && stats.totalDeletedUsers > 0) && (
+          <div className="mt-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-2 h-8 bg-gradient-to-b from-red-500 to-orange-500 rounded-full"></div>
+              <h2 className="text-2xl font-black text-gray-900">User Churn Analytics</h2>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Deletion Summary Card */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg text-3xl">
+                    👋
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-gray-900">{stats.totalDeletedUsers}</h3>
+                    <p className="text-sm font-bold text-gray-600">Users Left</p>
+                  </div>
+                </div>
+
+                {stats.deletionReasons && stats.deletionReasons.length > 0 && (
+                  <div className="space-y-3">
+                    <p className="text-sm font-bold text-gray-700 mb-3">Top Reasons</p>
+                    {stats.deletionReasons.slice(0, 5).map((item, index) => (
+                      <div key={item.reason} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 flex items-center justify-center rounded-full bg-red-100 text-red-600 text-xs font-bold">
+                            {index + 1}
+                          </span>
+                          <span className="text-sm text-gray-700">
+                            {deletionReasonLabels[item.reason] || item.reason}
+                          </span>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900">{item.count}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Recent Deletions */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    📋
+                  </div>
+                  Recent Feedback
+                </h3>
+
+                {stats.recentDeletions && stats.recentDeletions.length > 0 ? (
+                  <div className="space-y-3">
+                    {stats.recentDeletions.slice(0, 5).map((deletion: any) => (
+                      <div
+                        key={deletion.id}
+                        className="p-4 rounded-2xl bg-gray-50 border border-gray-100"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-sm font-bold text-gray-900">
+                            {deletion.userEmail}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {new Date(deletion.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <span className="inline-block px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-lg">
+                          {deletionReasonLabels[deletion.reason] || deletion.reason}
+                        </span>
+                        {deletion.feedback && (
+                          <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                            "{deletion.feedback}"
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-3">📋</div>
+                    <p className="text-gray-500 text-sm">No feedback yet</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
