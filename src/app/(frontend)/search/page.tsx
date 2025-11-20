@@ -66,11 +66,11 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen py-12">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Search Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">Search Results</h1>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Search Results</h1>
 
           {/* Search Box */}
           <form onSubmit={handleSearch} className="mb-6">
@@ -81,10 +81,10 @@ export default function SearchPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search articles..."
-                  className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600 text-lg"
+                  className="w-full px-6 py-4 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 text-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />
                 <svg
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 dark:text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -109,13 +109,13 @@ export default function SearchPage() {
           {/* Category Filter */}
           {query && categories.length > 0 && (
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-sm font-semibold text-gray-700">Filter by category:</span>
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Filter by category:</span>
               <Link
                 href={`/search?q=${query}`}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   !categoryFilter
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
                 }`}
               >
                 All
@@ -127,7 +127,7 @@ export default function SearchPage() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                     categoryFilter === cat.id
                       ? 'bg-blue-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-100'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
                   }`}
                 >
                   {cat.name}
@@ -140,10 +140,10 @@ export default function SearchPage() {
         {/* Results Info */}
         {query && !loading && (
           <div className="mb-6">
-            <p className="text-gray-600">
-              Found <span className="font-bold text-gray-900">{results.totalDocs}</span>{' '}
+            <p className="text-gray-600 dark:text-gray-400">
+              Found <span className="font-bold text-gray-900 dark:text-white">{results.totalDocs}</span>{' '}
               {results.totalDocs === 1 ? 'result' : 'results'} for{' '}
-              <span className="font-bold text-gray-900">"{query}"</span>
+              <span className="font-bold text-gray-900 dark:text-white">"{query}"</span>
             </p>
           </div>
         )}
@@ -152,7 +152,7 @@ export default function SearchPage() {
         {loading && (
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600">Searching...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Searching...</p>
           </div>
         )}
 
@@ -163,7 +163,7 @@ export default function SearchPage() {
               {results.docs.map((post: any) => (
                 <article
                   key={post.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-gray-100 dark:border-gray-700"
                 >
                   <Link href={`/blog/${post.slug}`}>
                     <div className="relative h-56 bg-gray-200">
@@ -188,12 +188,12 @@ export default function SearchPage() {
                     <div className="flex items-center gap-3 mb-3">
                       <Link
                         href={`/category/${typeof post.category === 'object' ? post.category.slug : ''}`}
-                        className="text-blue-600 font-bold text-xs uppercase hover:underline"
+                        className="text-blue-600 dark:text-blue-400 font-bold text-xs uppercase hover:underline"
                       >
                         {typeof post.category === 'object' ? post.category.name : ''}
                       </Link>
                       <span className="text-gray-400 text-xs">•</span>
-                      <span className="text-gray-500 text-xs">
+                      <span className="text-gray-500 dark:text-gray-400 text-xs">
                         {new Date(post.publishedAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -203,15 +203,15 @@ export default function SearchPage() {
                     </div>
 
                     <Link href={`/blog/${post.slug}`}>
-                      <h2 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition mb-3 line-clamp-2">
+                      <h2 className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition mb-3 line-clamp-2">
                         {post.title}
                       </h2>
                     </Link>
 
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-3 text-xs text-gray-500">
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                      <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                         <span>By {typeof post.author === 'object' ? post.author.name : ''}</span>
                         {post.readTime && (
                           <>
@@ -232,7 +232,7 @@ export default function SearchPage() {
                 {page > 1 && (
                   <Link
                     href={`/search?q=${query}${categoryFilter ? `&category=${categoryFilter}` : ''}&page=${page - 1}`}
-                    className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
+                    className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition font-medium text-gray-900 dark:text-white"
                   >
                     ← Previous
                   </Link>
@@ -246,7 +246,7 @@ export default function SearchPage() {
                       className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition ${
                         pageNum === page
                           ? 'bg-blue-600 text-white'
-                          : 'bg-white border border-gray-300 hover:bg-gray-50'
+                          : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
                       }`}
                     >
                       {pageNum}
@@ -257,7 +257,7 @@ export default function SearchPage() {
                 {page < results.totalPages && (
                   <Link
                     href={`/search?q=${query}${categoryFilter ? `&category=${categoryFilter}` : ''}&page=${page + 1}`}
-                    className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
+                    className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition font-medium text-gray-900 dark:text-white"
                   >
                     Next →
                   </Link>
@@ -271,10 +271,10 @@ export default function SearchPage() {
         {!loading && query && results.docs.length === 0 && (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">No results found</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No results found</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Try searching with different keywords or browse our{' '}
-              <Link href="/categories" className="text-blue-600 hover:underline">
+              <Link href="/categories" className="text-blue-600 dark:text-blue-400 hover:underline">
                 categories
               </Link>
             </p>
@@ -285,8 +285,8 @@ export default function SearchPage() {
         {!loading && !query && (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Search Articles</h2>
-            <p className="text-gray-600 mb-8">Enter keywords to search our content library</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Search Articles</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">Enter keywords to search our content library</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/blog"
@@ -296,7 +296,7 @@ export default function SearchPage() {
               </Link>
               <Link
                 href="/categories"
-                className="px-6 py-3 bg-white text-gray-700 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition"
+                className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-300 dark:border-gray-600 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition"
               >
                 Browse Categories
               </Link>

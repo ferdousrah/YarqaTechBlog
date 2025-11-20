@@ -120,7 +120,7 @@ export default function InterestsSettingsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
@@ -131,13 +131,13 @@ export default function InterestsSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -148,8 +148,8 @@ export default function InterestsSettingsPage() {
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Your Interests</h1>
-              <p className="text-gray-600">Select topics to personalize your feed</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Your Interests</h1>
+              <p className="text-gray-600 dark:text-gray-400">Select topics to personalize your feed</p>
             </div>
           </div>
         </div>
@@ -158,7 +158,7 @@ export default function InterestsSettingsPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-6"
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 mb-6 border border-gray-100 dark:border-gray-700"
         >
           <div className="flex flex-wrap gap-3">
             {categories.map((category) => {
@@ -173,15 +173,15 @@ export default function InterestsSettingsPage() {
                     px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200
                     flex items-center gap-2 border-2
                     ${isSelected
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                      : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }
                   `}
                 >
                   <span className="text-lg">{getCategoryIcon(category.icon)}</span>
                   {category.name}
                   {isSelected && (
-                    <CheckCircle2 className="w-4 h-4 text-blue-500" />
+                    <CheckCircle2 className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                   )}
                 </motion.button>
               )
@@ -190,14 +190,14 @@ export default function InterestsSettingsPage() {
 
           {categories.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-gray-500">No categories available</p>
+              <p className="text-gray-500 dark:text-gray-400">No categories available</p>
             </div>
           )}
         </motion.div>
 
         {/* Save Button */}
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             {selectedCategories.length > 0
               ? `${selectedCategories.length} topic${selectedCategories.length > 1 ? 's' : ''} selected`
               : 'No topics selected'}
@@ -242,10 +242,10 @@ export default function InterestsSettingsPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-100"
+          className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800"
         >
-          <h3 className="font-semibold text-blue-900 mb-2">How it works</h3>
-          <ul className="text-sm text-blue-700 space-y-1">
+          <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">How it works</h3>
+          <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
             <li>• Select categories you're interested in</li>
             <li>• Your home page will show a "For You" section with personalized content</li>
             <li>• You can update your interests anytime</li>
