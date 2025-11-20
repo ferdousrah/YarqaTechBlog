@@ -1,5 +1,5 @@
 /* Additional admin panel styles */
-/* Tailwind CSS is imported in src/app/(payload)/custom.scss */
+/* Note: Tailwind CSS should NOT be imported for the admin panel as it conflicts with Payload's UI */
 
 .dashboard-wrapper {
   position: relative;
