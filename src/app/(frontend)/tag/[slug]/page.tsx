@@ -83,7 +83,7 @@ export default async function TagPage({
   const tagColor = tag.color || '#6366F1'
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Tag Header */}
       <div
         className="py-16 text-white relative overflow-hidden"
@@ -129,7 +129,7 @@ export default async function TagPage({
               {posts.docs.map((post) => (
                 <article
                   key={post.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow border border-gray-100 dark:border-gray-700"
                 >
                   <Link href={`/blog/${post.slug}`}>
                     <div className="relative h-56 bg-gray-200">
@@ -164,7 +164,7 @@ export default async function TagPage({
                         {typeof post.category === 'object' ? post.category.name : ''}
                       </Link>
                       <span className="text-gray-400 text-xs">•</span>
-                      <span className="text-gray-500 text-xs">
+                      <span className="text-gray-500 dark:text-gray-400 text-xs">
                         {new Date(post.publishedAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -174,15 +174,15 @@ export default async function TagPage({
                     </div>
 
                     <Link href={`/blog/${post.slug}`}>
-                      <h2 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition mb-3 line-clamp-2">
+                      <h2 className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition mb-3 line-clamp-2">
                         {post.title}
                       </h2>
                     </Link>
 
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-3 text-xs text-gray-500">
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                      <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                         <span>By {typeof post.author === 'object' ? post.author.name : ''}</span>
                         {post.readTime && (
                           <>
@@ -192,7 +192,7 @@ export default async function TagPage({
                         )}
                       </div>
                       {post.views > 0 && (
-                        <div className="flex items-center gap-1 text-gray-500 text-xs">
+                        <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs">
                           <svg
                             className="w-4 h-4"
                             fill="none"
@@ -227,7 +227,7 @@ export default async function TagPage({
                 {page > 1 && (
                   <Link
                     href={`/tag/${params.slug}?page=${page - 1}`}
-                    className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
+                    className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition font-medium text-gray-900 dark:text-white"
                   >
                     ← Previous
                   </Link>
@@ -241,7 +241,7 @@ export default async function TagPage({
                       className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition ${
                         pageNum === page
                           ? 'text-white'
-                          : 'bg-white border border-gray-300 hover:bg-gray-50'
+                          : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
                       }`}
                       style={pageNum === page ? { backgroundColor: tagColor } : {}}
                     >
@@ -253,7 +253,7 @@ export default async function TagPage({
                 {page < posts.totalPages && (
                   <Link
                     href={`/tag/${params.slug}?page=${page + 1}`}
-                    className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium"
+                    className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition font-medium text-gray-900 dark:text-white"
                   >
                     Next →
                   </Link>
@@ -265,8 +265,8 @@ export default async function TagPage({
           // Empty State
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🏷️</div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">No articles yet</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No articles yet</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Check back later for new content tagged with #{tag.name}
             </p>
             <Link
