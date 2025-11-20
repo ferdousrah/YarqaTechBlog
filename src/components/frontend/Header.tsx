@@ -207,7 +207,7 @@ export default function Header({ settings }: HeaderProps) {
                   className="relative h-10 w-auto"
                 >
                   <Image
-                    src={logoUrl}
+                    src={colorMode === 'dark' ? '/yarqa-logo-dark.png' : logoUrl}
                     alt={settings?.siteName || 'Logo'}
                     height={40}
                     width={120}

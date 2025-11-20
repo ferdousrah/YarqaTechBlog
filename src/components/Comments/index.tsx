@@ -155,7 +155,7 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
     const authorName = comment.author?.name || 'Anonymous'
 
     return (
-      <div className={`${isReply ? 'ml-8 mt-4' : 'mt-6'} border-l-2 border-gray-200 pl-4`}>
+      <div className={`${isReply ? 'ml-8 mt-4' : 'mt-6'} border-l-2 border-gray-200 dark:border-gray-700 pl-4`}>
         <div className="flex items-start gap-3">
           {comment.author?.avatar?.url ? (
             <div className="w-10 h-10 rounded-full overflow-hidden relative flex-shrink-0">
@@ -173,18 +173,18 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
           )}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-semibold text-gray-900">{authorName}</span>
-              <span className="text-sm text-gray-500">{formatDate(comment.createdAt)}</span>
+              <span className="font-semibold text-gray-900 dark:text-white">{authorName}</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">{formatDate(comment.createdAt)}</span>
               {comment.isEdited && (
-                <span className="text-xs text-gray-400 italic">(edited)</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500 italic">(edited)</span>
               )}
             </div>
-            <p className="mt-2 text-gray-700 whitespace-pre-wrap break-words">{comment.content}</p>
+            <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words">{comment.content}</p>
             <div className="mt-2 flex items-center gap-4">
               {!isReply && user && (
                 <button
                   onClick={() => setShowReplyForm(!showReplyForm)}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
                 >
                   Reply
                 </button>
@@ -192,7 +192,7 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
             </div>
 
             {showReplyForm && (
-              <div className="mt-4 bg-gray-50 p-4 rounded-lg">
+              <div className="mt-4 bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                 <form onSubmit={(e) => handleSubmitComment(e, String(comment.id))}>
                   <Textarea
                     value={content}
@@ -233,7 +233,7 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
 
   if (!enableComments) {
     return (
-      <div className="mt-12 text-center text-gray-500">
+      <div className="mt-12 text-center text-gray-500 dark:text-gray-400">
         Comments are disabled for this post.
       </div>
     )
@@ -242,13 +242,13 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
   return (
     <>
       <div className="mt-12 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
           Comments {comments.length > 0 && `(${comments.length})`}
         </h2>
 
         {/* Comment Form */}
         {!authLoading && (
-          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-8">
             {user ? (
               <>
                 <div className="flex items-center gap-3 mb-4">
@@ -267,8 +267,8 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
                     </div>
                   )}
                   <div>
-                    <div className="font-semibold text-gray-900">{user.name}</div>
-                    <div className="text-sm text-gray-500">{user.email}</div>
+                    <div className="font-semibold text-gray-900 dark:text-white">{user.name}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{user.email}</div>
                   </div>
                 </div>
                 <form onSubmit={(e) => handleSubmitComment(e)}>
@@ -282,7 +282,7 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
                     maxLength={1000}
                     className="mt-1"
                   />
-                  <p className="text-sm text-gray-500 mt-1">{content.length}/1000 characters</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{content.length}/1000 characters</p>
 
                   {error && (
                     <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -305,7 +305,7 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
               </>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-600 mb-4">You need to be logged in to comment.</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">You need to be logged in to comment.</p>
                 <Button onClick={() => setShowAuthModal(true)}>Login to Comment</Button>
               </div>
             )}
@@ -316,10 +316,10 @@ export function Comments({ postId, enableComments = true }: CommentsProps) {
         {loading ? (
           <div className="text-center py-8">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
-            <p className="mt-2 text-gray-500">Loading comments...</p>
+            <p className="mt-2 text-gray-500 dark:text-gray-400">Loading comments...</p>
           </div>
         ) : comments.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <p>No comments yet. Be the first to comment!</p>
           </div>
         ) : (
