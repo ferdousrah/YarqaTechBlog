@@ -28,6 +28,7 @@ import Logo from '@/components/admin/Logo'
 import DashboardComponent from '@/components/Dashboard'
 import CustomAdminNav from '@/components/admin/CustomAdminNav'
 import CustomRoot from '@/components/admin/CustomRoot'
+import AdminProvider from '@/components/admin/AdminProvider'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -56,5 +57,6 @@ export const importMap = {
   "@/components/admin/Logo#default": Logo,
   "@/components/Dashboard#default": DashboardComponent,
   "@/components/admin/CustomAdminNav#default": CustomAdminNav,
-  "@/components/admin/CustomRoot#default": CustomRoot
+  "@/components/admin/CustomRoot#default": CustomRoot,
+  "@/components/admin/AdminProvider#default": AdminProvider
 }
