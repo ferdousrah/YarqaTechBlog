@@ -9,6 +9,12 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  Legend,
 } from 'recharts'
 
 interface DashboardStats {
@@ -34,6 +40,29 @@ interface DashboardStats {
   recentDeletions?: any[]
 }
 
+interface AnalyticsStats {
+  totalUniqueVisitors: number
+  uniqueVisitorsToday: number
+  uniqueVisitors7Days: number
+  totalPageViews: number
+  pageViewsToday: number
+  currentOnline: number
+  newVisitors: number
+  returningVisitors: number
+  newVsReturningRatio: number
+  bounceRate: number
+  avgSessionDuration: number
+  avgPagesPerSession: number
+  avgTimeOnPage: number
+  trafficSources: { source: string; count: number; percentage: number }[]
+  topCountries: { country: string; count: number; percentage: number }[]
+  deviceBreakdown: { device: string; count: number; percentage: number }[]
+  browserBreakdown: { browser: string; count: number; percentage: number }[]
+  topPages: { path: string; count: number; title: string }[]
+  visitorsPerDay: { date: string; visitors: number; pageViews: number }[]
+  hourlyTraffic: { hour: string; visitors: number }[]
+}
+
 const deletionReasonLabels: Record<string, string> = {
   not_relevant: 'Not finding relevant content',
   too_many_emails: 'Too many emails/notifications',
@@ -46,7 +75,9 @@ const deletionReasonLabels: Record<string, string> = {
 
 export default function DashboardClient() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [analyticsStats, setAnalyticsStats] = useState<AnalyticsStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [analyticsLoading, setAnalyticsLoading] = useState(true)
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -82,6 +113,35 @@ export default function DashboardClient() {
       }
     }
     fetchStats()
+  }, [])
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const res = await fetch('/api/analytics-stats', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!res.ok) {
+          console.error('Analytics fetch failed with status:', res.status)
+          setAnalyticsStats(null)
+          setAnalyticsLoading(false)
+          return
+        }
+
+        const data = await res.json()
+        setAnalyticsStats(data)
+      } catch (err) {
+        console.error('Analytics fetch failed:', err)
+        setAnalyticsStats(null)
+      } finally {
+        setAnalyticsLoading(false)
+      }
+    }
+    fetchAnalytics()
   }, [])
 
   if (loading) {
@@ -555,6 +615,302 @@ export default function DashboardClient() {
                     <p className="text-gray-500 text-sm">No feedback yet</p>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Analytics Section */}
+        {analyticsStats && (
+          <div className="mt-12">
+            <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 mb-8 flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl text-2xl">
+                📊
+              </div>
+              Visitor Analytics
+            </h2>
+
+            {/* Overview Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white text-xl">
+                    👥
+                  </div>
+                  <p className="text-sm text-gray-500 font-bold">Total Visitors</p>
+                </div>
+                <p className="text-4xl font-black bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  {analyticsStats.totalUniqueVisitors.toLocaleString()}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {analyticsStats.uniqueVisitorsToday} today
+                </p>
+              </div>
+
+              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-white text-xl">
+                    📄
+                  </div>
+                  <p className="text-sm text-gray-500 font-bold">Page Views</p>
+                </div>
+                <p className="text-4xl font-black bg-gradient-to-br from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  {analyticsStats.totalPageViews.toLocaleString()}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {analyticsStats.pageViewsToday} today
+                </p>
+              </div>
+
+              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-white text-xl">
+                    🔴
+                  </div>
+                  <p className="text-sm text-gray-500 font-bold">Online Now</p>
+                </div>
+                <p className="text-4xl font-black bg-gradient-to-br from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  {analyticsStats.currentOnline}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">Active users</p>
+              </div>
+
+              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-white text-xl">
+                    ⏱️
+                  </div>
+                  <p className="text-sm text-gray-500 font-bold">Avg Session</p>
+                </div>
+                <p className="text-4xl font-black bg-gradient-to-br from-orange-600 to-red-600 bg-clip-text text-transparent">
+                  {Math.floor(analyticsStats.avgSessionDuration / 60)}m
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {analyticsStats.avgSessionDuration % 60}s duration
+                </p>
+              </div>
+            </div>
+
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Visitors Chart (Last 7 Days) */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    📈
+                  </div>
+                  Visitors (Last 7 Days)
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={analyticsStats.visitorsPerDay}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="date" stroke="#94a3b8" />
+                    <YAxis stroke="#94a3b8" />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="visitors"
+                      stroke="#3b82f6"
+                      strokeWidth={3}
+                      dot={{ fill: '#3b82f6', r: 4 }}
+                      name="Visitors"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="pageViews"
+                      stroke="#10b981"
+                      strokeWidth={3}
+                      dot={{ fill: '#10b981', r: 4 }}
+                      name="Page Views"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Traffic Sources (Pie Chart) */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    🔗
+                  </div>
+                  Traffic Sources
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={analyticsStats.trafficSources}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ source, percentage }) => `${source}: ${percentage}%`}
+                      outerRadius={100}
+                      fill="#8884d8"
+                      dataKey="count"
+                    >
+                      {analyticsStats.trafficSources.map((entry, index) => {
+                        const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+                        return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                      })}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Metrics Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+              {/* Visitor Behavior */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    🎯
+                  </div>
+                  Visitor Behavior
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50">
+                    <span className="text-sm font-bold text-gray-700">New Visitors</span>
+                    <span className="text-lg font-black text-blue-600">
+                      {analyticsStats.newVsReturningRatio}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50">
+                    <span className="text-sm font-bold text-gray-700">Bounce Rate</span>
+                    <span className="text-lg font-black text-green-600">
+                      {analyticsStats.bounceRate}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50">
+                    <span className="text-sm font-bold text-gray-700">Pages/Session</span>
+                    <span className="text-lg font-black text-purple-600">
+                      {analyticsStats.avgPagesPerSession}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-orange-50 to-red-50">
+                    <span className="text-sm font-bold text-gray-700">Avg Time on Page</span>
+                    <span className="text-lg font-black text-orange-600">
+                      {Math.floor(analyticsStats.avgTimeOnPage / 60)}m {analyticsStats.avgTimeOnPage % 60}s
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Countries */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    🌍
+                  </div>
+                  Top Countries
+                </h3>
+                <div className="space-y-3">
+                  {analyticsStats.topCountries.slice(0, 5).map((country, index) => (
+                    <div key={index} className="flex justify-between items-center">
+                      <span className="text-sm font-bold text-gray-700">{country.country}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-24 bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full"
+                            style={{ width: `${country.percentage}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-sm font-black text-green-600">
+                          {country.count}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Top Pages */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    📊
+                  </div>
+                  Top Pages
+                </h3>
+                <div className="space-y-3">
+                  {analyticsStats.topPages.slice(0, 5).map((page, index) => (
+                    <div key={index} className="p-3 rounded-xl bg-gray-50 border border-gray-100">
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="text-xs text-gray-500 font-medium truncate flex-1">
+                          {page.path}
+                        </span>
+                        <span className="text-sm font-black text-amber-600 ml-2">
+                          {page.count}
+                        </span>
+                      </div>
+                      {page.title && (
+                        <p className="text-xs text-gray-600 truncate">{page.title}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Device & Browser Stats */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Device Breakdown */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    📱
+                  </div>
+                  Device Breakdown
+                </h3>
+                <div className="space-y-4">
+                  {analyticsStats.deviceBreakdown.map((device, index) => (
+                    <div key={index}>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-bold text-gray-700 capitalize">
+                          {device.device}
+                        </span>
+                        <span className="text-sm font-black text-indigo-600">
+                          {device.percentage}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div
+                          className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full"
+                          style={{ width: `${device.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Browser Breakdown */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
+                    🌐
+                  </div>
+                  Browser Breakdown
+                </h3>
+                <div className="space-y-4">
+                  {analyticsStats.browserBreakdown.map((browser, index) => (
+                    <div key={index}>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-bold text-gray-700">{browser.browser}</span>
+                        <span className="text-sm font-black text-rose-600">
+                          {browser.percentage}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div
+                          className="bg-gradient-to-r from-rose-500 to-pink-500 h-3 rounded-full"
+                          style={{ width: `${browser.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
