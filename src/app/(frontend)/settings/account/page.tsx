@@ -35,7 +35,7 @@ export default function AccountSettingsPage() {
   }, [user, authLoading, router])
 
   const handleDeleteAccount = async () => {
-    if (confirmText !== 'DELETE') return
+    if (confirmText !== 'DELETE' || !user?.id) return
 
     setDeleting(true)
     try {
@@ -55,7 +55,7 @@ export default function AccountSettingsPage() {
       }
 
       // Delete the user account
-      const response = await fetch('/api/users/me', {
+      const response = await fetch(`/api/users/${user.id}`, {
         method: 'DELETE',
         credentials: 'include',
       })
