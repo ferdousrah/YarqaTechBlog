@@ -351,7 +351,7 @@ export default function Header({ settings }: HeaderProps) {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="border-t border-gray-200 bg-white overflow-hidden"
+            className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden"
           >
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
               <form onSubmit={handleSearch} className="flex gap-3">
@@ -362,7 +362,7 @@ export default function Header({ settings }: HeaderProps) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search articles..."
-                  className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-blue-600 transition-all duration-300 shadow-sm"
+                  className="flex-1 px-6 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:border-blue-600 dark:focus:border-blue-500 transition-all duration-300 shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   autoFocus
                 />
                 <motion.button
@@ -382,7 +382,7 @@ export default function Header({ settings }: HeaderProps) {
                   whileTap={{ scale: 0.95 }}
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className="px-4 py-3 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-50 transition-all duration-300"
+                  className="px-4 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
                 >
                   Cancel
                 </motion.button>
