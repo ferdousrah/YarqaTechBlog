@@ -76,9 +76,11 @@ export default function InterestsSettingsPage() {
   }
 
   const handleSave = async () => {
+    if (!user?.id) return
+
     setSaving(true)
     try {
-      const response = await fetch('/api/users/me', {
+      const response = await fetch(`/api/users/${user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
