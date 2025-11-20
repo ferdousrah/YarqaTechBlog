@@ -27,7 +27,7 @@ interface LexicalContentProps {
 
 export default function LexicalContent({ content }: LexicalContentProps) {
   if (!content?.root) {
-    return <p className="text-gray-600">No content available.</p>
+    return <p className="text-gray-600 dark:text-gray-400">No content available.</p>
   }
 
   return <div className="prose prose-lg max-w-none">{renderNode(content.root)}</div>
@@ -46,7 +46,7 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
       if (node.format & 2) text = (<em key={index}>{text}</em>) as any
       if (node.format & 8)
         text = (
-          <code key={index} className="bg-gray-100 px-2 py-1 rounded text-sm">
+          <code key={index} className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm dark:text-gray-200">
             {text}
           </code>
         ) as any
@@ -58,7 +58,7 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
   // Paragraph
   if (node.type === 'paragraph') {
     return (
-      <p key={index} className="mb-4 text-gray-800 leading-relaxed">
+      <p key={index} className="mb-4 text-gray-800 dark:text-gray-300 leading-relaxed">
         {node.children?.map((child, i) => renderNode(child, i))}
       </p>
     )
@@ -68,12 +68,12 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
   if (node.type === 'heading') {
     const tag = node.tag || 'h2'
     const classes: Record<string, string> = {
-      h1: 'text-4xl font-bold mt-8 mb-4 text-gray-900',
-      h2: 'text-3xl font-bold mt-8 mb-4 text-gray-900',
-      h3: 'text-2xl font-bold mt-6 mb-3 text-gray-900',
-      h4: 'text-xl font-bold mt-6 mb-3 text-gray-900',
-      h5: 'text-lg font-bold mt-4 mb-2 text-gray-900',
-      h6: 'text-base font-bold mt-4 mb-2 text-gray-900',
+      h1: 'text-4xl font-bold mt-8 mb-4 text-gray-900 dark:text-white',
+      h2: 'text-3xl font-bold mt-8 mb-4 text-gray-900 dark:text-white',
+      h3: 'text-2xl font-bold mt-6 mb-3 text-gray-900 dark:text-white',
+      h4: 'text-xl font-bold mt-6 mb-3 text-gray-900 dark:text-white',
+      h5: 'text-lg font-bold mt-4 mb-2 text-gray-900 dark:text-white',
+      h6: 'text-base font-bold mt-4 mb-2 text-gray-900 dark:text-white',
     }
 
     const Component = tag as keyof JSX.IntrinsicElements
@@ -96,7 +96,7 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
 
   if (node.type === 'listitem') {
     return (
-      <li key={index} className="text-gray-800">
+      <li key={index} className="text-gray-800 dark:text-gray-300">
         {node.children?.map((child, i) => renderNode(child, i))}
       </li>
     )
@@ -105,7 +105,7 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
   // Quote/blockquote
   if (node.type === 'quote') {
     return (
-      <blockquote key={index} className="border-l-4 border-blue-600 pl-4 italic my-6 text-gray-700">
+      <blockquote key={index} className="border-l-4 border-blue-600 dark:border-blue-400 pl-4 italic my-6 text-gray-700 dark:text-gray-300">
         {node.children?.map((child, i) => renderNode(child, i))}
       </blockquote>
     )
@@ -144,7 +144,7 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
 
   // Horizontal rule
   if (node.type === 'horizontalrule') {
-    return <hr key={index} className="my-8 border-t-2 border-gray-200" />
+    return <hr key={index} className="my-8 border-t-2 border-gray-200 dark:border-gray-700" />
   }
 
   // Image (if you have image nodes)
