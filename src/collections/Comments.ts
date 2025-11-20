@@ -6,7 +6,7 @@ export const Comments: CollectionConfig = {
   admin: {
     useAsTitle: 'content',
     defaultColumns: ['author', 'post', 'status', 'createdAt'],
-    group: 'Content',
+    group: 'Engagement',
   },
   access: {
     read: ({ req: { user } }) => {

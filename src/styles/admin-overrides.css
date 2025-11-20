@@ -19,3 +19,173 @@
   z-index: 1;
   padding: 2rem;
 }
+
+/* ========================================
+   Admin Sidebar Navigation Styling
+   ======================================== */
+
+/* Sidebar Group Headers */
+.nav__list .nav__list-toggle,
+.nav__list .group-label {
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #64748b !important;
+  padding: 0.75rem 1rem !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+  background: linear-gradient(to right, #f1f5f9, transparent) !important;
+  border-left: 3px solid #cbd5e1 !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav__list .nav__list-toggle:hover,
+.nav__list .group-label:hover {
+  background: linear-gradient(to right, #e2e8f0, transparent) !important;
+  border-left-color: #94a3b8 !important;
+  color: #475569 !important;
+}
+
+/* Sidebar Links */
+.nav__list a,
+.nav__list button {
+  position: relative !important;
+  padding: 0.625rem 1rem !important;
+  margin: 0.125rem 0.5rem !important;
+  border-radius: 0.5rem !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  color: #334155 !important;
+  transition: all 0.2s ease !important;
+  border-left: 3px solid transparent !important;
+}
+
+/* Hover Effect */
+.nav__list a:hover,
+.nav__list button:hover {
+  background: linear-gradient(to right, #eff6ff, #f0f9ff) !important;
+  border-left-color: #3b82f6 !important;
+  color: #1e40af !important;
+  transform: translateX(2px) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Active Link */
+.nav__list a[aria-current="page"],
+.nav__list button[aria-current="page"] {
+  background: linear-gradient(to right, #dbeafe, #bfdbfe) !important;
+  border-left-color: #2563eb !important;
+  color: #1e3a8a !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 4px 0 rgba(37, 99, 235, 0.1) !important;
+}
+
+/* Active Link Hover */
+.nav__list a[aria-current="page"]:hover,
+.nav__list button[aria-current="page"]:hover {
+  background: linear-gradient(to right, #bfdbfe, #93c5fd) !important;
+  box-shadow: 0 2px 6px 0 rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Add Icons to Groups */
+.nav__list .nav__list-toggle::before,
+.nav__list .group-label::before {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Group-specific styling */
+[data-group="Content"] .nav__list-toggle::before,
+[data-group="Content"] .group-label::before {
+  content: '📝';
+}
+
+[data-group="Users"] .nav__list-toggle::before,
+[data-group="Users"] .group-label::before {
+  content: '👥';
+}
+
+[data-group="Analytics"] .nav__list-toggle::before,
+[data-group="Analytics"] .group-label::before {
+  content: '📊';
+}
+
+[data-group="Engagement"] .nav__list-toggle::before,
+[data-group="Engagement"] .group-label::before {
+  content: '💬';
+}
+
+[data-group="Marketing"] .nav__list-toggle::before,
+[data-group="Marketing"] .group-label::before {
+  content: '📧';
+}
+
+/* Nested Lists Indentation */
+.nav__list .nav__list {
+  padding-left: 1rem !important;
+  margin-top: 0.25rem !important;
+}
+
+/* Sidebar Container */
+.nav {
+  background: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+}
+
+/* Scrollbar Styling */
+.nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nav::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.nav::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Link Icons/Badges */
+.nav__list a .pill,
+.nav__list button .pill {
+  font-size: 0.65rem !important;
+  padding: 0.125rem 0.375rem !important;
+  margin-left: auto !important;
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border-radius: 0.375rem !important;
+  font-weight: 600 !important;
+}
+
+/* Smooth Transitions */
+.nav__list * {
+  transition: all 0.2s ease !important;
+}
+
+/* Dashboard Link Special Styling */
+.nav__list a[href="/admin"],
+.nav__list a[href*="dashboard"] {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  border-left: none !important;
+}
+
+.nav__list a[href="/admin"]:hover,
+.nav__list a[href*="dashboard"]:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+  transform: translateX(0) scale(1.02) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
