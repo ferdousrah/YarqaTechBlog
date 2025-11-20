@@ -175,15 +175,4 @@ export const VisitorSessions: CollectionConfig = {
       },
     },
   ],
-  indexes: [
-    {
-      fields: { visitorId: 1, createdAt: -1 },
-    },
-    {
-      fields: { isActive: 1 },
-    },
-    {
-      fields: { country: 1 },
-    },
-  ],
 }

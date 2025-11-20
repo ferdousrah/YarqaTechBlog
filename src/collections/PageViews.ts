@@ -112,15 +112,4 @@ export const PageViews: CollectionConfig = {
       },
     },
   ],
-  indexes: [
-    {
-      fields: { path: 1, createdAt: -1 },
-    },
-    {
-      fields: { sessionId: 1 },
-    },
-    {
-      fields: { visitorId: 1 },
-    },
-  ],
 }
