@@ -50,6 +50,21 @@
     @apply antialiased;
     background-color: var(--color-background);
     color: var(--color-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Dark mode overrides */
+  .dark {
+    --color-background: #111827;
+    --color-background-secondary: #1f2937;
+    --color-text: #f9fafb;
+    --color-text-secondary: #d1d5db;
+    --color-border: #374151;
+  }
+
+  .dark body {
+    background-color: #111827;
+    color: #f9fafb;
   }
 
   /* Disable animations if specified */
