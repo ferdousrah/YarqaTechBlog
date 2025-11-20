@@ -29,6 +29,7 @@ export const dashboardStatsEndpoint: Endpoint = {
         recentPosts,
         topPosts,
         recentComments,
+        allDeletionFeedback,
       ] = await Promise.all([
         // Posts stats
         req.payload.find({ collection: 'posts', limit: 0 }),
@@ -70,7 +71,24 @@ export const dashboardStatsEndpoint: Endpoint = {
           limit: 5,
           sort: '-createdAt',
         }),
+        // Deletion feedback
+        req.payload.find({
+          collection: 'deletion-feedback',
+          limit: 100,
+          sort: '-createdAt',
+        }),
       ])
+
+      // Aggregate deletion reasons
+      const deletionReasonCounts: Record<string, number> = {}
+      allDeletionFeedback.docs.forEach((feedback: any) => {
+        const reason = feedback.reason || 'unknown'
+        deletionReasonCounts[reason] = (deletionReasonCounts[reason] || 0) + 1
+      })
+
+      const deletionReasons = Object.entries(deletionReasonCounts)
+        .map(([reason, count]) => ({ reason, count }))
+        .sort((a, b) => b.count - a.count)
 
       // Fetch all posts for analytics and views calculation in one query
       const allPostsForAnalytics = await req.payload.find({
@@ -130,6 +148,10 @@ export const dashboardStatsEndpoint: Endpoint = {
         topPosts: topPosts.docs,
         recentComments: recentComments.docs,
         analytics: monthlyAnalytics,
+        // User deletion stats
+        totalDeletedUsers: allDeletionFeedback.totalDocs,
+        deletionReasons,
+        recentDeletions: allDeletionFeedback.docs.slice(0, 5),
       })
     } catch (error) {
       console.error('Dashboard stats error:', error)
