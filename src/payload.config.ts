@@ -69,6 +69,7 @@ export default buildConfig({
         Icon: '@/components/admin/Logo',
         Logo: '@/components/admin/Logo',
       },
+      beforeNav: ['@/components/admin/CustomAdminNav'],
     },
     livePreview: {
       collections: ['posts', 'pages'],
