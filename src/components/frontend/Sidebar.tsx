@@ -122,7 +122,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
       {/* Sidebar - Light Theme */}
       <aside
         className={`
-          fixed top-0 left-0 h-full bg-gray-50 border-r border-gray-200 z-40
+          fixed top-0 left-0 h-full bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 z-40
           transition-all duration-300 ease-in-out
           ${isCollapsed ? 'w-16' : 'w-64'}
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -130,9 +130,9 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         `}
       >
         {/* Header with Toggle */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           {!isCollapsed && (
-            <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+            <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
               Categories
             </h2>
           )}
@@ -140,7 +140,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
           {/* Collapse Toggle - Desktop only */}
           <button
             onClick={toggleSidebar}
-            className={`hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors ${isCollapsed ? 'mx-auto' : ''}`}
+            className={`hidden lg:flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors ${isCollapsed ? 'mx-auto' : ''}`}
             aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <svg
@@ -204,7 +204,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                       className={`
                         flex items-center gap-3 px-3 py-2.5 rounded-lg
                         transition-colors group relative cursor-pointer
-                        ${isActive ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'}
+                        ${isActive ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'}
                         ${isCollapsed ? 'justify-center' : ''}
                       `}
                     >
@@ -370,14 +370,14 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         </div>
 
         {/* Bottom Section - Auth */}
-        <div className="border-t border-gray-200 p-3 space-y-1">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-3 space-y-1">
           {user ? (
             <>
               {/* User Info */}
               {!isCollapsed && (
                 <div className="px-3 py-2 mb-2">
-                  <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{user.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                 </div>
               )}
 
@@ -385,7 +385,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
               <Link
                 href="/settings/interests"
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors
+                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors
                   ${isCollapsed ? 'justify-center' : ''}
                 `}
                 title={isCollapsed ? 'My Interests' : undefined}
@@ -400,7 +400,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
               <Link
                 href="/bookmarks"
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors
+                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors
                   ${isCollapsed ? 'justify-center' : ''}
                 `}
                 title={isCollapsed ? 'My Bookmarks' : undefined}
@@ -415,7 +415,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
               <Link
                 href="/settings/account"
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors
+                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors
                   ${isCollapsed ? 'justify-center' : ''}
                 `}
                 title={isCollapsed ? 'Account Settings' : undefined}
@@ -431,7 +431,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
               <button
                 onClick={handleLogout}
                 className={`
-                  w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors
+                  w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-700 dark:hover:text-red-300 transition-colors
                   ${isCollapsed ? 'justify-center' : ''}
                 `}
                 title={isCollapsed ? 'Sign Out' : undefined}
@@ -447,7 +447,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
               <Link
                 href="/login"
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors
+                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors
                   ${isCollapsed ? 'justify-center' : ''}
                 `}
                 title={isCollapsed ? 'Sign In' : undefined}
@@ -471,7 +471,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
               <Link
                 href="/register"
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-white transition-colors
+                  flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white transition-colors
                   ${isCollapsed ? 'justify-center' : ''}
                 `}
                 title={isCollapsed ? 'Sign Up' : undefined}
