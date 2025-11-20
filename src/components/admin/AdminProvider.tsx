@@ -36,9 +36,7 @@ export default function AdminProvider({ children }: { children: React.ReactNode 
   return (
     <>
       <CustomAdminNav />
-      <div style={{ marginLeft: '280px' }}>
-        {children}
-      </div>
+      {children}
     </>
   )
 }
