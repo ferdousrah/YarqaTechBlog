@@ -218,13 +218,13 @@ export default function Header({ settings }: HeaderProps) {
                 <>
                   <motion.div
                     whileHover={{ scale: 1.05, rotate: 5 }}
-                    className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg"
+                    className="w-10 h-10 bg-gradient-to-br from-slate-600 to-slate-800 rounded-xl flex items-center justify-center shadow-lg"
                   >
                     <span className="text-white font-bold text-xl">{logoText.letter}</span>
                   </motion.div>
                   <span className="text-2xl md:text-3xl font-bold">
-                    <span className="gradient-text">{logoText.first}</span>
-                    <span className="text-gray-900">{logoText.second}</span>
+                    <span className="bg-gradient-to-r from-slate-400 to-slate-600 bg-clip-text text-transparent">{logoText.first}</span>
+                    <span className="text-slate-700">{logoText.second}</span>
                   </span>
                 </>
               )}
@@ -333,7 +333,7 @@ export default function Header({ settings }: HeaderProps) {
                           />
                         </div>
                       ) : (
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-800 rounded-full flex items-center justify-center">
                           <span className="text-white font-bold text-sm">
                             {user.name?.charAt(0).toUpperCase() || 'U'}
                           </span>
@@ -596,12 +596,12 @@ export default function Header({ settings }: HeaderProps) {
                 ) : (
                   // Default text logo
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-800 rounded-lg flex items-center justify-center">
                       <span className="text-white font-bold">{logoText.letter}</span>
                     </div>
                     <span className="text-xl font-bold">
-                      <span className="gradient-text">{logoText.first}</span>
-                      <span className="text-gray-900">{logoText.second}</span>
+                      <span className="bg-gradient-to-r from-slate-400 to-slate-600 bg-clip-text text-transparent">{logoText.first}</span>
+                      <span className="text-slate-700">{logoText.second}</span>
                     </span>
                   </div>
                 )}
