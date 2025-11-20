@@ -47,7 +47,6 @@ export default buildConfig({
   admin: {
     css: [
       path.resolve(__dirname, './styles/admin-overrides.css'),
-      path.resolve(__dirname, './styles/admin-custom-nav.css'),
     ],
     user: Users.slug,
     importMap: {
@@ -69,7 +68,6 @@ export default buildConfig({
         Icon: '@/components/admin/Logo',
         Logo: '@/components/admin/Logo',
       },
-      providers: ['@/components/admin/AdminProvider'],
     },
     livePreview: {
       collections: ['posts', 'pages'],
