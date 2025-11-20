@@ -9,3 +9,13 @@
 .payload__template--empty {
   background: none !important;
 }
+
+/* Load custom admin nav script */
+body::after {
+  content: '';
+  display: none;
+  background: url('/admin-nav-inject.js');
+}
+
+/* Alternative: Import custom nav CSS */
+@import url('/admin-custom-nav.css');
