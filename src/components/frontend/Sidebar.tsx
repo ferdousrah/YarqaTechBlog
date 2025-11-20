@@ -24,6 +24,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [expandedMenus, setExpandedMenus] = useState<string[]>([])
   const [showLogoutModal, setShowLogoutModal] = useState(false)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const { isCollapsed, toggleSidebar } = useSidebar()
   const pathname = usePathname()
   const router = useRouter()
@@ -119,7 +120,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar - Light Theme */}
+      {/* Sidebar */}
       <aside
         className={`
           fixed top-0 left-0 h-full bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 z-40
@@ -144,7 +145,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
             aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <svg
-              className={`w-5 h-5 text-gray-500 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
+              className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -186,8 +187,8 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
           </Link>
         </div>
 
-        {/* Categories Section with Light Scrollbar */}
-        <div className="flex-1 overflow-y-auto sidebar-scroll">
+        {/* Categories Section with Scrollbar */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden sidebar-scroll">
           <nav className="px-3 space-y-1 pb-3">
             {categories.map((category) => {
               const hasChildren = category.children && category.children.length > 0
@@ -260,7 +261,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                       className={`
                         flex items-center gap-3 px-3 py-2.5 rounded-lg
                         transition-colors group relative
-                        ${isActive ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'}
+                        ${isActive ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'}
                         ${isCollapsed ? 'justify-center' : ''}
                       `}
                       title={isCollapsed ? category.name : undefined}
@@ -298,7 +299,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                   {hasChildren && !isCollapsed && (
                     <div
                       className={`
-                        ml-4 border-l-2 border-gray-200 pl-3 overflow-hidden
+                        ml-4 border-l-2 border-gray-200 dark:border-gray-700 pl-3 overflow-hidden
                         transition-all duration-300 ease-in-out
                         ${isExpanded ? 'max-h-96 opacity-100 mt-1' : 'max-h-0 opacity-0'}
                       `}
@@ -309,7 +310,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                           href={`/category/${category.slug}`}
                           className={`
                             flex items-center gap-2 px-3 py-2 rounded-lg text-sm
-                            transition-colors text-blue-600 hover:bg-blue-50 hover:text-blue-700
+                            transition-colors text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-700 dark:hover:text-blue-300
                           `}
                         >
                           <span className="w-4 h-4 flex items-center justify-center flex-shrink-0">
@@ -327,7 +328,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                               />
                             </svg>
                           </span>
-                          <span className="truncate">View all {category.name}</span>
+                          <span className="truncate font-medium">View all {category.name}</span>
                         </Link>
                         {category.children?.map((child) => {
                           const isChildActive = pathname === `/category/${child.slug}`
@@ -338,7 +339,7 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
                               className={`
                                 flex items-center gap-2 px-3 py-2 rounded-lg text-sm
                                 transition-colors
-                                ${isChildActive ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}
+                                ${isChildActive ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'}
                               `}
                             >
                               <span className="w-4 h-4 flex items-center justify-center flex-shrink-0">
@@ -370,77 +371,96 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         </div>
 
         {/* Bottom Section - Auth */}
-        <div className="border-t border-gray-200 dark:border-gray-700 p-3 space-y-1">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-3 space-y-1 relative">
           {user ? (
             <>
-              {/* User Info */}
+              {/* User Info - Clickable to open menu */}
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className={`
+                  w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors
+                  ${isCollapsed ? 'justify-center' : ''}
+                  ${showUserMenu ? 'bg-gray-200 dark:bg-gray-800' : ''}
+                `}
+                title={isCollapsed ? user.name : undefined}
+              >
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-sm">{user.name.charAt(0).toUpperCase()}</span>
+                </div>
+                {!isCollapsed && (
+                  <div className="flex-1 text-left min-w-0">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{user.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                  </div>
+                )}
+                {!isCollapsed && (
+                  <svg
+                    className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </button>
+
+              {/* User Menu Dropdown */}
               {!isCollapsed && (
-                <div className="px-3 py-2 mb-2">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{user.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                <div
+                  className={`
+                    overflow-hidden transition-all duration-300 ease-in-out
+                    ${showUserMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
+                  `}
+                >
+                  <div className="py-1 space-y-1">
+                    {/* My Interests */}
+                    <Link
+                      href="/settings/interests"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                    >
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                      </svg>
+                      <span className="text-sm">My Interests</span>
+                    </Link>
+
+                    {/* My Bookmarks */}
+                    <Link
+                      href="/bookmarks"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                    >
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                      </svg>
+                      <span className="text-sm">My Bookmarks</span>
+                    </Link>
+
+                    {/* Account Settings */}
+                    <Link
+                      href="/settings/account"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                    >
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="text-sm">Account</span>
+                    </Link>
+
+                    {/* Sign Out */}
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-700 dark:hover:text-red-300 transition-colors"
+                    >
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      <span className="text-sm">Sign Out</span>
+                    </button>
+                  </div>
                 </div>
               )}
-
-              {/* My Interests */}
-              <Link
-                href="/settings/interests"
-                className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors
-                  ${isCollapsed ? 'justify-center' : ''}
-                `}
-                title={isCollapsed ? 'My Interests' : undefined}
-              >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
-                {!isCollapsed && <span className="text-sm">My Interests</span>}
-              </Link>
-
-              {/* My Bookmarks */}
-              <Link
-                href="/bookmarks"
-                className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors
-                  ${isCollapsed ? 'justify-center' : ''}
-                `}
-                title={isCollapsed ? 'My Bookmarks' : undefined}
-              >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                </svg>
-                {!isCollapsed && <span className="text-sm">My Bookmarks</span>}
-              </Link>
-
-              {/* Account Settings */}
-              <Link
-                href="/settings/account"
-                className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 transition-colors
-                  ${isCollapsed ? 'justify-center' : ''}
-                `}
-                title={isCollapsed ? 'Account Settings' : undefined}
-              >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {!isCollapsed && <span className="text-sm">Account</span>}
-              </Link>
-
-              {/* Sign Out */}
-              <button
-                onClick={handleLogout}
-                className={`
-                  w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-700 dark:hover:text-red-300 transition-colors
-                  ${isCollapsed ? 'justify-center' : ''}
-                `}
-                title={isCollapsed ? 'Sign Out' : undefined}
-              >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                {!isCollapsed && <span className="text-sm">Sign Out</span>}
-              </button>
             </>
           ) : (
             <>
@@ -496,13 +516,13 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         </div>
       </aside>
 
-      {/* Light Scrollbar Styles */}
+      {/* Scrollbar Styles */}
       <style jsx global>{`
         .sidebar-scroll::-webkit-scrollbar {
           width: 6px;
         }
         .sidebar-scroll::-webkit-scrollbar-track {
-          background: #f1f1f1;
+          background: transparent;
           border-radius: 3px;
         }
         .sidebar-scroll::-webkit-scrollbar-thumb {
@@ -512,9 +532,18 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         .sidebar-scroll::-webkit-scrollbar-thumb:hover {
           background: #9ca3af;
         }
+        .dark .sidebar-scroll::-webkit-scrollbar-thumb {
+          background: #4b5563;
+        }
+        .dark .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+          background: #6b7280;
+        }
         .sidebar-scroll {
           scrollbar-width: thin;
-          scrollbar-color: #d1d5db #f1f1f1;
+          scrollbar-color: #d1d5db transparent;
+        }
+        .dark .sidebar-scroll {
+          scrollbar-color: #4b5563 transparent;
         }
       `}</style>
 

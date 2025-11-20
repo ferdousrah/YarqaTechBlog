@@ -91,7 +91,7 @@ export default function BookmarksPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
@@ -102,7 +102,7 @@ export default function BookmarksPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -114,9 +114,9 @@ export default function BookmarksPage() {
             <div className="p-3 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-lg shadow-blue-500/50">
               <Bookmark className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">My Bookmarks</h1>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">My Bookmarks</h1>
           </div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             {bookmarks.length} saved {bookmarks.length === 1 ? 'article' : 'articles'}
           </p>
         </motion.div>
@@ -126,7 +126,7 @@ export default function BookmarksPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700"
+            className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-400"
           >
             {error}
           </motion.div>
@@ -137,13 +137,13 @@ export default function BookmarksPage() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-100"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center border border-gray-100 dark:border-gray-700"
           >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-6">
-              <Bookmark className="w-10 h-10 text-gray-400" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mb-6">
+              <Bookmark className="w-10 h-10 text-gray-400 dark:text-gray-500" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">No bookmarks yet</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No bookmarks yet</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Start saving articles to read later by clicking the bookmark icon on any post
             </p>
             <Link
@@ -166,11 +166,11 @@ export default function BookmarksPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group"
+                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 group"
                 >
                   <Link href={`/blog/${bookmark.post.slug}`} className="block">
                     {/* Featured Image */}
-                    <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                    <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
                       {bookmark.post.featuredImage?.url ? (
                         <Image
                           src={bookmark.post.featuredImage.url}
@@ -180,7 +180,7 @@ export default function BookmarksPage() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <FileText className="w-16 h-16 text-gray-400" />
+                          <FileText className="w-16 h-16 text-gray-400 dark:text-gray-600" />
                         </div>
                       )}
 
@@ -190,10 +190,10 @@ export default function BookmarksPage() {
                           e.preventDefault()
                           handleRemoveBookmark(bookmark.id)
                         }}
-                        className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-red-50 transition-all group/btn"
+                        className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-red-50 dark:hover:bg-red-900/50 transition-all group/btn"
                         title="Remove bookmark"
                       >
-                        <Trash2 className="w-4 h-4 text-gray-600 group-hover/btn:text-red-600 transition-colors" />
+                        <Trash2 className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover/btn:text-red-600 transition-colors" />
                       </button>
                     </div>
 
@@ -203,13 +203,13 @@ export default function BookmarksPage() {
                       <div className="flex items-center gap-3 mb-3 text-xs">
                         {bookmark.post.category && (
                           <>
-                            <span className="text-blue-600 font-bold uppercase tracking-wide">
+                            <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-wide">
                               {bookmark.post.category.name}
                             </span>
-                            <span className="text-gray-300">•</span>
+                            <span className="text-gray-300 dark:text-gray-600">•</span>
                           </>
                         )}
-                        <span className="text-gray-500 flex items-center gap-1">
+                        <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {new Date(bookmark.post.publishedAt).toLocaleDateString('en-US', {
                             month: 'short',
@@ -220,18 +220,18 @@ export default function BookmarksPage() {
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2 leading-tight">
+                      <h3 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2 line-clamp-2 leading-tight">
                         {bookmark.post.title}
                       </h3>
 
                       {/* Excerpt */}
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-4">
                         {bookmark.post.excerpt}
                       </p>
 
                       {/* Author */}
                       {bookmark.post.author && (
-                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
                           <UserIcon className="w-4 h-4" />
                           <span>{bookmark.post.author.name}</span>
                         </div>
@@ -239,14 +239,14 @@ export default function BookmarksPage() {
 
                       {/* Note */}
                       {bookmark.note && (
-                        <div className="pt-3 border-t border-gray-100">
-                          <p className="text-sm text-gray-600 italic">"{bookmark.note}"</p>
+                        <div className="pt-3 border-t border-gray-100 dark:border-gray-700">
+                          <p className="text-sm text-gray-600 dark:text-gray-300 italic">"{bookmark.note}"</p>
                         </div>
                       )}
 
                       {/* Saved Date */}
-                      <div className="pt-3 border-t border-gray-100 mt-3">
-                        <p className="text-xs text-gray-500">
+                      <div className="pt-3 border-t border-gray-100 dark:border-gray-700 mt-3">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                           Saved on{' '}
                           {new Date(bookmark.createdAt).toLocaleDateString('en-US', {
                             month: 'long',
