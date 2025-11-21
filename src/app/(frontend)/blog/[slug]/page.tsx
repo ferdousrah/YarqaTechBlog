@@ -136,7 +136,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {/* Bookmark Button - Right aligned, icon only */}
           <div className="flex-shrink-0">
-            <BookmarkButtonWrapper postId={post.id} variant="icon-only" />
+            <BookmarkButtonWrapper postId={String(post.id)} variant="icon-only" />
           </div>
         </div>
 
