@@ -30,7 +30,7 @@ export default function RegisterPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [savingPreferences, setSavingPreferences] = useState(false)
-  const [newUserId, setNewUserId] = useState<string | null>(null)
+  const [newUserId, setNewUserId] = useState<string | number | null>(null)
 
   // Redirect if already logged in (but not during registration flow)
   useEffect(() => {
