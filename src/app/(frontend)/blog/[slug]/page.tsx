@@ -180,7 +180,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {/* Like/Dislike Buttons */}
           <LikeDislike
-            postId={post.id}
+            postId={String(post.id)}
             initialLikes={post.likes || 0}
             initialDislikes={post.dislikes || 0}
           />
@@ -188,7 +188,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Comments Section */}
         <Comments
-          postId={post.id}
+          postId={String(post.id)}
           enableComments={post.commentsSettings?.enableComments ?? true}
         />
       </article>
