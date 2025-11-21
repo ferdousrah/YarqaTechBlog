@@ -4,9 +4,10 @@ import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-export default async function BlogPage({ searchParams }: { searchParams: { page?: string } }) {
+export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const { page: pageParam } = await searchParams
   const payload = await getPayload({ config })
-  const page = Number(searchParams.page) || 1
+  const page = Number(pageParam) || 1
   const limit = 12
 
   const posts = await payload.find({

@@ -17,13 +17,14 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const payload = await getPayload({ config })
 
   const result = await payload.find({
     collection: 'tags',
     where: {
-      slug: { equals: params.slug },
+      slug: { equals: slug },
     },
     limit: 1,
   })
@@ -46,18 +47,20 @@ export default async function TagPage({
   params,
   searchParams,
 }: {
-  params: { slug: string }
-  searchParams: { page?: string }
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ page?: string }>
 }) {
+  const { slug } = await params
+  const { page: pageParam } = await searchParams
   const payload = await getPayload({ config })
-  const page = Number(searchParams.page) || 1
+  const page = Number(pageParam) || 1
   const limit = 12
 
   // Get tag
   const tagResult = await payload.find({
     collection: 'tags',
     where: {
-      slug: { equals: params.slug },
+      slug: { equals: slug },
     },
     limit: 1,
   })

@@ -6,13 +6,14 @@ import Image from 'next/image'
 import LexicalContent from '@/components/frontend/LexicalContent'
 import type { Metadata } from 'next'
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
   const payload = await getPayload({ config })
 
   const result = await payload.find({
     collection: 'pages',
     where: {
-      slug: { equals: params.slug },
+      slug: { equals: slug },
       status: { equals: 'published' },
     },
     limit: 1,
@@ -47,13 +48,14 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   const payload = await getPayload({ config })
 
   const result = await payload.find({
     collection: 'pages',
     where: {
-      slug: { equals: params.slug },
+      slug: { equals: slug },
       status: { equals: 'published' },
     },
     limit: 1,
