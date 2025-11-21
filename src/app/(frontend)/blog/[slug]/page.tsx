@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="bg-white dark:bg-gray-900">
-      <BlogPageClient postId={post.id} />
+      <BlogPageClient postId={String(post.id)} />
 
       {/* Article Header */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
