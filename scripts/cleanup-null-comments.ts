@@ -39,7 +39,7 @@ async function cleanupComments() {
         deleted++
         console.log(`  ✓ Deleted comment ${comment.id}`)
       } catch (error) {
-        console.error(`  ✗ Failed to delete comment ${comment.id}:`, error.message)
+        console.error(`  ✗ Failed to delete comment ${comment.id}:`, error instanceof Error ? error.message : String(error))
       }
     }
 
