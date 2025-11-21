@@ -20,9 +20,7 @@ interface LexicalNode {
 }
 
 interface LexicalContentProps {
-  content: {
-    root?: LexicalNode
-  }
+  content: any
 }
 
 export default function LexicalContent({ content }: LexicalContentProps) {
