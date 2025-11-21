@@ -72,7 +72,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     sort: '-publishedAt',
   })
 
-  const formattedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
+  const formattedDate = new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
