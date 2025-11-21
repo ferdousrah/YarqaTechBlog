@@ -146,8 +146,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <ClickableImage
               src={post.featuredImage.url}
               alt={post.featuredImage.alt || post.title}
-              caption={post.featuredImage.caption}
-              credit={post.featuredImage.credit}
+              caption={post.featuredImage.caption || undefined}
+              credit={post.featuredImage.credit || undefined}
               priority
             />
           </div>
