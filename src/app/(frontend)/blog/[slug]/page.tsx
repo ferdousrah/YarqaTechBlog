@@ -181,8 +181,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Like/Dislike Buttons */}
           <LikeDislike
             postId={String(post.id)}
-            initialLikes={post.likes || 0}
-            initialDislikes={post.dislikes || 0}
+            initialLikes={(post as any).likes || 0}
+            initialDislikes={(post as any).dislikes || 0}
           />
         </div>
 
