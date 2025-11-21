@@ -52,7 +52,15 @@ export const SiteSettings: GlobalConfig = {
               type: 'upload',
               relationTo: 'media',
               admin: {
-                description: 'Upload your site logo (optional, defaults to text logo)',
+                description: 'Upload your site logo for light theme (optional, defaults to text logo)',
+              },
+            },
+            {
+              name: 'logoDark',
+              type: 'upload',
+              relationTo: 'media',
+              admin: {
+                description: 'Upload your site logo for dark theme (optional, falls back to light logo)',
               },
             },
             {
