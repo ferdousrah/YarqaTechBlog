@@ -128,8 +128,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
                 {post.readTime && `${post.readTime} min read`}
-                {post.views > 0 && post.readTime && ' • '}
-                {post.views > 0 && `${post.views} views`}
+                {post.views && post.views > 0 && post.readTime && ' • '}
+                {post.views && post.views > 0 && `${post.views} views`}
               </div>
             </div>
           </div>
