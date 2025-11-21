@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 
 interface BlogPageClientProps {
-  postId: string
+  postId: string | number
 }
 
 const BlogPageClient: React.FC<BlogPageClientProps> = ({ postId }) => {
