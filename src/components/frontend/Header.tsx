@@ -180,6 +180,10 @@ export default function Header({ settings }: HeaderProps) {
   const hasUploadedLogo = settings?.logo && typeof settings.logo === 'object' && settings.logo?.url
   const logoUrl = hasUploadedLogo ? settings.logo.url : null
 
+  // Check if there's an uploaded dark logo
+  const hasUploadedLogoDark = settings?.logoDark && typeof settings.logoDark === 'object' && settings.logoDark?.url
+  const logoDarkUrl = hasUploadedLogoDark ? settings.logoDark.url : null
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -207,7 +211,7 @@ export default function Header({ settings }: HeaderProps) {
                   className="relative h-10 w-auto"
                 >
                   <Image
-                    src={colorMode === 'dark' ? '/yarqa-logo-dark.png' : logoUrl}
+                    src={colorMode === 'dark' ? (logoDarkUrl || logoUrl) : logoUrl}
                     alt={settings?.siteName || 'Logo'}
                     height={40}
                     width={120}
