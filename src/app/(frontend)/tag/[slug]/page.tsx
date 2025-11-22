@@ -229,7 +229,7 @@ export default async function TagPage({
               <div className="flex justify-center items-center gap-2">
                 {page > 1 && (
                   <Link
-                    href={`/tag/${params.slug}?page=${page - 1}`}
+                    href={`/tag/${slug}?page=${page - 1}`}
                     className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition font-medium text-gray-900 dark:text-white"
                   >
                     ← Previous
@@ -240,7 +240,7 @@ export default async function TagPage({
                   {Array.from({ length: posts.totalPages }, (_, i) => i + 1).map((pageNum) => (
                     <Link
                       key={pageNum}
-                      href={`/tag/${params.slug}?page=${pageNum}`}
+                      href={`/tag/${slug}?page=${pageNum}`}
                       className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition ${
                         pageNum === page
                           ? 'text-white'
@@ -255,7 +255,7 @@ export default async function TagPage({
 
                 {page < posts.totalPages && (
                   <Link
-                    href={`/tag/${params.slug}?page=${page + 1}`}
+                    href={`/tag/${slug}?page=${page + 1}`}
                     className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition font-medium text-gray-900 dark:text-white"
                   >
                     Next →
