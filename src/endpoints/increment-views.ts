@@ -37,14 +37,14 @@ export const incrementViewsEndpoint: Endpoint = {
       // Log view
       try {
         await req.payload.create({
-          collection: 'post-views',
+          collection: 'post-views' as any,
           data: {
-            post: postId as string,
+            post: postId,
             user: req.user?.id,
-            ipAddress: req.ip,
+            ipAddress: (req as any).ip || req.headers.get('x-forwarded-for'),
             userAgent: req.headers.get('user-agent'),
             referrer: req.headers.get('referer'),
-          },
+          } as any,
           overrideAccess: true,
         })
         console.log('View logged successfully')

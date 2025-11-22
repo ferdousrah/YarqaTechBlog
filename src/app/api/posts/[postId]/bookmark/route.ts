@@ -59,7 +59,7 @@ export async function POST(
 
     // Check if bookmark exists
     const existing = await payload.find({
-      collection: 'bookmarks',
+      collection: 'bookmarks' as any,
       where: {
         and: [
           { user: { equals: user.id } },
@@ -72,7 +72,7 @@ export async function POST(
     if (existing.docs.length > 0) {
       // Remove bookmark
       await payload.delete({
-        collection: 'bookmarks',
+        collection: 'bookmarks' as any,
         id: existing.docs[0].id,
       })
 
@@ -89,11 +89,11 @@ export async function POST(
       console.log('[Bookmark API] Creating bookmark with postId:', parsedPostId, 'type:', typeof parsedPostId)
 
       await payload.create({
-        collection: 'bookmarks',
+        collection: 'bookmarks' as any,
         data: {
           user: user.id,
           post: parsedPostId,
-        },
+        } as any,
       })
 
       return NextResponse.json({

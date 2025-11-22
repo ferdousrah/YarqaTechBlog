@@ -8,7 +8,7 @@ export default async function HeaderWrapper() {
 
   try {
     const payload = await getPayload({ config })
-    const result = await payload.findGlobal({
+    const result = await (payload.findGlobal as any)({
       slug: 'site-settings',
     })
     settings = result

@@ -498,9 +498,9 @@ export const SiteSettings: GlobalConfig = {
                       defaultValue: 1.6,
                       min: 1.2,
                       max: 2,
-                      step: 0.1,
                       admin: {
                         description: 'Line height multiplier (1.5-1.75 recommended)',
+                        step: 0.1,
                       },
                     },
                     {

@@ -1,5 +1,6 @@
 // src/app/(frontend)/layout.tsx
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import HeaderWrapper from '@/components/frontend/HeaderWrapper'
 import SidebarWrapper from '@/components/frontend/SidebarWrapper'
 import FooterWrapper from '@/components/frontend/FooterWrapper'
@@ -20,7 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={fontVariables} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
         <Providers>
-          <VisitorTracker />
+          <Suspense fallback={null}>
+            <VisitorTracker />
+          </Suspense>
           <div className="flex min-h-screen">
             <SidebarWrapper />
             <MainContent>

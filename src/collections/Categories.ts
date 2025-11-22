@@ -65,7 +65,7 @@ export const Categories: CollectionConfig = {
       admin: {
         description: 'Select parent to create subcategory',
       },
-      filterOptions: ({ id }) => {
+      filterOptions: (({ id }: any) => {
         // Only filter out self when editing an existing category
         if (id) {
           return {
@@ -75,8 +75,8 @@ export const Categories: CollectionConfig = {
           }
         }
         // When creating a new category, allow all categories to be selected as parent
-        return {}
-      },
+        return true
+      }) as any,
     },
     {
       name: 'color',

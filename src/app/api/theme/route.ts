@@ -12,7 +12,7 @@ export async function GET() {
     const payload = await getPayload({ config })
 
     // Fetch site settings
-    const settings = await payload.findGlobal({
+    const settings = await (payload.findGlobal as any)({
       slug: 'site-settings',
     })
 

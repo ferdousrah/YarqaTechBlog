@@ -43,7 +43,7 @@ export default async function SidebarWrapper() {
     categories = rootCategories
 
     // Fetch site settings for logo
-    const settingsResult = await payload.findGlobal({
+    const settingsResult = await (payload.findGlobal as any)({
       slug: 'site-settings',
     })
     settings = settingsResult

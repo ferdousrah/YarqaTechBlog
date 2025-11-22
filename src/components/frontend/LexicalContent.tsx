@@ -1,6 +1,7 @@
 // src/components/frontend/LexicalContent.tsx
 'use client'
 
+import React from 'react'
 import { ContentImage } from '@/components/ContentImage'
 
 interface LexicalNode {
@@ -74,7 +75,7 @@ function renderNode(node: LexicalNode, index: number = 0): React.ReactNode {
       h6: 'text-base font-bold mt-4 mb-2 text-gray-900 dark:text-white',
     }
 
-    const Component = tag as keyof JSX.IntrinsicElements
+    const Component = tag as keyof React.JSX.IntrinsicElements
     return (
       <Component key={index} className={classes[tag]}>
         {node.children?.map((child, i) => renderNode(child, i))}

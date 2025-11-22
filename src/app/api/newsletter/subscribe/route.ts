@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     // Check if email already exists
     const existingSubscriber = await payload.find({
-      collection: 'newsletter-subscribers',
+      collection: 'newsletter-subscribers' as any,
       where: {
         email: { equals: email.toLowerCase() },
       },
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       // If previously unsubscribed, resubscribe
       if (subscriber.status === 'unsubscribed') {
         await payload.update({
-          collection: 'newsletter-subscribers',
+          collection: 'newsletter-subscribers' as any,
           id: subscriber.id,
           data: {
             status: 'subscribed',
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
 
     // Create new subscriber
     await payload.create({
-      collection: 'newsletter-subscribers',
+      collection: 'newsletter-subscribers' as any,
       data: {
         email: email.toLowerCase(),
         status: 'subscribed',

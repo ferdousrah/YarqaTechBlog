@@ -31,7 +31,7 @@ export async function GET(
 
     // Find user's reaction to this post
     const reactions = await payload.find({
-      collection: 'post-reactions',
+      collection: 'post-reactions' as any,
       where: {
         and: [{ user: { equals: user.id } }, { post: { equals: numericPostId } }],
       },
@@ -95,7 +95,7 @@ export async function POST(
 
     // Check if user already has a reaction
     const existing = await payload.find({
-      collection: 'post-reactions',
+      collection: 'post-reactions' as any,
       where: {
         and: [{ user: { equals: user.id } }, { post: { equals: numericPostId } }],
       },
@@ -110,15 +110,15 @@ export async function POST(
       id: numericPostId,
     })
 
-    let newLikes = post.likes || 0
-    let newDislikes = post.dislikes || 0
+    let newLikes = (post as any).likes || 0
+    let newDislikes = (post as any).dislikes || 0
 
     if (existingReaction) {
       // User is changing their reaction
       if (existingReaction.reactionType === reactionType) {
         // Same reaction - remove it
         await payload.delete({
-          collection: 'post-reactions',
+          collection: 'post-reactions' as any,
           id: existingReaction.id,
         })
 
@@ -135,7 +135,7 @@ export async function POST(
           data: {
             likes: newLikes,
             dislikes: newDislikes,
-          },
+          } as any,
         })
 
         return NextResponse.json({
@@ -147,7 +147,7 @@ export async function POST(
       } else {
         // Different reaction - update it
         await payload.update({
-          collection: 'post-reactions',
+          collection: 'post-reactions' as any,
           id: existingReaction.id,
           data: {
             reactionType,
@@ -169,7 +169,7 @@ export async function POST(
           data: {
             likes: newLikes,
             dislikes: newDislikes,
-          },
+          } as any,
         })
 
         return NextResponse.json({
@@ -182,7 +182,7 @@ export async function POST(
     } else {
       // New reaction
       const newReaction = await payload.create({
-        collection: 'post-reactions',
+        collection: 'post-reactions' as any,
         data: {
           user: user.id,
           post: numericPostId,
@@ -203,7 +203,7 @@ export async function POST(
         data: {
           likes: newLikes,
           dislikes: newDislikes,
-        },
+        } as any,
       })
 
       return NextResponse.json({

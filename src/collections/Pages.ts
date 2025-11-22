@@ -63,12 +63,12 @@ export const Pages: CollectionConfig = {
     {
       name: 'parent',
       type: 'relationship',
-      relationTo: 'pages',
+      relationTo: 'pages' as any,
       admin: {
         description: 'Select parent page to create sub-page (e.g., Services > Web Development)',
         position: 'sidebar',
       },
-      filterOptions: ({ id }) => {
+      filterOptions: (({ id }: any) => {
         // Only filter out self when editing an existing page
         if (id) {
           return {
@@ -78,8 +78,8 @@ export const Pages: CollectionConfig = {
           }
         }
         // When creating a new page, allow all pages to be selected as parent
-        return {}
-      },
+        return true
+      }) as any,
     },
     {
       name: 'status',

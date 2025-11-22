@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     await payload.create({
-      collection: 'logout-feedback',
+      collection: 'logout-feedback' as any,
       data: {
         rating,
         feedback: feedback || '',

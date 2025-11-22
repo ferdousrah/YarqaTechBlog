@@ -32,13 +32,13 @@ export const analyticsStatsEndpoint: Endpoint = {
       ] = await Promise.all([
         // All sessions
         req.payload.find({
-          collection: 'visitor-sessions',
+          collection: 'visitor-sessions' as any,
           limit: 10000,
           pagination: false,
         }),
         // Today's sessions
         req.payload.find({
-          collection: 'visitor-sessions',
+          collection: 'visitor-sessions' as any,
           where: {
             createdAt: { greater_than_equal: today.toISOString() },
           },
@@ -47,7 +47,7 @@ export const analyticsStatsEndpoint: Endpoint = {
         }),
         // Last 7 days sessions
         req.payload.find({
-          collection: 'visitor-sessions',
+          collection: 'visitor-sessions' as any,
           where: {
             createdAt: { greater_than_equal: last7Days.toISOString() },
           },
@@ -56,13 +56,13 @@ export const analyticsStatsEndpoint: Endpoint = {
         }),
         // All page views
         req.payload.find({
-          collection: 'page-views',
+          collection: 'page-views' as any,
           limit: 10000,
           pagination: false,
         }),
         // Today's page views
         req.payload.find({
-          collection: 'page-views',
+          collection: 'page-views' as any,
           where: {
             createdAt: { greater_than_equal: today.toISOString() },
           },
@@ -71,7 +71,7 @@ export const analyticsStatsEndpoint: Endpoint = {
         }),
         // Currently active sessions (active in last 5 minutes)
         req.payload.find({
-          collection: 'visitor-sessions',
+          collection: 'visitor-sessions' as any,
           where: {
             isActive: { equals: true },
             updatedAt: {

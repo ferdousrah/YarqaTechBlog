@@ -54,7 +54,6 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: '- Yarqa Tech Blog',
-      favicon: '/favicon.ico',
       ogImage: '/og-image.jpg',
     },
     autoLogin: false,
@@ -72,7 +71,7 @@ export default buildConfig({
     livePreview: {
       collections: ['posts', 'pages'],
     },
-  },
+  } as any,
   collections: [
     Users,
     Media,

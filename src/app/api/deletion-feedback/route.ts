@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     // Create deletion feedback entry
     await payload.create({
-      collection: 'deletion-feedback',
+      collection: 'deletion-feedback' as any,
       data: {
         reason,
         feedback: feedback || '',

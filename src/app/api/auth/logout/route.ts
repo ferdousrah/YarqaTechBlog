@@ -18,8 +18,9 @@ export async function POST(request: NextRequest) {
         if (user) {
           // Calculate session duration
           let sessionDuration = 0
-          if (user.lastLoginAt) {
-            const loginTime = new Date(user.lastLoginAt).getTime()
+          const userAny = user as any
+          if (userAny.lastLoginAt) {
+            const loginTime = new Date(userAny.lastLoginAt).getTime()
             const logoutTime = Date.now()
             sessionDuration = Math.round((logoutTime - loginTime) / 1000) // Duration in seconds
           }
@@ -30,8 +31,8 @@ export async function POST(request: NextRequest) {
             id: user.id,
             data: {
               lastLogoutAt: new Date().toISOString(),
-              totalLoginTime: (user.totalLoginTime || 0) + sessionDuration,
-            },
+              totalLoginTime: (userAny.totalLoginTime || 0) + sessionDuration,
+            } as any,
           })
         }
       } catch (trackingError) {

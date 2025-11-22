@@ -73,7 +73,7 @@ export const dashboardStatsEndpoint: Endpoint = {
         }),
         // Deletion feedback
         req.payload.find({
-          collection: 'deletion-feedback',
+          collection: 'deletion-feedback' as any,
           limit: 100,
           sort: '-createdAt',
         }),

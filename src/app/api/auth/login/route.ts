@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
         id: loginResult.user.id,
         data: {
           lastLoginAt: new Date().toISOString(),
-          loginCount: (loginResult.user.loginCount || 0) + 1,
-        },
+          loginCount: ((loginResult.user as any).loginCount || 0) + 1,
+        } as any,
       })
     } catch (trackingError) {
       console.error('Failed to update login tracking:', trackingError)

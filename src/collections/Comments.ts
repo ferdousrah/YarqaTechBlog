@@ -122,8 +122,8 @@ export const Comments: CollectionConfig = {
             throw new Error('You must be logged in to post a comment')
           }
           data.author = req.user.id
-          // Auto-approve comments from authenticated users with admin/editor/author role
-          if (req.user && (req.user.role === 'admin' || req.user.role === 'editor' || req.user.role === 'author')) {
+          // Auto-approve comments from authenticated users with admin/editor role
+          if (req.user && (req.user.role === 'admin' || req.user.role === 'editor')) {
             data.status = 'approved'
           } else {
             data.status = 'pending'

@@ -6,7 +6,7 @@ export const createCommentEndpoint: Endpoint = {
   method: 'post',
   handler: async (req) => {
     try {
-      const body = await req.json()
+      const body = await req.json!() as any
       const { postId, content, guestName, guestEmail, parentCommentId } = body
 
       // Validate required fields

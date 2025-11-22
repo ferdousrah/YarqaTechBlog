@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
       }
 
       const session = await payload.create({
-        collection: 'visitor-sessions',
+        collection: 'visitor-sessions' as any,
         data: {
           visitorId,
           sessionId,
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
 
       // Find the active session
       const sessions = await payload.find({
-        collection: 'visitor-sessions',
+        collection: 'visitor-sessions' as any,
         where: {
           sessionId: { equals: sessionId },
           isActive: { equals: true },
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
 
       // Create page view record
       await payload.create({
-        collection: 'page-views',
+        collection: 'page-views' as any,
         data: {
           visitorId,
           sessionId,
@@ -202,9 +202,9 @@ export async function POST(request: NextRequest) {
       })
 
       // Update session with new page view count and mark as not bounced
-      const newPageViews = (session.pageViews || 0) + 1
+      const newPageViews = ((session as any).pageViews || 0) + 1
       await payload.update({
-        collection: 'visitor-sessions',
+        collection: 'visitor-sessions' as any,
         id: session.id,
         data: {
           pageViews: newPageViews,
@@ -235,7 +235,7 @@ export async function POST(request: NextRequest) {
 
       // Update the last page view with time spent and scroll depth
       const pageViews = await payload.find({
-        collection: 'page-views',
+        collection: 'page-views' as any,
         where: {
           sessionId: { equals: sessionId },
           path: { equals: data.path },
@@ -246,7 +246,7 @@ export async function POST(request: NextRequest) {
 
       if (pageViews.docs.length > 0) {
         await payload.update({
-          collection: 'page-views',
+          collection: 'page-views' as any,
           id: pageViews.docs[0].id,
           data: {
             timeOnPage: data.timeOnPage || 0,
@@ -267,7 +267,7 @@ export async function POST(request: NextRequest) {
 
       // Find and update the session
       const sessions = await payload.find({
-        collection: 'visitor-sessions',
+        collection: 'visitor-sessions' as any,
         where: {
           sessionId: { equals: sessionId },
         },
@@ -275,13 +275,13 @@ export async function POST(request: NextRequest) {
       })
 
       if (sessions.docs.length > 0) {
-        const session = sessions.docs[0]
+        const session = sessions.docs[0] as any
         const startTime = new Date(session.startTime).getTime()
         const endTime = Date.now()
         const duration = Math.round((endTime - startTime) / 1000) // Duration in seconds
 
         await payload.update({
-          collection: 'visitor-sessions',
+          collection: 'visitor-sessions' as any,
           id: session.id,
           data: {
             endTime: new Date().toISOString(),

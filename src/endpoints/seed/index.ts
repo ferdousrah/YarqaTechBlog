@@ -1,4 +1,4 @@
-import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
+import type { Payload, PayloadRequest, File } from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
@@ -10,7 +10,7 @@ import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
 
-const collections: CollectionSlug[] = [
+const collections: string[] = [
   'categories',
   'media',
   'pages',
@@ -20,7 +20,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: string[] = ['header', 'footer']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -46,7 +46,7 @@ export const seed = async ({
   // clear the database
   await Promise.all(
     globals.map((global) =>
-      payload.updateGlobal({
+      (payload.updateGlobal as any)({
         slug: global,
         data: {
           navItems: [],
@@ -60,13 +60,13 @@ export const seed = async ({
   )
 
   await Promise.all(
-    collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
+    collections.map((collection) => payload.db.deleteMany({ collection: collection as any, req, where: {} })),
   )
 
   await Promise.all(
     collections
-      .filter((collection) => Boolean(payload.collections[collection].config.versions))
-      .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
+      .filter((collection) => Boolean((payload.collections as any)[collection]?.config?.versions))
+      .map((collection) => payload.db.deleteVersions({ collection: collection as any, req, where: {} })),
   )
 
   payload.logger.info(`— Seeding demo author and user...`)
@@ -105,6 +105,7 @@ export const seed = async ({
         name: 'Demo Author',
         email: 'demo-author@example.com',
         password: 'password',
+        role: 'user',
       },
     }),
     payload.create({
@@ -131,9 +132,9 @@ export const seed = async ({
       payload.create({
         collection: 'categories',
         data: {
-          title: category,
+          name: category,
           slug: category,
-        },
+        } as any,
       }),
     ),
   ])
@@ -195,7 +196,7 @@ export const seed = async ({
   payload.logger.info(`— Seeding contact form...`)
 
   const contactForm = await payload.create({
-    collection: 'forms',
+    collection: 'forms' as any,
     depth: 0,
     data: contactFormData,
   })
@@ -204,12 +205,12 @@ export const seed = async ({
 
   const [_, contactPage] = await Promise.all([
     payload.create({
-      collection: 'pages',
+      collection: 'pages' as any,
       depth: 0,
       data: home({ heroImage: imageHomeDoc, metaImage: image2Doc }),
     }),
     payload.create({
-      collection: 'pages',
+      collection: 'pages' as any,
       depth: 0,
       data: contactPageData({ contactForm: contactForm }),
     }),
@@ -218,7 +219,7 @@ export const seed = async ({
   payload.logger.info(`— Seeding globals...`)
 
   await Promise.all([
-    payload.updateGlobal({
+    (payload.updateGlobal as any)({
       slug: 'header',
       data: {
         navItems: [
@@ -242,7 +243,7 @@ export const seed = async ({
         ],
       },
     }),
-    payload.updateGlobal({
+    (payload.updateGlobal as any)({
       slug: 'footer',
       data: {
         navItems: [

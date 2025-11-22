@@ -14,7 +14,7 @@ export const toggleBookmarkEndpoint: Endpoint = {
     try {
       // Check if bookmark exists
       const existing = await req.payload.find({
-        collection: 'bookmarks',
+        collection: 'bookmarks' as any,
         where: {
           and: [{ user: { equals: req.user.id } }, { post: { equals: postId } }],
         },
@@ -23,7 +23,7 @@ export const toggleBookmarkEndpoint: Endpoint = {
       if (existing.docs.length > 0) {
         // Remove bookmark
         await req.payload.delete({
-          collection: 'bookmarks',
+          collection: 'bookmarks' as any,
           id: existing.docs[0].id,
         })
 
@@ -34,11 +34,11 @@ export const toggleBookmarkEndpoint: Endpoint = {
       } else {
         // Add bookmark
         await req.payload.create({
-          collection: 'bookmarks',
+          collection: 'bookmarks' as any,
           data: {
             user: req.user.id,
-            post: postId as string,
-          },
+            post: postId,
+          } as any,
         })
 
         return Response.json({

@@ -29,13 +29,13 @@ export const searchEndpoint: Endpoint = {
 
         // Log search query
         await req.payload.create({
-          collection: 'search-queries',
+          collection: 'search-queries' as any,
           data: {
             query: query as string,
             user: req.user?.id,
-            ipAddress: req.ip,
+            ipAddress: (req as any).ip || req.headers.get('x-forwarded-for'),
             userAgent: req.headers.get('user-agent'),
-          },
+          } as any,
         })
       }
 
