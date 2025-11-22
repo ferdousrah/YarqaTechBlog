@@ -211,7 +211,7 @@ export default function BookmarksPage() {
                         )}
                         <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {new Date(bookmark.post.publishedAt || bookmark.post.createdAt).toLocaleDateString('en-US', {
+                          {new Date(bookmark.post.publishedAt || new Date()).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric',
