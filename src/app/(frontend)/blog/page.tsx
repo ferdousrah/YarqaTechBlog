@@ -91,7 +91,7 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
                       </>
                     )}
                   </div>
-                  {post.views > 0 && (
+                  {post.views && post.views > 0 && (
                     <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs">
                       <svg
                         className="w-4 h-4"
