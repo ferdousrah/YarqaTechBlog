@@ -210,7 +210,7 @@ async function CategorySection({ category, payload }: any) {
                   {post.title}
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                  {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric',

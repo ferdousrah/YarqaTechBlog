@@ -42,7 +42,7 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
               </span>
               <span className="text-gray-300">•</span>
               <span className="text-gray-500 dark:text-gray-400 text-xs">
-                {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                 })}
@@ -112,7 +112,7 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
                 <span>{typeof post.author === 'object' ? post.author.name : ''}</span>
               </div>
               <span>•</span>
-              <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+              <span>{new Date(post.publishedAt || post.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
         </article>

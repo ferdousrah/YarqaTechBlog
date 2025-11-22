@@ -65,7 +65,7 @@ export default async function BlogPage({ searchParams }: { searchParams: Promise
                   </Link>
                   <span className="text-gray-400 text-xs">•</span>
                   <span className="text-gray-500 dark:text-gray-400 text-xs">
-                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                    {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric',

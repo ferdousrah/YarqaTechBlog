@@ -177,7 +177,7 @@ export default function PersonalizedSection() {
 
               <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                 <span>
-                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                  {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                   })}

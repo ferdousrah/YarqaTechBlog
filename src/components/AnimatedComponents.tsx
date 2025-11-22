@@ -80,7 +80,7 @@ export function AnimatedHeroPost({ post, index = 0 }: HeroPostCardProps) {
                 {typeof post.category === 'object' ? post.category.name : ''}
               </span>
               <span className="text-gray-200 text-sm font-medium">
-                {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric',
@@ -227,7 +227,7 @@ export function AnimatedPostCard({ post, index = 0 }: HeroPostCardProps) {
               </span>
               <span className="text-gray-300">•</span>
               <span className="text-gray-500 dark:text-gray-400 text-xs">
-                {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                   month: 'short',
                   day: 'numeric',
                 })}
