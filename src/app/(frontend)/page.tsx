@@ -182,7 +182,7 @@ async function CategorySection({ category, payload }: any) {
 
         {/* Right Column - Small Posts List (Wider) */}
         <div className="lg:col-span-3 space-y-4">
-          {sidebarPosts.map((post) => (
+          {sidebarPosts.map((post: any) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
