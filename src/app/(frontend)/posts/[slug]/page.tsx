@@ -52,7 +52,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   return (
     <article className="pt-16 pb-16">
-      <PageClient postId={post.id} />
+      <PageClient postId={String(post.id)} />
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -73,7 +73,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
           {/* Comments Section */}
           <Comments
-            postId={post.id}
+            postId={String(post.id)}
             enableComments={post.commentsSettings?.enableComments ?? true}
           />
         </div>

@@ -65,7 +65,7 @@ export function AnimatedHeroPost({ post, index = 0 }: HeroPostCardProps) {
 
           {/* Bookmark Button - Top Right (visible on hover) */}
           <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" onClick={(e) => e.stopPropagation()}>
-            <BookmarkButton postId={post.id} variant="icon-only" />
+            <BookmarkButton postId={String(post.id)} variant="icon-only" />
           </div>
 
           {/* Content */}
@@ -165,7 +165,7 @@ export function AnimatedSmallPost({ post, index = 0 }: HeroPostCardProps) {
 
           {/* Bookmark Button - Top Right (visible on hover) */}
           <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" onClick={(e) => e.stopPropagation()}>
-            <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
+            <BookmarkButton postId={String(post.id)} variant="icon-only" showLabel={false} />
           </div>
 
           {/* Content */}
@@ -217,7 +217,7 @@ export function AnimatedPostCard({ post, index = 0 }: HeroPostCardProps) {
             )}
             {/* Bookmark Button - Top Right (visible on hover) */}
             <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" onClick={(e) => e.stopPropagation()}>
-              <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
+              <BookmarkButton postId={String(post.id)} variant="icon-only" showLabel={false} />
             </div>
           </div>
           <div className="p-5">

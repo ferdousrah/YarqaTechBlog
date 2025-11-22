@@ -60,7 +60,7 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
           className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           onClick={(e) => e.stopPropagation()}
         >
-          <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
+          <BookmarkButton postId={String(post.id)} variant="icon-only" showLabel={false} />
         </div>
       </div>
     )
@@ -90,7 +90,7 @@ export function ArticleCardWithBookmark({ post, variant = 'list', borderColor }:
               className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               onClick={(e) => e.stopPropagation()}
             >
-              <BookmarkButton postId={post.id} variant="icon-only" showLabel={false} />
+              <BookmarkButton postId={String(post.id)} variant="icon-only" showLabel={false} />
             </div>
           </div>
           <div className="p-6">
