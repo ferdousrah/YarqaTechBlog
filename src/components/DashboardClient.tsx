@@ -73,6 +73,182 @@ const deletionReasonLabels: Record<string, string> = {
   other: 'Other',
 }
 
+// Inline styles
+const styles = {
+  container: {
+    backgroundColor: '#f8fafc',
+    padding: '32px',
+  } as React.CSSProperties,
+  card: {
+    background: '#ffffff',
+    borderRadius: '24px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    padding: '24px',
+    border: '1px solid #f3f4f6',
+    marginBottom: '24px',
+  } as React.CSSProperties,
+  statCard: {
+    background: '#ffffff',
+    borderRadius: '24px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    padding: '24px',
+    border: '1px solid #f3f4f6',
+    position: 'relative' as const,
+    overflow: 'hidden',
+  } as React.CSSProperties,
+  statValue: {
+    fontSize: '2.5rem',
+    fontWeight: 900,
+    color: '#111827',
+    marginBottom: '8px',
+  } as React.CSSProperties,
+  statLabel: {
+    fontSize: '1rem',
+    fontWeight: 700,
+    color: '#374151',
+    marginBottom: '4px',
+  } as React.CSSProperties,
+  statSubtext: {
+    fontSize: '0.75rem',
+    color: '#6b7280',
+    fontWeight: 500,
+  } as React.CSSProperties,
+  gridFour: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '24px',
+    marginBottom: '40px',
+  } as React.CSSProperties,
+  gridThree: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '24px',
+    marginBottom: '40px',
+  } as React.CSSProperties,
+  gridTwo: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '32px',
+    marginBottom: '32px',
+  } as React.CSSProperties,
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '40px',
+  } as React.CSSProperties,
+  headerTitle: {
+    fontSize: '3rem',
+    fontWeight: 900,
+    background: 'linear-gradient(to right, #2563eb, #9333ea)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+  } as React.CSSProperties,
+  headerSubtitle: {
+    color: '#4b5563',
+    fontSize: '1.125rem',
+    fontWeight: 500,
+    marginTop: '4px',
+  } as React.CSSProperties,
+  button: {
+    padding: '12px 24px',
+    borderRadius: '12px',
+    fontWeight: 700,
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    cursor: 'pointer',
+    border: 'none',
+    background: 'linear-gradient(to right, #2563eb, #9333ea)',
+    color: '#ffffff',
+  } as React.CSSProperties,
+  sectionTitle: {
+    fontSize: '1.5rem',
+    fontWeight: 900,
+    color: '#111827',
+    marginBottom: '24px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  } as React.CSSProperties,
+  iconBox: {
+    width: '40px',
+    height: '40px',
+    borderRadius: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.25rem',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  } as React.CSSProperties,
+  listItem: {
+    padding: '20px',
+    borderRadius: '16px',
+    marginBottom: '12px',
+    transition: 'all 0.2s',
+  } as React.CSSProperties,
+  badge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '4px',
+    padding: '4px 12px',
+    borderRadius: '9999px',
+    fontSize: '0.75rem',
+    fontWeight: 700,
+    color: '#ffffff',
+  } as React.CSSProperties,
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+  } as React.CSSProperties,
+  quickActionCard: {
+    background: '#ffffff',
+    borderRadius: '16px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    padding: '24px',
+    border: '1px solid #f3f4f6',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    textAlign: 'center' as const,
+    gap: '16px',
+    textDecoration: 'none',
+    color: 'inherit',
+    cursor: 'pointer',
+  } as React.CSSProperties,
+  quickActionIcon: {
+    width: '64px',
+    height: '64px',
+    borderRadius: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.875rem',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+  } as React.CSSProperties,
+  metricRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '12px',
+    borderRadius: '12px',
+    marginBottom: '8px',
+  } as React.CSSProperties,
+  progressBar: {
+    width: '96px',
+    height: '8px',
+    backgroundColor: '#e5e7eb',
+    borderRadius: '9999px',
+    overflow: 'hidden',
+  } as React.CSSProperties,
+  progressFill: {
+    height: '100%',
+    borderRadius: '9999px',
+  } as React.CSSProperties,
+}
+
 export default function DashboardClient() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [analyticsStats, setAnalyticsStats] = useState<AnalyticsStats | null>(null)
@@ -99,7 +275,6 @@ export default function DashboardClient() {
 
       const data = await res.json()
 
-      // Validate response structure
       if (data && typeof data.totalPosts !== 'undefined') {
         setStats(data)
         setLastUpdated(new Date())
@@ -148,30 +323,28 @@ export default function DashboardClient() {
     await Promise.all([fetchStats(true), fetchAnalytics(true)])
   }
 
-  // Initial fetch
   useEffect(() => {
     fetchStats()
     fetchAnalytics()
   }, [])
 
-  // Auto-refresh every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       fetchStats(true)
       fetchAnalytics(true)
-    }, 30000) // 30 seconds
+    }, 30000)
 
     return () => clearInterval(interval)
   }, [])
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
-        <div className="w-full">
-          <div className="h-10 bg-gray-200 rounded-xl w-72 mb-8 animate-pulse"></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div style={styles.container}>
+        <div style={{ width: '100%' }}>
+          <div style={{ height: '40px', background: '#e5e7eb', borderRadius: '12px', width: '288px', marginBottom: '32px' }}></div>
+          <div style={styles.gridFour}>
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-40 bg-white rounded-3xl shadow animate-pulse"></div>
+              <div key={i} style={{ ...styles.statCard, height: '160px', background: '#f3f4f6' }}></div>
             ))}
           </div>
         </div>
@@ -181,13 +354,13 @@ export default function DashboardClient() {
 
   if (!stats) {
     return (
-      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
-        <div className="flex items-center justify-center" style={{ minHeight: '400px' }}>
-          <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md text-center">
-            <div className="text-6xl mb-4">📊</div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Oops!</h3>
-            <p className="text-red-600 font-semibold text-lg mb-2">Failed to load dashboard</p>
-            <p className="text-gray-500 text-sm">Please refresh the page</p>
+      <div style={styles.container}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+          <div style={{ ...styles.card, maxWidth: '400px', textAlign: 'center' }}>
+            <div style={{ fontSize: '4rem', marginBottom: '16px' }}>📊</div>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>Oops!</h3>
+            <p style={{ color: '#dc2626', fontWeight: 600, fontSize: '1.125rem', marginBottom: '8px' }}>Failed to load dashboard</p>
+            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Please refresh the page</p>
           </div>
         </div>
       </div>
@@ -195,142 +368,79 @@ export default function DashboardClient() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8">
-      <div className="w-full">
+    <div style={styles.container}>
+      <div style={{ width: '100%' }}>
         {/* Header */}
-        <div className="mb-10">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl text-4xl">
-                📊
-              </div>
-              <div>
-                <h1 className="text-5xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Dashboard
-                </h1>
-                <p className="text-gray-600 text-lg font-medium mt-1">
-                  Welcome back! Here's what's happening today ✨
-                </p>
-              </div>
+        <div style={styles.header}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ ...styles.iconBox, width: '64px', height: '64px', background: 'linear-gradient(to bottom right, #3b82f6, #9333ea)', fontSize: '2.5rem' }}>
+              📊
+            </div>
+            <div>
+              <h1 style={styles.headerTitle}>Dashboard</h1>
+              <p style={styles.headerSubtitle}>Welcome back! Here's what's happening today ✨</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', background: '#dcfce7', border: '1px solid #86efac', borderRadius: '8px' }}>
+              <div style={{ width: '8px', height: '8px', background: '#22c55e', borderRadius: '50%' }}></div>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#15803d' }}>LIVE</span>
             </div>
 
-            {/* Refresh Button and Last Updated */}
-            <div className="flex items-center gap-4">
-              {/* Live Badge */}
-              <div className="flex items-center gap-2 px-3 py-2 bg-green-100 border border-green-300 rounded-lg">
-                <div className="relative">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                </div>
-                <span className="text-xs font-bold text-green-700">LIVE</span>
+            {lastUpdated && (
+              <div style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: 500 }}>
+                Updated: {lastUpdated.toLocaleTimeString()}
               </div>
+            )}
 
-              {lastUpdated && (
-                <div className="text-sm text-gray-500 font-medium">
-                  Updated: {lastUpdated.toLocaleTimeString()}
-                </div>
-              )}
-
-              <button
-                onClick={handleRefresh}
-                disabled={refreshing}
-                className={`
-                  px-6 py-3 rounded-xl font-bold transition-all duration-300
-                  flex items-center gap-2 shadow-lg
-                  ${refreshing
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:shadow-xl hover:scale-105'
-                  }
-                `}
-              >
-                <svg
-                  className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                {refreshing ? 'Refreshing...' : 'Refresh'}
-              </button>
-            </div>
+            <button onClick={handleRefresh} disabled={refreshing} style={{ ...styles.button, opacity: refreshing ? 0.5 : 1 }}>
+              <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
           </div>
         </div>
 
         {/* Stat Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <div className="relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 overflow-hidden group">
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full opacity-30"></div>
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-5">
-                <div className="bg-blue-100 p-4 rounded-2xl text-3xl">📝</div>
-              </div>
-              <h3 className="text-4xl font-black text-gray-900 mb-2">{stats.totalPosts}</h3>
-              <p className="text-base font-bold text-gray-700 mb-1">Total Posts</p>
-              <p className="text-xs text-gray-500 font-medium">
-                {stats.publishedPosts} published · {stats.draftPosts} drafts
-              </p>
-            </div>
+        <div style={styles.gridFour}>
+          <div style={styles.statCard}>
+            <div style={{ ...styles.iconBox, background: '#dbeafe', marginBottom: '20px', fontSize: '1.875rem' }}>📝</div>
+            <h3 style={styles.statValue}>{stats.totalPosts}</h3>
+            <p style={styles.statLabel}>Total Posts</p>
+            <p style={styles.statSubtext}>{stats.publishedPosts} published · {stats.draftPosts} drafts</p>
           </div>
 
-          <div className="relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 overflow-hidden group">
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-100 rounded-full opacity-30"></div>
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-5">
-                <div className="bg-green-100 p-4 rounded-2xl text-3xl">👁️</div>
-              </div>
-              <h3 className="text-4xl font-black text-gray-900 mb-2">
-                {stats.totalViews.toLocaleString()}
-              </h3>
-              <p className="text-base font-bold text-gray-700 mb-1">Total Views</p>
-              <p className="text-xs text-gray-500 font-medium">All time engagement</p>
-            </div>
+          <div style={styles.statCard}>
+            <div style={{ ...styles.iconBox, background: '#dcfce7', marginBottom: '20px', fontSize: '1.875rem' }}>👁️</div>
+            <h3 style={styles.statValue}>{stats.totalViews.toLocaleString()}</h3>
+            <p style={styles.statLabel}>Total Views</p>
+            <p style={styles.statSubtext}>All time engagement</p>
           </div>
 
-          <div className="relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 overflow-hidden group">
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-100 rounded-full opacity-30"></div>
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-5">
-                <div className="bg-purple-100 p-4 rounded-2xl text-3xl">💬</div>
-              </div>
-              <h3 className="text-4xl font-black text-gray-900 mb-2">{stats.totalComments}</h3>
-              <p className="text-base font-bold text-gray-700 mb-1">Comments</p>
-              <p className="text-xs text-gray-500 font-medium">
-                {stats.pendingComments} awaiting review
-              </p>
-            </div>
+          <div style={styles.statCard}>
+            <div style={{ ...styles.iconBox, background: '#f3e8ff', marginBottom: '20px', fontSize: '1.875rem' }}>💬</div>
+            <h3 style={styles.statValue}>{stats.totalComments}</h3>
+            <p style={styles.statLabel}>Comments</p>
+            <p style={styles.statSubtext}>{stats.pendingComments} awaiting review</p>
           </div>
 
-          <div className="relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 overflow-hidden group">
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-100 rounded-full opacity-30"></div>
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-5">
-                <div className="bg-orange-100 p-4 rounded-2xl text-3xl">👥</div>
-              </div>
-              <h3 className="text-4xl font-black text-gray-900 mb-2">{stats.totalUsers}</h3>
-              <p className="text-base font-bold text-gray-700 mb-1">Active Users</p>
-              <p className="text-xs text-gray-500 font-medium">Registered members</p>
-            </div>
+          <div style={styles.statCard}>
+            <div style={{ ...styles.iconBox, background: '#ffedd5', marginBottom: '20px', fontSize: '1.875rem' }}>👥</div>
+            <h3 style={styles.statValue}>{stats.totalUsers}</h3>
+            <p style={styles.statLabel}>Active Users</p>
+            <p style={styles.statSubtext}>Registered members</p>
           </div>
         </div>
 
         {/* Analytics Chart */}
         {stats.analytics && stats.analytics.length > 0 && (
-          <div className="bg-white rounded-3xl shadow-lg p-8 mb-10 border border-gray-100">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-2xl font-black text-gray-900 flex items-center gap-3 mb-1">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    📈
-                  </div>
-                  Monthly Activity
-                </h2>
-                <p className="text-sm text-gray-500 font-medium ml-13">
-                  Track your content performance over time
-                </p>
-              </div>
-            </div>
-
+          <div style={{ ...styles.card, padding: '32px' }}>
+            <h2 style={styles.sectionTitle}>
+              <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #3b82f6, #9333ea)' }}>📈</div>
+              Monthly Activity
+            </h2>
             <ResponsiveContainer width="100%" height={340}>
               <AreaChart data={stats.analytics}>
                 <defs>
@@ -344,140 +454,72 @@ export default function DashboardClient() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                <XAxis
-                  dataKey="month"
-                  stroke="#9ca3af"
-                  style={{ fontSize: '13px', fontWeight: '600' }}
-                  tickLine={false}
-                />
-                <YAxis
-                  stroke="#9ca3af"
-                  style={{ fontSize: '13px', fontWeight: '600' }}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '2px solid #e5e7eb',
-                    borderRadius: '16px',
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-                    padding: '12px 16px',
-                    fontWeight: '600',
-                  }}
-                  cursor={{ fill: 'rgba(99, 102, 241, 0.05)' }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="posts"
-                  stroke="#6366f1"
-                  strokeWidth={4}
-                  fill="url(#colorPosts)"
-                  name="Posts"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="views"
-                  stroke="#10b981"
-                  strokeWidth={4}
-                  fill="url(#colorViews)"
-                  name="Views"
-                />
+                <XAxis dataKey="month" stroke="#9ca3af" style={{ fontSize: '13px', fontWeight: 600 }} tickLine={false} />
+                <YAxis stroke="#9ca3af" style={{ fontSize: '13px', fontWeight: 600 }} tickLine={false} axisLine={false} />
+                <Tooltip contentStyle={{ backgroundColor: 'white', border: '2px solid #e5e7eb', borderRadius: '16px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)', padding: '12px 16px', fontWeight: 600 }} />
+                <Area type="monotone" dataKey="posts" stroke="#6366f1" strokeWidth={4} fill="url(#colorPosts)" name="Posts" />
+                <Area type="monotone" dataKey="views" stroke="#10b981" strokeWidth={4} fill="url(#colorViews)" name="Views" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         )}
 
         {/* Quick Actions */}
-        <div className="mb-10">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-2 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"></div>
-            <h2 className="text-2xl font-black text-gray-900">Quick Actions</h2>
-          </div>
+        <div style={{ marginBottom: '40px' }}>
+          <h2 style={styles.sectionTitle}>
+            <div style={{ width: '8px', height: '32px', background: 'linear-gradient(to bottom, #2563eb, #9333ea)', borderRadius: '4px' }}></div>
+            Quick Actions
+          </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <a
-              href="/admin/collections/posts/create"
-              className="bg-white hover:bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 flex flex-col items-center text-center gap-4 no-underline"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg text-3xl">
-                ➕
-              </div>
-              <span className="text-sm font-bold text-gray-700">New Post</span>
+          <div style={styles.gridFour}>
+            <a href="/admin/collections/posts/create" style={styles.quickActionCard}>
+              <div style={{ ...styles.quickActionIcon, background: 'linear-gradient(to bottom right, #3b82f6, #2563eb)' }}>➕</div>
+              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>New Post</span>
             </a>
 
-            <a
-              href="/admin/collections/categories/create"
-              className="bg-white hover:bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 flex flex-col items-center text-center gap-4 no-underline"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg text-3xl">
-                📁
-              </div>
-              <span className="text-sm font-bold text-gray-700">New Category</span>
+            <a href="/admin/collections/categories/create" style={styles.quickActionCard}>
+              <div style={{ ...styles.quickActionIcon, background: 'linear-gradient(to bottom right, #22c55e, #14b8a6)' }}>📁</div>
+              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>New Category</span>
             </a>
 
-            <a
-              href="/admin/collections/comments?where[status][equals]=pending"
-              className="bg-white hover:bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 flex flex-col items-center text-center gap-4 no-underline"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg text-3xl">
-                ✉️
-              </div>
-              <span className="text-sm font-bold text-gray-700">Review Comments</span>
+            <a href="/admin/collections/comments?where[status][equals]=pending" style={styles.quickActionCard}>
+              <div style={{ ...styles.quickActionIcon, background: 'linear-gradient(to bottom right, #a855f7, #ec4899)' }}>✉️</div>
+              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>Review Comments</span>
             </a>
 
-            <a
-              href="/admin/collections/media/create"
-              className="bg-white hover:bg-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all p-6 border border-gray-100 flex flex-col items-center text-center gap-4 no-underline"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg text-3xl">
-                📤
-              </div>
-              <span className="text-sm font-bold text-gray-700">Upload Media</span>
+            <a href="/admin/collections/media/create" style={styles.quickActionCard}>
+              <div style={{ ...styles.quickActionIcon, background: 'linear-gradient(to bottom right, #f97316, #ef4444)' }}>📤</div>
+              <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>Upload Media</span>
             </a>
           </div>
         </div>
 
         {/* Recent Posts, Top Posts & Comments */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div style={styles.gridThree}>
           {/* Recent Posts */}
-          <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-            <h2 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                📝
-              </div>
+          <div style={styles.card}>
+            <h2 style={styles.sectionTitle}>
+              <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #3b82f6, #2563eb)' }}>📝</div>
               Recent Posts
             </h2>
 
             {stats.recentPosts.length > 0 ? (
-              <div className="space-y-3">
+              <div>
                 {stats.recentPosts.slice(0, 5).map((post) => (
-                  <div
-                    key={post.id}
-                    className="p-5 rounded-2xl hover:bg-blue-50 transition-all border border-transparent hover:border-blue-100 hover:shadow-md"
-                  >
-                    <div className="flex justify-between items-start gap-4">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-bold text-gray-900 truncate mb-2">{post.title}</p>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span
-                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm ${
-                              post.status === 'published'
-                                ? 'bg-gradient-to-r from-green-500 to-green-600'
-                                : 'bg-gradient-to-r from-orange-500 to-orange-600'
-                            }`}
-                          >
+                  <div key={post.id} style={{ ...styles.listItem, background: '#f9fafb' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontWeight: 700, color: '#111827', marginBottom: '8px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{post.title}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ ...styles.badge, background: post.status === 'published' ? 'linear-gradient(to right, #22c55e, #16a34a)' : 'linear-gradient(to right, #f97316, #ea580c)' }}>
                             {post.status === 'published' ? 'Published' : 'Draft'}
                           </span>
-                          <span className="text-xs font-semibold text-gray-500">
+                          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280' }}>
                             {new Date(post.createdAt || Date.now()).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
-                      <a
-                        href={`/admin/collections/posts/${post.id}`}
-                        className="flex-shrink-0 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow transition-all no-underline"
-                      >
+                      <a href={`/admin/collections/posts/${post.id}`} style={{ ...styles.link, padding: '8px 16px', background: '#2563eb', color: '#ffffff', fontSize: '0.75rem', fontWeight: 700, borderRadius: '12px' }}>
                         Edit
                       </a>
                     </div>
@@ -485,13 +527,10 @@ export default function DashboardClient() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">📝</div>
-                <p className="text-gray-600 font-semibold mb-2">No posts yet</p>
-                <a
-                  href="/admin/collections/posts/create"
-                  className="inline-block mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl shadow-lg no-underline"
-                >
+              <div style={{ textAlign: 'center', padding: '64px 0' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '16px' }}>📝</div>
+                <p style={{ color: '#4b5563', fontWeight: 600, marginBottom: '8px' }}>No posts yet</p>
+                <a href="/admin/collections/posts/create" style={{ ...styles.link, display: 'inline-block', marginTop: '16px', padding: '12px 24px', background: 'linear-gradient(to right, #3b82f6, #2563eb)', color: '#ffffff', fontWeight: 700, borderRadius: '12px' }}>
                   Create First Post
                 </a>
               </div>
@@ -499,42 +538,31 @@ export default function DashboardClient() {
           </div>
 
           {/* Top Posts by Views */}
-          <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-            <h2 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                🔥
-              </div>
+          <div style={styles.card}>
+            <h2 style={styles.sectionTitle}>
+              <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #22c55e, #14b8a6)' }}>🔥</div>
               Top Posts by Views
             </h2>
 
             {stats.topPosts && stats.topPosts.length > 0 ? (
-              <div className="space-y-3">
+              <div>
                 {stats.topPosts.slice(0, 5).map((post, index) => (
-                  <div
-                    key={post.id}
-                    className="p-5 rounded-2xl hover:bg-green-50 transition-all border border-transparent hover:border-green-100 hover:shadow-md"
-                  >
-                    <div className="flex justify-between items-start gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-teal-600 text-white text-xs font-bold">
+                  <div key={post.id} style={{ ...styles.listItem, background: '#f0fdf4' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', borderRadius: '50%', background: 'linear-gradient(to bottom right, #22c55e, #14b8a6)', color: '#ffffff', fontSize: '0.75rem', fontWeight: 700 }}>
                             {index + 1}
                           </span>
-                          <p className="font-bold text-gray-900 truncate flex-1">{post.title}</p>
+                          <p style={{ fontWeight: 700, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{post.title}</p>
                         </div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-500 to-green-600 text-white shadow-sm">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ ...styles.badge, background: 'linear-gradient(to right, #22c55e, #16a34a)' }}>
                             👁️ {(post.views || 0).toLocaleString()} views
-                          </span>
-                          <span className="text-xs font-semibold text-gray-500">
-                            {new Date(post.publishedAt || post.createdAt || Date.now()).toLocaleDateString()}
                           </span>
                         </div>
                       </div>
-                      <a
-                        href={`/admin/collections/posts/${post.id}`}
-                        className="flex-shrink-0 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-xl shadow transition-all no-underline"
-                      >
+                      <a href={`/admin/collections/posts/${post.id}`} style={{ ...styles.link, padding: '8px 16px', background: '#16a34a', color: '#ffffff', fontSize: '0.75rem', fontWeight: 700, borderRadius: '12px' }}>
                         View
                       </a>
                     </div>
@@ -542,44 +570,33 @@ export default function DashboardClient() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">🔥</div>
-                <p className="text-gray-600 font-semibold mb-2">No views yet</p>
-                <p className="text-gray-500 text-sm">Top posts will appear here</p>
+              <div style={{ textAlign: 'center', padding: '64px 0' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '16px' }}>🔥</div>
+                <p style={{ color: '#4b5563', fontWeight: 600, marginBottom: '8px' }}>No views yet</p>
+                <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Top posts will appear here</p>
               </div>
             )}
           </div>
 
           {/* Recent Comments */}
-          <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-            <h2 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                💬
-              </div>
+          <div style={styles.card}>
+            <h2 style={styles.sectionTitle}>
+              <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #a855f7, #ec4899)' }}>💬</div>
               Recent Comments
             </h2>
 
             {stats.recentComments.length > 0 ? (
-              <div className="space-y-3">
+              <div>
                 {stats.recentComments.slice(0, 5).map((comment) => (
-                  <div
-                    key={comment.id}
-                    className="p-5 rounded-2xl hover:bg-purple-50 transition-all border border-transparent hover:border-purple-100 hover:shadow-md"
-                  >
-                    <p className="text-gray-800 text-sm font-medium mb-3 line-clamp-2">
+                  <div key={comment.id} style={{ ...styles.listItem, background: '#faf5ff' }}>
+                    <p style={{ color: '#1f2937', fontSize: '0.875rem', fontWeight: 500, marginBottom: '12px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       "{comment.content}"
                     </p>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm ${
-                          comment.status === 'pending'
-                            ? 'bg-gradient-to-r from-orange-500 to-red-600'
-                            : 'bg-gradient-to-r from-green-500 to-green-600'
-                        }`}
-                      >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ ...styles.badge, background: comment.status === 'pending' ? 'linear-gradient(to right, #f97316, #ef4444)' : 'linear-gradient(to right, #22c55e, #16a34a)' }}>
                         {comment.status === 'pending' ? 'Pending' : 'Approved'}
                       </span>
-                      <span className="text-xs font-semibold text-gray-500">
+                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280' }}>
                         {new Date(comment.createdAt).toLocaleDateString()}
                       </span>
                     </div>
@@ -587,181 +604,67 @@ export default function DashboardClient() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">💬</div>
-                <p className="text-gray-600 font-semibold mb-2">No comments yet</p>
-                <p className="text-gray-500 text-sm">Comments will appear here</p>
+              <div style={{ textAlign: 'center', padding: '64px 0' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '16px' }}>💬</div>
+                <p style={{ color: '#4b5563', fontWeight: 600, marginBottom: '8px' }}>No comments yet</p>
+                <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Comments will appear here</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* User Deletion Stats */}
-        {(stats.totalDeletedUsers !== undefined && stats.totalDeletedUsers > 0) && (
-          <div className="mt-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-2 h-8 bg-gradient-to-b from-red-500 to-orange-500 rounded-full"></div>
-              <h2 className="text-2xl font-black text-gray-900">User Churn Analytics</h2>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Deletion Summary Card */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg text-3xl">
-                    👋
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-black text-gray-900">{stats.totalDeletedUsers}</h3>
-                    <p className="text-sm font-bold text-gray-600">Users Left</p>
-                  </div>
-                </div>
-
-                {stats.deletionReasons && stats.deletionReasons.length > 0 && (
-                  <div className="space-y-3">
-                    <p className="text-sm font-bold text-gray-700 mb-3">Top Reasons</p>
-                    {stats.deletionReasons.slice(0, 5).map((item, index) => (
-                      <div key={item.reason} className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 flex items-center justify-center rounded-full bg-red-100 text-red-600 text-xs font-bold">
-                            {index + 1}
-                          </span>
-                          <span className="text-sm text-gray-700">
-                            {deletionReasonLabels[item.reason] || item.reason}
-                          </span>
-                        </div>
-                        <span className="text-sm font-bold text-gray-900">{item.count}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Recent Deletions */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    📋
-                  </div>
-                  Recent Feedback
-                </h3>
-
-                {stats.recentDeletions && stats.recentDeletions.length > 0 ? (
-                  <div className="space-y-3">
-                    {stats.recentDeletions.slice(0, 5).map((deletion: any) => (
-                      <div
-                        key={deletion.id}
-                        className="p-4 rounded-2xl bg-gray-50 border border-gray-100"
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <span className="text-sm font-bold text-gray-900">
-                            {deletion.userEmail}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {new Date(deletion.createdAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <span className="inline-block px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-lg">
-                          {deletionReasonLabels[deletion.reason] || deletion.reason}
-                        </span>
-                        {deletion.feedback && (
-                          <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                            "{deletion.feedback}"
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-3">📋</div>
-                    <p className="text-gray-500 text-sm">No feedback yet</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Analytics Section */}
         {analyticsStats && (
-          <div className="mt-12">
-            <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 mb-8 flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl text-2xl">
-                📊
-              </div>
+          <div style={{ marginTop: '48px' }}>
+            <h2 style={{ ...styles.headerTitle, fontSize: '1.875rem', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ ...styles.iconBox, width: '48px', height: '48px', background: 'linear-gradient(to bottom right, #22c55e, #10b981)', fontSize: '1.5rem' }}>📊</div>
               Visitor Analytics
             </h2>
 
             {/* Overview Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white text-xl">
-                    👥
-                  </div>
-                  <p className="text-sm text-gray-500 font-bold">Total Visitors</p>
-                </div>
-                <p className="text-4xl font-black bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <div style={styles.gridFour}>
+              <div style={styles.statCard}>
+                <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #60a5fa, #3b82f6)', marginBottom: '8px' }}>👥</div>
+                <p style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: 700 }}>Total Visitors</p>
+                <p style={{ ...styles.statValue, background: 'linear-gradient(to bottom right, #2563eb, #9333ea)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   {analyticsStats.totalUniqueVisitors.toLocaleString()}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {analyticsStats.uniqueVisitorsToday} today
-                </p>
+                <p style={styles.statSubtext}>{analyticsStats.uniqueVisitorsToday} today</p>
               </div>
 
-              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-white text-xl">
-                    📄
-                  </div>
-                  <p className="text-sm text-gray-500 font-bold">Page Views</p>
-                </div>
-                <p className="text-4xl font-black bg-gradient-to-br from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              <div style={styles.statCard}>
+                <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #4ade80, #22c55e)', marginBottom: '8px' }}>📄</div>
+                <p style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: 700 }}>Page Views</p>
+                <p style={{ ...styles.statValue, background: 'linear-gradient(to bottom right, #16a34a, #10b981)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   {analyticsStats.totalPageViews.toLocaleString()}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {analyticsStats.pageViewsToday} today
-                </p>
+                <p style={styles.statSubtext}>{analyticsStats.pageViewsToday} today</p>
               </div>
 
-              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-white text-xl">
-                    🔴
-                  </div>
-                  <p className="text-sm text-gray-500 font-bold">Online Now</p>
-                </div>
-                <p className="text-4xl font-black bg-gradient-to-br from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <div style={styles.statCard}>
+                <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #c084fc, #a855f7)', marginBottom: '8px' }}>🔴</div>
+                <p style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: 700 }}>Online Now</p>
+                <p style={{ ...styles.statValue, background: 'linear-gradient(to bottom right, #9333ea, #ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   {analyticsStats.currentOnline}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">Active users</p>
+                <p style={styles.statSubtext}>Active users</p>
               </div>
 
-              <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center text-white text-xl">
-                    ⏱️
-                  </div>
-                  <p className="text-sm text-gray-500 font-bold">Avg Session</p>
-                </div>
-                <p className="text-4xl font-black bg-gradient-to-br from-orange-600 to-red-600 bg-clip-text text-transparent">
+              <div style={styles.statCard}>
+                <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #fb923c, #f97316)', marginBottom: '8px' }}>⏱️</div>
+                <p style={{ fontSize: '0.875rem', color: '#6b7280', fontWeight: 700 }}>Avg Session</p>
+                <p style={{ ...styles.statValue, background: 'linear-gradient(to bottom right, #ea580c, #dc2626)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   {Math.floor(analyticsStats.avgSessionDuration / 60)}m
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {analyticsStats.avgSessionDuration % 60}s duration
-                </p>
+                <p style={styles.statSubtext}>{analyticsStats.avgSessionDuration % 60}s duration</p>
               </div>
             </div>
 
             {/* Charts Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              {/* Visitors Chart (Last 7 Days) */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    📈
-                  </div>
+            <div style={styles.gridTwo}>
+              <div style={{ ...styles.card, padding: '32px' }}>
+                <h3 style={styles.sectionTitle}>
+                  <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #3b82f6, #6366f1)' }}>📈</div>
                   Visitors (Last 7 Days)
                 </h3>
                 <ResponsiveContainer width="100%" height={300}>
@@ -771,32 +674,15 @@ export default function DashboardClient() {
                     <YAxis stroke="#94a3b8" />
                     <Tooltip />
                     <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="visitors"
-                      stroke="#3b82f6"
-                      strokeWidth={3}
-                      dot={{ fill: '#3b82f6', r: 4 }}
-                      name="Visitors"
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="pageViews"
-                      stroke="#10b981"
-                      strokeWidth={3}
-                      dot={{ fill: '#10b981', r: 4 }}
-                      name="Page Views"
-                    />
+                    <Line type="monotone" dataKey="visitors" stroke="#3b82f6" strokeWidth={3} dot={{ fill: '#3b82f6', r: 4 }} name="Visitors" />
+                    <Line type="monotone" dataKey="pageViews" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981', r: 4 }} name="Page Views" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* Traffic Sources (Pie Chart) */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    🔗
-                  </div>
+              <div style={{ ...styles.card, padding: '32px' }}>
+                <h3 style={styles.sectionTitle}>
+                  <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #a855f7, #ec4899)' }}>🔗</div>
                   Traffic Sources
                 </h3>
                 <ResponsiveContainer width="100%" height={300}>
@@ -823,37 +709,29 @@ export default function DashboardClient() {
             </div>
 
             {/* Metrics Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <div style={styles.gridThree}>
               {/* Visitor Behavior */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    🎯
-                  </div>
+              <div style={styles.card}>
+                <h3 style={styles.sectionTitle}>
+                  <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #06b6d4, #3b82f6)' }}>🎯</div>
                   Visitor Behavior
                 </h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50">
-                    <span className="text-sm font-bold text-gray-700">New Visitors</span>
-                    <span className="text-lg font-black text-blue-600">
-                      {analyticsStats.newVsReturningRatio}%
-                    </span>
+                <div>
+                  <div style={{ ...styles.metricRow, background: 'linear-gradient(to right, #dbeafe, #e0f2fe)' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>New Visitors</span>
+                    <span style={{ fontSize: '1.125rem', fontWeight: 900, color: '#2563eb' }}>{analyticsStats.newVsReturningRatio}%</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50">
-                    <span className="text-sm font-bold text-gray-700">Bounce Rate</span>
-                    <span className="text-lg font-black text-green-600">
-                      {analyticsStats.bounceRate}%
-                    </span>
+                  <div style={{ ...styles.metricRow, background: 'linear-gradient(to right, #dcfce7, #d1fae5)' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>Bounce Rate</span>
+                    <span style={{ fontSize: '1.125rem', fontWeight: 900, color: '#16a34a' }}>{analyticsStats.bounceRate}%</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50">
-                    <span className="text-sm font-bold text-gray-700">Pages/Session</span>
-                    <span className="text-lg font-black text-purple-600">
-                      {analyticsStats.avgPagesPerSession}
-                    </span>
+                  <div style={{ ...styles.metricRow, background: 'linear-gradient(to right, #f3e8ff, #fce7f3)' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>Pages/Session</span>
+                    <span style={{ fontSize: '1.125rem', fontWeight: 900, color: '#9333ea' }}>{analyticsStats.avgPagesPerSession}</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-orange-50 to-red-50">
-                    <span className="text-sm font-bold text-gray-700">Avg Time on Page</span>
-                    <span className="text-lg font-black text-orange-600">
+                  <div style={{ ...styles.metricRow, background: 'linear-gradient(to right, #ffedd5, #fee2e2)' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>Avg Time on Page</span>
+                    <span style={{ fontSize: '1.125rem', fontWeight: 900, color: '#ea580c' }}>
                       {Math.floor(analyticsStats.avgTimeOnPage / 60)}m {analyticsStats.avgTimeOnPage % 60}s
                     </span>
                   </div>
@@ -861,27 +739,20 @@ export default function DashboardClient() {
               </div>
 
               {/* Top Countries */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    🌍
-                  </div>
+              <div style={styles.card}>
+                <h3 style={styles.sectionTitle}>
+                  <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #22c55e, #10b981)' }}>🌍</div>
                   Top Countries
                 </h3>
-                <div className="space-y-3">
+                <div>
                   {analyticsStats.topCountries.slice(0, 5).map((country, index) => (
-                    <div key={index} className="flex justify-between items-center">
-                      <span className="text-sm font-bold text-gray-700">{country.country}</span>
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full"
-                            style={{ width: `${country.percentage}%` }}
-                          ></div>
+                    <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>{country.country}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={styles.progressBar}>
+                          <div style={{ ...styles.progressFill, width: `${country.percentage}%`, background: 'linear-gradient(to right, #22c55e, #10b981)' }}></div>
                         </div>
-                        <span className="text-sm font-black text-green-600">
-                          {country.count}
-                        </span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 900, color: '#16a34a' }}>{country.count}</span>
                       </div>
                     </div>
                   ))}
@@ -889,27 +760,19 @@ export default function DashboardClient() {
               </div>
 
               {/* Top Pages */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    📊
-                  </div>
+              <div style={styles.card}>
+                <h3 style={styles.sectionTitle}>
+                  <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #f59e0b, #f97316)' }}>📊</div>
                   Top Pages
                 </h3>
-                <div className="space-y-3">
+                <div>
                   {analyticsStats.topPages.slice(0, 5).map((page, index) => (
-                    <div key={index} className="p-3 rounded-xl bg-gray-50 border border-gray-100">
-                      <div className="flex justify-between items-start mb-1">
-                        <span className="text-xs text-gray-500 font-medium truncate flex-1">
-                          {page.path}
-                        </span>
-                        <span className="text-sm font-black text-amber-600 ml-2">
-                          {page.count}
-                        </span>
+                    <div key={index} style={{ padding: '12px', borderRadius: '12px', background: '#f9fafb', border: '1px solid #f3f4f6', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{page.path}</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 900, color: '#d97706', marginLeft: '8px' }}>{page.count}</span>
                       </div>
-                      {page.title && (
-                        <p className="text-xs text-gray-600 truncate">{page.title}</p>
-                      )}
+                      {page.title && <p style={{ fontSize: '0.75rem', color: '#4b5563', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{page.title}</p>}
                     </div>
                   ))}
                 </div>
@@ -917,59 +780,41 @@ export default function DashboardClient() {
             </div>
 
             {/* Device & Browser Stats */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Device Breakdown */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    📱
-                  </div>
+            <div style={styles.gridTwo}>
+              <div style={styles.card}>
+                <h3 style={styles.sectionTitle}>
+                  <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #6366f1, #a855f7)' }}>📱</div>
                   Device Breakdown
                 </h3>
-                <div className="space-y-4">
+                <div>
                   {analyticsStats.deviceBreakdown.map((device, index) => (
-                    <div key={index}>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-bold text-gray-700 capitalize">
-                          {device.device}
-                        </span>
-                        <span className="text-sm font-black text-indigo-600">
-                          {device.percentage}%
-                        </span>
+                    <div key={index} style={{ marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151', textTransform: 'capitalize' }}>{device.device}</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 900, color: '#6366f1' }}>{device.percentage}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-3">
-                        <div
-                          className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full"
-                          style={{ width: `${device.percentage}%` }}
-                        ></div>
+                      <div style={{ ...styles.progressBar, width: '100%', height: '12px' }}>
+                        <div style={{ ...styles.progressFill, width: `${device.percentage}%`, background: 'linear-gradient(to right, #6366f1, #a855f7)' }}></div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Browser Breakdown */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-                <h3 className="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg text-xl">
-                    🌐
-                  </div>
+              <div style={styles.card}>
+                <h3 style={styles.sectionTitle}>
+                  <div style={{ ...styles.iconBox, background: 'linear-gradient(to bottom right, #f43f5e, #ec4899)' }}>🌐</div>
                   Browser Breakdown
                 </h3>
-                <div className="space-y-4">
+                <div>
                   {analyticsStats.browserBreakdown.map((browser, index) => (
-                    <div key={index}>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-bold text-gray-700">{browser.browser}</span>
-                        <span className="text-sm font-black text-rose-600">
-                          {browser.percentage}%
-                        </span>
+                    <div key={index} style={{ marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>{browser.browser}</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 900, color: '#f43f5e' }}>{browser.percentage}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-3">
-                        <div
-                          className="bg-gradient-to-r from-rose-500 to-pink-500 h-3 rounded-full"
-                          style={{ width: `${browser.percentage}%` }}
-                        ></div>
+                      <div style={{ ...styles.progressBar, width: '100%', height: '12px' }}>
+                        <div style={{ ...styles.progressFill, width: `${browser.percentage}%`, background: 'linear-gradient(to right, #f43f5e, #ec4899)' }}></div>
                       </div>
                     </div>
                   ))}
