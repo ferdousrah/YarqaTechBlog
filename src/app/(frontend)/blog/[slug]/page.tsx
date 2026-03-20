@@ -13,12 +13,11 @@ import LikeDislike from '@/components/LikeDislike'
 import { headers } from 'next/headers'
 import BlogPageClient from './page.client'
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
-    const posts = await getPayloadClient()
     // your existing code here
+    return posts.map(({ slug }) => ({ slug }))
   } catch (error) {
-    // DB not ready at build time, return empty array
     return []
   }
 }
