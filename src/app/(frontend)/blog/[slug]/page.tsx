@@ -15,8 +15,16 @@ import BlogPageClient from './page.client'
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
-    // your existing code here
-    return posts.map(({ slug }) => ({ slug }))
+    const payload = await getPayload({ config })
+    const posts = await payload.find({
+      collection: 'posts',
+      where: {
+        status: { equals: 'published' },
+      },
+      limit: 1000,
+      depth: 0,
+    })
+    return posts.docs.map(({ slug }) => ({ slug: slug ?? '' }))
   } catch (error) {
     return []
   }
