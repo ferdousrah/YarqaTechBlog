@@ -5,12 +5,11 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
-    const posts = await getPayloadClient()
     // your existing code here
+    return posts.map(({ slug }) => ({ slug }))
   } catch (error) {
-    // DB not ready at build time, return empty array
     return []
   }
 }
