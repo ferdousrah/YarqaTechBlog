@@ -38,6 +38,12 @@ export async function generateStaticParams() {
   }
 }
 
+type Args = {
+  params: Promise<{
+    slug?: string
+  }>
+}
+
 export default async function Post({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
