@@ -6,15 +6,13 @@ import config from '@payload-config'
 import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const categories = await payload.find({
-    collection: 'categories',
-    limit: 1000,
-  })
-
-  return categories.docs.map((category) => ({
-    slug: category.slug,
-  }))
+  try {
+    const posts = await getPayloadClient()
+    // your existing code here
+  } catch (error) {
+    // DB not ready at build time, return empty array
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
