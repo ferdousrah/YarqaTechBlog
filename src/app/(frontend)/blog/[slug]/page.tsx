@@ -14,18 +14,13 @@ import { headers } from 'next/headers'
 import BlogPageClient from './page.client'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const posts = await payload.find({
-    collection: 'posts',
-    where: {
-      status: { equals: 'published' },
-    },
-    limit: 1000,
-  })
-
-  return posts.docs.map((post) => ({
-    slug: post.slug,
-  }))
+  try {
+    const posts = await getPayloadClient()
+    // your existing code here
+  } catch (error) {
+    // DB not ready at build time, return empty array
+    return []
+  }
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
