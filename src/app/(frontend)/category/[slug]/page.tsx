@@ -7,8 +7,13 @@ import { notFound } from 'next/navigation'
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
-    // your existing code here
-    return posts.map(({ slug }) => ({ slug }))
+    const payload = await getPayload({ config })
+    const categories = await payload.find({
+      collection: 'categories',
+      limit: 1000,
+      depth: 0,
+    })
+    return categories.docs.map(({ slug }) => ({ slug: slug ?? '' }))
   } catch (error) {
     return []
   }
