@@ -6,15 +6,19 @@ import config from '@payload-config'
 import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const tags = await payload.find({
-    collection: 'tags',
-    limit: 1000,
-  })
+  try {
+    const payload = await getPayload({ config })
+    const tags = await payload.find({
+      collection: 'tags',
+      limit: 1000,
+    })
 
-  return tags.docs.map((tag) => ({
-    slug: tag.slug,
-  }))
+    return tags.docs.map((tag) => ({
+      slug: tag.slug,
+    }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
