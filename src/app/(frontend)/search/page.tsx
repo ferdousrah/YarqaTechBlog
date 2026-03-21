@@ -9,14 +9,14 @@ import { useState, useEffect, Suspense } from 'react'
 function SearchPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '')
   const [results, setResults] = useState<any>({ docs: [], totalDocs: 0, totalPages: 0, page: 1 })
   const [categories, setCategories] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
 
-  const query = searchParams.get('q') || ''
-  const categoryFilter = searchParams.get('category') || ''
-  const page = Number(searchParams.get('page')) || 1
+  const query = searchParams?.get('q') || ''
+  const categoryFilter = searchParams?.get('category') || ''
+  const page = Number(searchParams?.get('page')) || 1
 
   useEffect(() => {
     if (query.trim()) {
