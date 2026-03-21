@@ -5,10 +5,11 @@
 import config from '@payload-config'
 import type { ServerFunctionClient } from 'payload'
 
-import { importMap } from './importMap.js'
-
 export const adminServerFunction: ServerFunctionClient = async function (args) {
-  const { handleServerFunctions } = await import('@payloadcms/next/layouts')
+  const [{ handleServerFunctions }, { importMap }] = await Promise.all([
+    import('@payloadcms/next/layouts'),
+    import('./importMap.js'),
+  ])
   return handleServerFunctions({
     ...args,
     config,

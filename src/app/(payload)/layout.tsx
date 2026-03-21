@@ -8,7 +8,6 @@ import config from '@payload-config'
 import '@payloadcms/next/css'
 import React from 'react'
 
-import { importMap } from './admin/importMap.js'
 import './custom.scss'
 import { adminServerFunction } from './admin/adminServerFn'
 
@@ -17,7 +16,10 @@ type Args = {
 }
 
 export default async function Layout({ children }: Args) {
-  const { RootLayout } = await import('@payloadcms/next/layouts')
+  const [{ RootLayout }, { importMap }] = await Promise.all([
+    import('@payloadcms/next/layouts'),
+    import('./admin/importMap.js'),
+  ])
   return (
     <RootLayout config={config} importMap={importMap} serverFunction={adminServerFunction}>
       {children}
