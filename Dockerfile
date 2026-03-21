@@ -22,6 +22,8 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+# Ensure NODE_ENV=production so next build generates correct module stubs
+ENV NODE_ENV production
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
