@@ -6,7 +6,6 @@
 import type { Metadata } from 'next'
 
 import config from '@payload-config'
-import { importMap } from '../importMap'
 
 type Args = {
   params: Promise<{
@@ -23,7 +22,10 @@ export const generateMetadata = async ({ params, searchParams }: Args): Promise<
 }
 
 const Page = async ({ params, searchParams }: Args) => {
-  const { RootPage } = await import('@payloadcms/next/views')
+  const [{ RootPage }, { importMap }] = await Promise.all([
+    import('@payloadcms/next/views'),
+    import('../importMap'),
+  ])
   return RootPage({ config, params, searchParams, importMap })
 }
 
