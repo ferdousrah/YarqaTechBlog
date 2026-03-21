@@ -1,9 +1,11 @@
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
-/* MODIFIED: ALL Payload imports are dynamic — @payloadcms/next/views and
-   @payload-config are deferred so nothing from Payload lands in shared
-   webpack server chunks evaluated during /404 static prerendering. */
 import type { Metadata } from 'next'
+
+import config from '@payload-config'
+import { generatePageMetadata, RootPage } from '@payloadcms/next/views'
+
+import { importMap } from '../importMap.js'
 
 type Args = {
   params: Promise<{
@@ -14,21 +16,10 @@ type Args = {
   }>
 }
 
-export const generateMetadata = async ({ params, searchParams }: Args): Promise<Metadata> => {
-  const [{ generatePageMetadata }, { default: config }] = await Promise.all([
-    import('@payloadcms/next/views'),
-    import('@payload-config'),
-  ])
-  return generatePageMetadata({ config, params, searchParams })
-}
+export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
+  generatePageMetadata({ config, params, searchParams })
 
-const Page = async ({ params, searchParams }: Args) => {
-  const [{ RootPage }, { importMap }, { default: config }] = await Promise.all([
-    import('@payloadcms/next/views'),
-    import('../importMap'),
-    import('@payload-config'),
-  ])
-  return RootPage({ config, params, searchParams, importMap })
-}
+const Page = ({ params, searchParams }: Args) =>
+  RootPage({ config, params, searchParams, importMap })
 
 export default Page
