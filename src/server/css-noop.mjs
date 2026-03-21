@@ -10,18 +10,19 @@ import { register } from 'node:module'
 
 const loaderCode = `
 const NOOP_EXTS = ['.css', '.scss', '.sass', '.less', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.woff', '.woff2', '.ttf', '.eot']
+const NOOP_URL = 'data:text/javascript,export default ""'
 
 export async function resolve(specifier, context, nextResolve) {
   const base = specifier.split('?')[0]
   if (NOOP_EXTS.some((ext) => base.endsWith(ext))) {
-    return { shortCircuit: true, url: 'data:text/javascript,' }
+    return { shortCircuit: true, url: NOOP_URL }
   }
   return nextResolve(specifier, context)
 }
 
 export async function load(url, context, nextLoad) {
-  if (url === 'data:text/javascript,') {
-    return { format: 'module', shortCircuit: true, source: '' }
+  if (url === NOOP_URL) {
+    return { format: 'module', shortCircuit: true, source: 'export default ""' }
   }
   return nextLoad(url, context)
 }
