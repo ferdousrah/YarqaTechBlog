@@ -29,9 +29,9 @@ export default function VisitorTracker() {
           sessionStarted.current = true
         } else {
           // Start new session
-          const utmSource = searchParams.get('utm_source')
-          const utmMedium = searchParams.get('utm_medium')
-          const utmCampaign = searchParams.get('utm_campaign')
+          const utmSource = searchParams?.get('utm_source')
+          const utmMedium = searchParams?.get('utm_medium')
+          const utmCampaign = searchParams?.get('utm_campaign')
 
           const res = await fetch('/api/analytics/track', {
             method: 'POST',
