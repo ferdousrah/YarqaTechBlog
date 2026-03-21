@@ -46,11 +46,29 @@ const nextConfig = {
       }),
     ],
   },
-  webpack: (webpackConfig) => {
+  webpack: (webpackConfig, { isServer }) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
+    }
+
+    if (isServer) {
+      // withPayload() REPLACES nextConfig.serverExternalPackages with its own list,
+      // so additions to serverExternalPackages above have no effect. We must add
+      // next/document directly to webpackConfig.externals here instead.
+      //
+      // next/document is replaced by an App Router webpack stub that throws
+      // "<Html> should not be imported outside of pages/_document" at module
+      // evaluation time. Externalizing it generates require('next/document')
+      // instead, loading the real Node.js module which does NOT throw at import time.
+      if (Array.isArray(webpackConfig.externals)) {
+        webpackConfig.externals.push('next/document')
+      } else if (webpackConfig.externals) {
+        webpackConfig.externals = [webpackConfig.externals, 'next/document']
+      } else {
+        webpackConfig.externals = ['next/document']
+      }
     }
 
     return webpackConfig
