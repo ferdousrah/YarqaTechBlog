@@ -8,6 +8,18 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: [
+    'payload',
+    '@payloadcms/next',
+    '@payloadcms/ui',
+    '@payloadcms/richtext-lexical',
+    '@payloadcms/db-postgres',
+    '@payloadcms/plugin-seo',
+    '@payloadcms/plugin-redirects',
+    '@payloadcms/plugin-nested-docs',
+    '@payloadcms/plugin-search',
+    '@payloadcms/plugin-form-builder',
+  ],
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
