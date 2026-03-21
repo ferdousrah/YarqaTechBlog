@@ -1,11 +1,9 @@
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
-/* MODIFIED: Dynamic imports prevent @payloadcms/next/views (which contains
-   <Html> from next/document) from landing in shared webpack chunks that are
-   evaluated during /404 static prerendering. */
+/* MODIFIED: ALL Payload imports are dynamic — @payloadcms/next/views and
+   @payload-config are deferred so nothing from Payload lands in shared
+   webpack server chunks evaluated during /404 static prerendering. */
 import type { Metadata } from 'next'
-
-import config from '@payload-config'
 
 type Args = {
   params: Promise<{
@@ -17,14 +15,18 @@ type Args = {
 }
 
 export const generateMetadata = async ({ params, searchParams }: Args): Promise<Metadata> => {
-  const { generatePageMetadata } = await import('@payloadcms/next/views')
+  const [{ generatePageMetadata }, { default: config }] = await Promise.all([
+    import('@payloadcms/next/views'),
+    import('@payload-config'),
+  ])
   return generatePageMetadata({ config, params, searchParams })
 }
 
 const Page = async ({ params, searchParams }: Args) => {
-  const [{ RootPage }, { importMap }] = await Promise.all([
+  const [{ RootPage }, { importMap }, { default: config }] = await Promise.all([
     import('@payloadcms/next/views'),
     import('../importMap'),
+    import('@payload-config'),
   ])
   return RootPage({ config, params, searchParams, importMap })
 }
