@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Providers } from '@/components/Providers'
-import { fontVariables } from '@/utils/fonts'
 import '../(frontend)/globals.css'
 
 export const metadata: Metadata = {
@@ -14,12 +13,8 @@ export default function AuthLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={fontVariables} suppressHydrationWarning>
-      <body className="antialiased" suppressHydrationWarning>
-        <Providers>
-          {children}
-        </Providers>
-      </body>
-    </html>
+    <Providers>
+      {children}
+    </Providers>
   )
 }

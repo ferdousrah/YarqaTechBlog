@@ -8,7 +8,6 @@ import MainContent from '@/components/frontend/MainContent'
 import { Providers } from '@/components/Providers'
 import ThemeDebugger from '@/components/ThemeDebugger'
 import VisitorTracker from '@/components/frontend/VisitorTracker'
-import { fontVariables } from '@/utils/fonts'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -16,26 +15,22 @@ export const metadata: Metadata = {
   description: 'Your source for tech news, tutorials, and insights',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={fontVariables} suppressHydrationWarning>
-      <body className="antialiased" suppressHydrationWarning>
-        <Providers>
-          <Suspense fallback={null}>
-            <VisitorTracker />
-          </Suspense>
-          <div className="flex min-h-screen">
-            <SidebarWrapper />
-            <MainContent>
-              <HeaderWrapper />
-              <main className="flex-grow">{children}</main>
-              <FooterWrapper />
-            </MainContent>
-          </div>
-          {/* Theme Debugger - Remove this in production */}
-          <ThemeDebugger />
-        </Providers>
-      </body>
-    </html>
+    <Providers>
+      <Suspense fallback={null}>
+        <VisitorTracker />
+      </Suspense>
+      <div className="flex min-h-screen">
+        <SidebarWrapper />
+        <MainContent>
+          <HeaderWrapper />
+          <main className="flex-grow">{children}</main>
+          <FooterWrapper />
+        </MainContent>
+      </div>
+      {/* Theme Debugger - Remove this in production */}
+      <ThemeDebugger />
+    </Providers>
   )
 }
