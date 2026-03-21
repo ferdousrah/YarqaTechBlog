@@ -9,11 +9,11 @@
 import { register } from 'node:module'
 
 const loaderCode = `
-const CSS_EXTS = ['.css', '.scss', '.sass', '.less']
+const NOOP_EXTS = ['.css', '.scss', '.sass', '.less', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.woff', '.woff2', '.ttf', '.eot']
 
 export async function resolve(specifier, context, nextResolve) {
   const base = specifier.split('?')[0]
-  if (CSS_EXTS.some((ext) => base.endsWith(ext))) {
+  if (NOOP_EXTS.some((ext) => base.endsWith(ext))) {
     return { shortCircuit: true, url: 'data:text/javascript,' }
   }
   return nextResolve(specifier, context)
