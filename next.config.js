@@ -10,9 +10,6 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 const nextConfig = {
   serverExternalPackages: [
     'payload',
-    '@payloadcms/next',
-    '@payloadcms/ui',
-    '@payloadcms/richtext-lexical',
     '@payloadcms/db-postgres',
     '@payloadcms/plugin-seo',
     '@payloadcms/plugin-redirects',
