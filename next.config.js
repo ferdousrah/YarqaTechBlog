@@ -19,6 +19,15 @@ const nextConfig = {
     '@payloadcms/plugin-nested-docs',
     '@payloadcms/plugin-search',
     '@payloadcms/plugin-form-builder',
+    '@payloadcms/payload-cloud',
+    '@payloadcms/admin-bar',
+    '@payloadcms/live-preview-react',
+    // Prevents the App Router webpack stub for next/document (which throws
+    // "<Html> should not be imported outside of pages/_document" at module
+    // evaluation time) from firing when Payload packages transitively import it.
+    // Externalizing bypasses the stub replacement so the real Node.js module
+    // is loaded instead, which does NOT throw at import time.
+    'next/document',
   ],
   eslint: {
     // Warning: This allows production builds to successfully complete even if
