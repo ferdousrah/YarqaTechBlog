@@ -9,7 +9,10 @@ const dirname = path.dirname(filename)
 export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
-    staticDir: path.resolve(dirname, '../../media'),
+    // In production (Docker/Coolify) set MEDIA_DIR to a path backed by a
+    // persistent volume, e.g. /app/media. Falls back to the local repo folder
+    // for local development.
+    staticDir: process.env.MEDIA_DIR || path.resolve(dirname, '../../media'),
     imageSizes: [
       {
         name: 'thumbnail',
