@@ -15,6 +15,12 @@ export const metadata: Metadata = {
   description: 'Your source for tech news, tutorials, and insights',
 }
 
+// Render all frontend pages dynamically so newly published posts/categories
+// appear immediately. Without this, the home page and sidebar are statically
+// cached and keep showing stale data until a redeploy (there are no
+// afterChange revalidation hooks wired up to invalidate them).
+export const dynamic = 'force-dynamic'
+
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
     <Providers>
