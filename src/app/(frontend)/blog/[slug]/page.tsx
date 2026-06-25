@@ -13,6 +13,11 @@ import LikeDislike from '@/components/LikeDislike'
 import { headers } from 'next/headers'
 import BlogPageClient from './page.client'
 
+// This page reads request headers() to build the share URL, which forces
+// dynamic rendering. Without this, Next tries to statically generate posts
+// created after build and throws DYNAMIC_SERVER_USAGE (500).
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
     const payload = await getPayload({ config })
