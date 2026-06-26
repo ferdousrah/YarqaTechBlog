@@ -85,11 +85,11 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed top-4 right-4 z-50 lg:hidden bg-white shadow-lg rounded-lg p-2 hover:bg-gray-50 transition-colors"
+        className="fixed top-4 right-4 z-50 lg:hidden rounded-lg p-2 transition-colors"
         aria-label="Toggle menu"
       >
         <svg
-          className="w-6 h-6 text-gray-700"
+          className="w-6 h-6 text-gray-700 dark:text-white"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
