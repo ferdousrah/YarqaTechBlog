@@ -333,12 +333,13 @@ export default function Header({ settings }: HeaderProps) {
               )}
             </motion.button>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button — hidden: the category sidebar's own toggle
+                is used as the mobile menu instead, to avoid two hamburgers */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition"
+              className="hidden p-2 hover:bg-gray-100 rounded-lg transition"
               aria-label="Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
