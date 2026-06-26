@@ -27,7 +27,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
       <Suspense fallback={null}>
         <VisitorTracker />
       </Suspense>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen overflow-x-hidden">
         <SidebarWrapper />
         <MainContent>
           <HeaderWrapper />

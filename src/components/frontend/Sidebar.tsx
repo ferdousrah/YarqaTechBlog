@@ -21,11 +21,10 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ categories, settings }: SidebarProps) {
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [expandedMenus, setExpandedMenus] = useState<string[]>([])
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
-  const { isCollapsed, toggleSidebar } = useSidebar()
+  const { isCollapsed, toggleSidebar, isMobileOpen, setIsMobileOpen } = useSidebar()
   const pathname = usePathname()
   const router = useRouter()
   const { user, logout } = useAuth()
@@ -112,10 +111,10 @@ export default function Sidebar({ categories, settings }: SidebarProps) {
         </svg>
       </button>
 
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay - sits below the sidebar (z-40) but above pushed content */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
