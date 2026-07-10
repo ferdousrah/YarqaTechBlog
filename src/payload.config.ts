@@ -43,6 +43,29 @@ import { analyticsStatsEndpoint } from './endpoints/analytics-stats'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const serverURL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+
+// Allow both the www and non-www variants of the server URL for CORS/CSRF so
+// the admin panel works regardless of which host the user visits. Without this,
+// requests from the non-canonical host are rejected with "You are not allowed
+// to perform this action".
+const buildAllowedOrigins = (url: string): string[] => {
+  try {
+    const u = new URL(url)
+    const origins = new Set<string>([`${u.protocol}//${u.host}`])
+    if (u.host.startsWith('www.')) {
+      origins.add(`${u.protocol}//${u.host.replace(/^www\./, '')}`)
+    } else {
+      origins.add(`${u.protocol}//www.${u.host}`)
+    }
+    return Array.from(origins)
+  } catch {
+    return [url]
+  }
+}
+
+const allowedOrigins = buildAllowedOrigins(serverURL)
+
 export default buildConfig({
   admin: {
     css: [
@@ -115,6 +138,6 @@ export default buildConfig({
     },
   }),
   sharp,
-  cors: [process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'].filter(Boolean),
-  csrf: [process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'].filter(Boolean),
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
 })
